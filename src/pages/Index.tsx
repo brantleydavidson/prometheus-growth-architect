@@ -8,55 +8,60 @@ import WhoWeHelpPanel from "@/components/home/WhoWeHelpPanel";
 import ProcessStrip from "@/components/home/ProcessStrip";
 import CTABanner from "@/components/common/CTABanner";
 import SEO from "@/components/SEO";
-import { getHomePageSchema } from "@/utils/schema";
+import { getHomePageSchema, getBreadcrumbSchema } from "@/utils/schema";
 import { Link } from "react-router-dom";
 
 const Index = () => {
   // Mock data for the ProofRibbon component
   const clients = [
     {
-      name: "Client 1",
-      logo: "https://placehold.co/200x100/gray/white?text=LOGO+1",
+      name: "Morpheus Technologies",
+      logo: "https://placehold.co/200x100/gray/white?text=MORPHEUS"
     },
     {
-      name: "Client 2",
-      logo: "https://placehold.co/200x100/gray/white?text=LOGO+2",
+      name: "Apollo Systems",
+      logo: "https://placehold.co/200x100/gray/white?text=APOLLO"
     },
     {
-      name: "Client 3",
-      logo: "https://placehold.co/200x100/gray/white?text=LOGO+3",
+      name: "Athena Solutions",
+      logo: "https://placehold.co/200x100/gray/white?text=ATHENA"
     },
     {
-      name: "Client 4",
-      logo: "https://placehold.co/200x100/gray/white?text=LOGO+4",
+      name: "Hermes Logistics",
+      logo: "https://placehold.co/200x100/gray/white?text=HERMES"
     },
     {
-      name: "Client 5",
-      logo: "https://placehold.co/200x100/gray/white?text=LOGO+5",
-    },
+      name: "Poseidon Industries",
+      logo: "https://placehold.co/200x100/gray/white?text=POSEIDON"
+    }
   ];
 
   const kpis = [
     {
       value: "+42%",
-      label: "Average Revenue Growth",
+      label: "Average Revenue Growth"
     },
     {
       value: "-28%",
-      label: "Reduced Acquisition Cost",
+      label: "Reduced Acquisition Cost"
     },
     {
       value: "35%",
-      label: "Shorter Sales Cycles",
+      label: "Shorter Sales Cycles"
     },
     {
       value: "47%",
-      label: "Increased Conversion Rates",
-    },
+      label: "Increased Conversion Rates"
+    }
   ];
 
   // Get structured data for the home page
-  const schemaMarkup = getHomePageSchema();
+  const homeSchema = getHomePageSchema();
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", url: "/" }
+  ]);
+  
+  const schemaMarkup = [homeSchema, breadcrumbSchema];
 
   return (
     <>
@@ -74,9 +79,9 @@ const Index = () => {
         {/* Introduction Section with Proper Heading Structure */}
         <section className="bg-white py-12">
           <div className="container-custom">
-            <h1 className="text-3xl md:text-4xl font-bold text-prometheus-navy mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-prometheus-navy mb-6">
               Strategic Growth Solutions for Modern Businesses
-            </h1>
+            </h2>
             <p className="text-lg text-prometheus-gray mb-6 max-w-3xl">
               At <strong>Prometheus Agency</strong>, we specialize in transforming technological complexity into 
               sustainable growth for both B2B and DTC businesses. Our team of experts leverages 
@@ -99,6 +104,87 @@ const Index = () => {
         <ProofRibbon clients={clients} kpis={kpis} />
         <WhoWeHelpPanel />
         <ProcessStrip />
+        
+        {/* Additional Value Proposition Section */}
+        <section className="py-20 bg-gray-50">
+          <div className="container-custom">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <h2 className="text-3xl font-semibold text-prometheus-navy mb-6">
+                  Why Businesses Choose Prometheus
+                </h2>
+                <p className="text-lg text-prometheus-gray mb-6">
+                  Our unique approach combines strategic insight, technological expertise, and operational 
+                  excellence to deliver measurable growth for our clients.
+                </p>
+                
+                <div className="space-y-6">
+                  <div className="flex gap-4">
+                    <div className="w-12 h-12 rounded-full bg-prometheus-orange/10 flex items-center justify-center shrink-0">
+                      <span className="text-prometheus-orange font-semibold text-xl">1</span>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-prometheus-navy mb-2">Strategic Focus</h3>
+                      <p className="text-prometheus-gray">
+                        We prioritize business outcomes over technical complexity, ensuring every solution 
+                        drives meaningful growth and ROI.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <div className="w-12 h-12 rounded-full bg-prometheus-orange/10 flex items-center justify-center shrink-0">
+                      <span className="text-prometheus-orange font-semibold text-xl">2</span>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-prometheus-navy mb-2">Practical Implementation</h3>
+                      <p className="text-prometheus-gray">
+                        Our recommendations aren't theoretical—they're actionable plans with clear steps, 
+                        timelines, and accountability.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex gap-4">
+                    <div className="w-12 h-12 rounded-full bg-prometheus-orange/10 flex items-center justify-center shrink-0">
+                      <span className="text-prometheus-orange font-semibold text-xl">3</span>
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-medium text-prometheus-navy mb-2">Holistic Approach</h3>
+                      <p className="text-prometheus-gray">
+                        We integrate technology, strategy, and process optimization to create comprehensive 
+                        solutions that address the entire customer journey.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 grid-rows-2 gap-4">
+                <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">94%</div>
+                  <p className="text-prometheus-gray">Client retention rate</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">12+</div>
+                  <p className="text-prometheus-gray">Industries served</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">3.8x</div>
+                  <p className="text-prometheus-gray">Average client ROI</p>
+                </div>
+                
+                <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">100+</div>
+                  <p className="text-prometheus-gray">Projects completed</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
         <CTABanner
           title="Ready to Transform Chaos into Growth?"
           description="Book a complimentary Growth Audit to discover how we can help you tame your technology and unleash sustainable growth."

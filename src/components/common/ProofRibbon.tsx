@@ -30,7 +30,7 @@ const ProofRibbon = ({ clients, kpis }: ProofRibbonProps) => {
             <div key={index} className="flex items-center justify-center">
               <img
                 src={client.logo}
-                alt={client.name}
+                alt={`${client.name} logo - Prometheus Agency client`}
                 className="max-h-12 max-w-full grayscale hover:grayscale-0 transition-all duration-300"
               />
             </div>

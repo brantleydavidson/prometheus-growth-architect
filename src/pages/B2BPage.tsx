@@ -1,255 +1,183 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, ArrowRight } from "lucide-react";
-import TestimonialCard from "@/components/common/TestimonialCard";
 import CTABanner from "@/components/common/CTABanner";
 import SEO from "@/components/SEO";
+import { getB2BPageSchema, getBreadcrumbSchema } from "@/utils/schema";
+import { Card, CardContent } from "@/components/ui/card";
+import { CheckCircle } from "lucide-react";
 
 const B2BPage = () => {
-  // Mock testimonial data
-  const testimonials = [
+  // Generate structured data for SEO
+  const schemaMarkup = getB2BPageSchema();
+  const breadcrumbSchema = getBreadcrumbSchema([
+    { name: "Home", url: "/" },
+    { name: "B2B Solutions", url: "/b2b" },
+  ]);
+
+  // Combine schemas
+  const combinedSchema = [schemaMarkup, breadcrumbSchema];
+
+  const benefits = [
+    "Shorten sales cycles by up to 35%",
+    "Align marketing and sales teams for cohesive execution",
+    "Navigate complex B2B buying committees effectively",
+    "Track and attribute ROI across lengthy customer journeys",
+    "Optimize resource allocation for maximum growth impact",
+    "Leverage AI to identify high-value prospects earlier"
+  ];
+
+  const solutions = [
     {
-      quote: "Prometheus helped us cut our sales cycle by 35% and increase our close rate significantly.",
-      author: "John Smith",
-      company: "Manufacturing Inc.",
-      categories: ["Manufacturing", "B2B"],
+      title: "CRM Implementation & Optimization",
+      description: "Custom CRM solutions designed for complex B2B sales cycles and multiple stakeholders.",
+      icon: "https://placehold.co/100x100/gray/white?text=CRM"
     },
     {
-      quote: "The team's strategy completely transformed how we approach the market and engage with prospects.",
-      author: "Sarah Johnson",
-      company: "Professional Services Co.",
-      categories: ["Professional Services", "B2B"],
+      title: "Marketing & Sales Alignment",
+      description: "Strategic frameworks that align your teams around shared goals and consistent messaging.",
+      icon: "https://placehold.co/100x100/gray/white?text=MSA"
     },
     {
-      quote: "Their AI implementation has given us a competitive edge in our industry. Highly recommend.",
-      author: "Michael Davis",
-      company: "Tech Solutions",
-      categories: ["Technology", "B2B"],
+      title: "AI-Enabled Lead Scoring",
+      description: "Predictive models that identify your most promising prospects based on behavioral patterns.",
+      icon: "https://placehold.co/100x100/gray/white?text=AI"
     },
+    {
+      title: "Account-Based Marketing",
+      description: "Targeted approaches for engaging key decision makers within strategic accounts.",
+      icon: "https://placehold.co/100x100/gray/white?text=ABM"
+    }
   ];
 
   return (
     <>
       <SEO 
-        title="B2B Solutions | Prometheus Agency"
-        description="Strategic technology solutions for B2B businesses that drive growth, efficiency, and competitive advantage."
+        title="B2B Growth Solutions | Prometheus Agency"
+        description="Shorten sales cycles and align teams with our strategic B2B growth solutions. AI-powered lead identification and proven ROI tracking."
         canonical="/b2b"
+        schemaMarkup={combinedSchema}
       />
       
       <Navbar />
       <main>
         {/* Hero Section */}
-        <section className="pt-16 pb-24 bg-prometheus-navy text-white">
+        <section className="pt-24 pb-16 bg-gradient-to-br from-white to-gray-50">
           <div className="container-custom">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h1 className="text-4xl md:text-5xl font-semibold mb-6 leading-tight">
-                  Win More B2B Deals with Predictable Results
+                <h1 className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6 leading-tight">
+                  B2B Growth <span className="text-prometheus-orange">Without the Complexity</span>
                 </h1>
-                <p className="text-white/80 text-lg mb-4 max-w-lg">
-                  Stop losing deals to indecision and complexity. We help B2B businesses 
-                  create <strong>streamlined sales processes</strong> that consistently win more profitable deals.
+                <p className="text-lg text-prometheus-gray mb-8 max-w-lg">
+                  Transform your technology chaos into a strategic advantage that shortens sales cycles, 
+                  aligns teams, and delivers measurable ROI for your B2B organization.
                 </p>
-                <p className="text-white/80 text-lg mb-8 max-w-lg">
-                  Our proven methodologies and technology implementations create predictable 
-                  revenue growth and shorter sales cycles for B2B companies across industries.
-                </p>
-                <div className="p-6 bg-white/10 rounded-lg border border-white/20 mb-8">
-                  <h3 className="text-xl font-medium mb-4">Free B2B Growth Teardown</h3>
-                  <p className="mb-4 text-white/70">
-                    Get a complimentary analysis of your current sales and marketing approach with 
-                    actionable recommendations you can implement today.
-                  </p>
-                  <Link to="/book-audit">
-                    <Button className="w-full bg-prometheus-orange hover:bg-prometheus-orange/90">
-                      Request Your Free Teardown
-                    </Button>
-                  </Link>
+                <div className="space-y-4 mb-8">
+                  {benefits.slice(0, 3).map((benefit, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <CheckCircle className="text-prometheus-orange mt-1" size={20} />
+                      <p>{benefit}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
               
               <div className="relative">
-                <div className="relative aspect-video rounded-lg overflow-hidden">
-                  {/* This would be a video or image in the real implementation */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-prometheus-orange to-prometheus-gold opacity-30" aria-hidden="true"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="bg-prometheus-navy/80 p-6 rounded-lg">
-                        <p className="text-xl font-medium mb-3">Average Customer Results</p>
-                        <div className="grid grid-cols-2 gap-4">
-                          <div>
-                            <div className="text-4xl font-bold mb-2 text-prometheus-orange">
-                              35%
-                            </div>
-                            <p>Shorter Sales Cycles</p>
-                          </div>
-                          <div>
-                            <div className="text-4xl font-bold mb-2 text-prometheus-orange">
-                              42%
-                            </div>
-                            <p>More Closed Deals</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
+                  <img 
+                    src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
+                    alt="B2B business professional analyzing growth data on laptop" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
             </div>
           </div>
         </section>
         
-        {/* Pain to Possibility Section */}
+        {/* Solutions Section */}
         <section className="py-20">
           <div className="container-custom">
-            <div className="max-w-3xl mx-auto text-center mb-16">
-              <h2 className="section-title">From Pain to Possibility</h2>
-              <p className="section-subtitle">
-                B2B companies face unique challenges that require specialized 
-                solutions. Here's how we transform common pain points into growth.
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-semibold text-prometheus-navy mb-4">
+                Our B2B Growth Solutions
+              </h2>
+              <p className="text-lg text-prometheus-gray max-w-2xl mx-auto">
+                Strategic services designed specifically for the complexities of B2B sales environments.
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-16">
-              {/* Pain Point 1 */}
-              <div className="flex gap-6">
-                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-red-600 font-semibold">1</span>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-prometheus-navy mb-3">
-                    Long, Unpredictable Sales Cycles
-                  </h3>
-                  <p className="text-prometheus-gray mb-4">
-                    Your sales team is spending months nurturing prospects with inconsistent results 
-                    and forecasts that never materialize.
-                  </p>
-                  <div className="p-4 bg-green-50 rounded-md border border-green-100">
-                    <p className="flex items-start gap-2">
-                      <CheckCircle size={20} className="text-green-600 mt-1 flex-shrink-0" aria-hidden="true" />
-                      <span className="text-green-800">
-                        We implement <strong>AI-powered lead scoring</strong> and qualification processes that 
-                        identify the most promising opportunities so you can focus resources effectively.
-                      </span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {solutions.map((solution, index) => (
+                <Card key={index} className="border border-gray-100 hover:border-prometheus-orange transition-all duration-300">
+                  <CardContent className="p-6">
+                    <div className="mb-4">
+                      <img 
+                        src={solution.icon} 
+                        alt={`${solution.title} icon`} 
+                        className="w-16 h-16"
+                      />
+                    </div>
+                    <h3 className="text-xl font-medium text-prometheus-navy mb-2">
+                      {solution.title}
+                    </h3>
+                    <p className="text-prometheus-gray">
+                      {solution.description}
                     </p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Pain Point 2 */}
-              <div className="flex gap-6">
-                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-red-600 font-semibold">2</span>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-prometheus-navy mb-3">
-                    Multiple Decision Makers
-                  </h3>
-                  <p className="text-prometheus-gray mb-4">
-                    Your deals stall because you can't effectively engage and persuade all the 
-                    stakeholders involved in the purchasing decision.
-                  </p>
-                  <div className="p-4 bg-green-50 rounded-md border border-green-100">
-                    <p className="flex items-start gap-2">
-                      <CheckCircle size={20} className="text-green-600 mt-1 flex-shrink-0" />
-                      <span className="text-green-800">
-                        We create stakeholder mapping systems and content strategies that address 
-                        the unique concerns of each decision-maker in the buying committee.
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Pain Point 3 */}
-              <div className="flex gap-6">
-                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-red-600 font-semibold">3</span>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-prometheus-navy mb-3">
-                    Marketing and Sales Misalignment
-                  </h3>
-                  <p className="text-prometheus-gray mb-4">
-                    Your marketing team generates leads that sales considers low quality, 
-                    while sales pursues opportunities without leveraging marketing resources.
-                  </p>
-                  <div className="p-4 bg-green-50 rounded-md border border-green-100">
-                    <p className="flex items-start gap-2">
-                      <CheckCircle size={20} className="text-green-600 mt-1 flex-shrink-0" />
-                      <span className="text-green-800">
-                        We implement unified CRM and automation systems with clear SLAs 
-                        between teams, creating a seamless revenue operation.
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Pain Point 4 */}
-              <div className="flex gap-6">
-                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
-                  <span className="text-red-600 font-semibold">4</span>
-                </div>
-                <div>
-                  <h3 className="text-xl font-semibold text-prometheus-navy mb-3">
-                    Poor ROI Tracking
-                  </h3>
-                  <p className="text-prometheus-gray mb-4">
-                    You invest in marketing and sales technology but struggle to 
-                    measure its impact on your bottom line.
-                  </p>
-                  <div className="p-4 bg-green-50 rounded-md border border-green-100">
-                    <p className="flex items-start gap-2">
-                      <CheckCircle size={20} className="text-green-600 mt-1 flex-shrink-0" />
-                      <span className="text-green-800">
-                        We set up attribution models and reporting dashboards that 
-                        clearly show which activities drive revenue, so you can optimize spending.
-                      </span>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="mt-16 text-center">
-              <Link to="/manufacturing">
-                <Button className="bg-prometheus-navy hover:bg-prometheus-navy/90 text-white flex items-center gap-2 mx-auto">
-                  Explore Manufacturing Solutions
-                  <ArrowRight size={16} />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
-        
-        {/* Testimonials Section */}
-        <section className="py-20 bg-gray-50">
-          <div className="container-custom">
-            <div className="max-w-3xl mx-auto text-center mb-16">
-              <h2 className="section-title">What Our B2B Clients Say</h2>
-              <p className="section-subtitle">
-                Don't just take our word for it. Here's what our clients have achieved 
-                by partnering with Prometheus.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial, index) => (
-                <TestimonialCard key={index} {...testimonial} />
+                  </CardContent>
+                </Card>
               ))}
             </div>
           </div>
         </section>
         
+        {/* Additional Benefits Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container-custom">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <h2 className="text-3xl font-semibold text-prometheus-navy mb-6">
+                  Why B2B Organizations Choose Prometheus
+                </h2>
+                <p className="text-lg text-prometheus-gray mb-6">
+                  We understand the unique challenges of B2B growth and have developed proven strategies
+                  to address them head-on.
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {benefits.map((benefit, index) => (
+                    <div key={index} className="flex items-start gap-3">
+                      <CheckCircle className="text-prometheus-orange mt-1" size={20} />
+                      <p>{benefit}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="bg-white p-8 rounded-lg shadow-lg border border-gray-100">
+                <blockquote className="italic text-lg text-prometheus-gray mb-6">
+                  "Prometheus Agency helped us transform our disjointed tech stack and misaligned teams into
+                  a cohesive growth engine. Our sales cycles shortened by 42% and revenue increased by 38% in
+                  the first six months alone."
+                </blockquote>
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+                  <div>
+                    <p className="font-medium text-prometheus-navy">Sarah Johnson</p>
+                    <p className="text-sm text-prometheus-gray">CMO, EnterpriseGrowth Inc.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
         <CTABanner
-          title="Ready to Win More B2B Deals?"
-          description="Book a complimentary Growth Audit to discover how we can help you transform your B2B sales approach."
-          buttonText="Book Your Growth Audit"
+          title="Ready to Transform Your B2B Growth Strategy?"
+          description="Book a complimentary Growth Audit to discover how we can help you overcome complex B2B challenges."
+          buttonText="Book Your B2B Growth Audit"
           buttonLink="/book-audit"
           color="navy"
         />

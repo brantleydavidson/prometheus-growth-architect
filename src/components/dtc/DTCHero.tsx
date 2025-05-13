@@ -1,63 +1,75 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { ArrowRight, ShoppingBag, TrendingUp, Users } from "lucide-react";
 
 const DTCHero = () => {
+  const metrics = [
+    {
+      icon: <ShoppingBag size={24} className="text-prometheus-gold" />,
+      value: "-28%",
+      label: "Customer Acquisition Cost"
+    },
+    {
+      icon: <TrendingUp size={24} className="text-prometheus-gold" />,
+      value: "+47%",
+      label: "Conversion Rates"
+    },
+    {
+      icon: <Users size={24} className="text-prometheus-gold" />,
+      value: "+120%",
+      label: "Customer LTV"
+    }
+  ];
+
   return (
-    <section className="pt-16 pb-24 bg-prometheus-navy text-white">
+    <section className="pt-24 pb-16 bg-gradient-to-br from-white to-gray-50">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
-            <h1 className="text-4xl md:text-5xl font-semibold mb-6 leading-tight">
-              Sell More Direct-to-Consumer with Lower Acquisition Costs
+            <h1 className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6 leading-tight">
+              Grow Your DTC Brand <span className="text-prometheus-gold">Without Breaking the Bank</span>
             </h1>
-            <p className="text-white/80 text-lg mb-4 max-w-lg">
-              Stop wasting ad spend on poorly targeted campaigns. We help DTC businesses 
-              acquire more customers at a <strong>lower cost</strong> and increase their lifetime value.
+            <p className="text-lg text-prometheus-gray mb-8 max-w-lg">
+              Smart strategies for customer acquisition, retention, and lifetime value growth in an increasingly competitive DTC landscape.
             </p>
-            <p className="text-white/80 text-lg mb-8 max-w-lg">
-              Our specialized DTC strategies combine sophisticated targeting, personalized customer 
-              journeys, and data-driven optimizations to maximize your marketing ROI.
-            </p>
-            <div className="p-6 bg-white/10 rounded-lg border border-white/20 mb-8">
-              <h3 className="text-xl font-medium mb-4">Free DTC Growth Audit</h3>
-              <p className="mb-4 text-white/70">
-                Get a complimentary analysis of your customer acquisition strategy with 
-                actionable recommendations to reduce costs and increase conversions.
-              </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Link to="/book-audit">
-                <Button className="w-full bg-prometheus-gold hover:bg-prometheus-gold/90">
-                  Request Your Free Audit
+                <Button className="bg-prometheus-gold hover:bg-prometheus-gold/90 text-white px-6 py-6 text-base w-full sm:w-auto">
+                  Book Growth Audit
                 </Button>
               </Link>
+              <Link to="/services">
+                <Button variant="outline" className="border-prometheus-navy text-prometheus-navy hover:bg-prometheus-navy hover:text-white px-6 py-6 text-base flex items-center gap-2 w-full sm:w-auto">
+                  Explore DTC Services
+                  <ArrowRight size={16} />
+                </Button>
+              </Link>
+            </div>
+            
+            {/* Metrics */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
+              {metrics.map((metric, index) => (
+                <div key={index} className="flex items-center gap-3">
+                  {metric.icon}
+                  <div>
+                    <div className="text-2xl font-bold text-prometheus-navy">{metric.value}</div>
+                    <div className="text-sm text-prometheus-gray">{metric.label}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
           
           <div className="relative">
-            <div className="relative aspect-video rounded-lg overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-prometheus-gold to-prometheus-orange opacity-30" aria-hidden="true"></div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="bg-prometheus-navy/80 p-6 rounded-lg">
-                    <p className="text-xl font-medium mb-3">Average Customer Results</p>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <div className="text-4xl font-bold mb-2 text-prometheus-gold">
-                          28%
-                        </div>
-                        <p>Lower Acquisition Cost</p>
-                      </div>
-                      <div>
-                        <div className="text-4xl font-bold mb-2 text-prometheus-gold">
-                          47%
-                        </div>
-                        <p>Higher Conversion Rate</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
+              <img 
+                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c" 
+                alt="DTC marketing team analyzing customer data and growth metrics" 
+                className="w-full h-full object-cover"
+              />
             </div>
           </div>
         </div>

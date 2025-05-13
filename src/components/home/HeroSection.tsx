@@ -10,10 +10,10 @@ const HeroSection = () => {
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="animate-grid-snap">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-prometheus-navy mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-prometheus-navy mb-6 leading-tight">
               Tame the Tech. <br/>
               <span className="text-prometheus-orange">Unleash the Growth.</span>
-            </h2>
+            </h1>
             <p className="text-lg md:text-xl text-prometheus-gray mb-8 max-w-lg">
               We help <strong>B2B</strong> and <strong>DTC businesses</strong> transform technology chaos into 
               strategic growth engines with AI enablement and proven GTM strategies.
@@ -36,7 +36,7 @@ const HeroSection = () => {
           <div className="relative animate-grid-snap" style={{ animationDelay: "200ms" }}>
             <div className="relative aspect-video overflow-hidden rounded-lg shadow-xl">
               {/* This would be a video or animation in the real implementation */}
-              <div className="absolute inset-0 bg-gradient-to-br from-prometheus-orange to-prometheus-gold opacity-30"></div>
+              <div className="absolute inset-0 bg-gradient-to-br from-prometheus-orange to-prometheus-gold opacity-30" aria-hidden="true"></div>
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="bg-prometheus-navy/80 p-6 rounded-lg">
