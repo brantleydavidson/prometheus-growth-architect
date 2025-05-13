@@ -85,15 +85,15 @@ const CRMConsultingConwayARPage = () => {
   return (
     <>
       <SEO 
-        title="CRM Consulting Services In Conway AR | Prometheus Agency"
-        description="Discover how effective CRM consulting services can transform businesses in Conway, Arkansas by enhancing customer relationships, streamlining processes, and driving sustainable growth."
+        title="CRM Consulting Services in Conway, AR – Boost Sales Efficiency | Prometheus Agency"
+        description="Expert CRM consulting in Conway, AR. Transform customer relationships, streamline sales processes, and drive growth with our HubSpot-certified consultants. Schedule a free strategy call today."
         canonical="/insights/crm-consulting-services-in-conway-ar"
         ogType="article"
         ogImage="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
         schemaMarkup={{
           "@context": "https://schema.org",
-          "@type": "BlogPosting",
-          "headline": "CRM Consulting Services In Conway AR",
+          "@type": ["Article", "Service"],
+          "headline": "CRM Consulting Services in Conway, AR",
           "description": "Discover how effective CRM consulting services can transform businesses in Conway, Arkansas by enhancing customer relationships, streamlining processes, and driving sustainable growth.",
           "image": "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
           "datePublished": "2025-05-13",
@@ -101,9 +101,12 @@ const CRMConsultingConwayARPage = () => {
             "@type": "Person",
             "name": "Michael Reynolds"
           },
-          "publisher": {
+          "serviceType": "CRM Consulting",
+          "areaServed": "Conway AR",
+          "provider": {
             "@type": "Organization",
             "name": "Prometheus Agency",
+            "url": "https://prometheusagency.co",
             "logo": {
               "@type": "ImageObject",
               "url": "https://prometheusagency.co/logo.png"
@@ -113,7 +116,7 @@ const CRMConsultingConwayARPage = () => {
             "@type": "WebPage",
             "@id": "https://prometheusagency.co/insights/crm-consulting-services-in-conway-ar"
           },
-          "keywords": "CRM Consulting, Conway AR, Business Growth, Customer Relationship Management, Sales Automation"
+          "keywords": "CRM Consulting, Conway AR, Business Growth, Customer Relationship Management, Sales Automation, HubSpot Integration"
         }}
       />
       
@@ -150,6 +153,16 @@ const CRMConsultingConwayARPage = () => {
               {blogData.title}
             </h1>
             
+            {/* Key takeaway box for SGE - new addition */}
+            <div className="bg-gray-50 border-l-4 border-prometheus-orange p-4 mb-6">
+              <h2 className="font-semibold text-lg mb-2">Key Takeaways:</h2>
+              <p className="text-gray-700">
+                Local CRM consulting services in Conway offer specialized expertise tailored to Arkansas businesses, 
+                with implementation timelines of 2-12 weeks depending on complexity. Companies can expect improved customer 
+                retention, streamlined sales processes, and data-driven decision making that drives meaningful growth.
+              </p>
+            </div>
+            
             <p className="text-lg text-gray-700 mb-6 leading-relaxed">
               {blogData.excerpt}
             </p>
@@ -181,7 +194,7 @@ const CRMConsultingConwayARPage = () => {
             <AspectRatio ratio={16/9} className="overflow-hidden rounded-lg shadow-md">
               <img
                 src={blogData.image}
-                alt="CRM Consulting Services in Conway AR"
+                alt="CRM dashboard showing Conway business metrics with sales pipeline visualization"
                 className="object-cover w-full h-full"
               />
             </AspectRatio>
@@ -567,39 +580,37 @@ const CRMConsultingConwayARPage = () => {
             
             {/* Sidebar */}
             <aside className="lg:w-1/3 space-y-8">
-              {/* Table of Contents - Modified to have fixed height with scroll */}
+              {/* Table of Contents - Fixed height WITHOUT scroll */}
               <div className="bg-gray-50 rounded-lg p-6">
                 <h3 className="font-bold text-xl mb-4">Table of Contents</h3>
-                <ScrollArea className="h-[400px] pr-4">
-                  <nav className="space-y-4">
-                    {blogData.tableOfContents.map((item) => (
-                      <div key={item.id} className="space-y-2">
-                        <a 
-                          href={`#${item.id}`} 
-                          className={cn(
-                            "block font-medium hover:text-prometheus-orange transition-colors",
-                            "text-prometheus-navy"
-                          )}
-                        >
-                          {item.title}
-                        </a>
-                        {item.subItems && (
-                          <div className="ml-4 space-y-2 border-l-2 border-gray-200 pl-3">
-                            {item.subItems.map((subItem) => (
-                              <a
-                                key={subItem.id}
-                                href={`#${subItem.id}`}
-                                className="block text-sm text-gray-600 hover:text-prometheus-orange transition-colors"
-                              >
-                                {subItem.title}
-                              </a>
-                            ))}
-                          </div>
+                <nav className="space-y-4">
+                  {blogData.tableOfContents.map((item) => (
+                    <div key={item.id} className="space-y-2">
+                      <a 
+                        href={`#${item.id}`} 
+                        className={cn(
+                          "block font-medium hover:text-prometheus-orange transition-colors",
+                          "text-prometheus-navy"
                         )}
-                      </div>
-                    ))}
-                  </nav>
-                </ScrollArea>
+                      >
+                        {item.title}
+                      </a>
+                      {item.subItems && (
+                        <div className="ml-4 space-y-2 border-l-2 border-gray-200 pl-3">
+                          {item.subItems.map((subItem) => (
+                            <a
+                              key={subItem.id}
+                              href={`#${subItem.id}`}
+                              className="block text-sm text-gray-600 hover:text-prometheus-orange transition-colors"
+                            >
+                              {subItem.title}
+                            </a>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </nav>
               </div>
               
               {/* CTA Box */}
@@ -627,7 +638,7 @@ const CRMConsultingConwayARPage = () => {
                 </div>
               </div>
               
-              {/* FAQ Section */}
+              {/* FAQ Section - enhanced for structured data */}
               <div className="bg-gray-50 rounded-lg p-6">
                 <h3 className="font-bold text-xl mb-4">Frequently Asked Questions</h3>
                 <div className="space-y-4">

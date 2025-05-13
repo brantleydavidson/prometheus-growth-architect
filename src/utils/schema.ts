@@ -38,15 +38,70 @@ export const getHomePageSchema = () => {
   };
 };
 
-// Service page schema
-export const getServicePageSchema = (name: string, description: string, url: string) => {
+// Service page schema enhanced with combined types
+export const getServicePageSchema = (name: string, description: string, url: string, serviceType: string, areaServed?: string) => {
   return {
     "@context": "https://schema.org",
-    "@type": "Service",
+    "@type": ["Service", "WebPage"],
     "name": name,
     "description": description,
     "url": `https://prometheusagency.co${url}`,
-    "provider": getOrganizationSchema()
+    "provider": getOrganizationSchema(),
+    "serviceType": serviceType,
+    ...(areaServed ? { "areaServed": areaServed } : {})
+  };
+};
+
+// Article schema
+export const getArticleSchema = (title: string, description: string, url: string, image: string, datePublished: string, author: string) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": title,
+    "description": description,
+    "image": image,
+    "datePublished": datePublished,
+    "author": {
+      "@type": "Person",
+      "name": author
+    },
+    "publisher": getOrganizationSchema(),
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://prometheusagency.co${url}`
+    }
+  };
+};
+
+// Combined Article and Service schema for location-specific service articles
+export const getServiceArticleSchema = (
+  title: string, 
+  description: string, 
+  url: string, 
+  image: string, 
+  datePublished: string, 
+  author: string,
+  serviceType: string,
+  areaServed: string
+) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": ["Article", "Service"],
+    "headline": title,
+    "description": description,
+    "image": image,
+    "datePublished": datePublished,
+    "author": {
+      "@type": "Person",
+      "name": author
+    },
+    "serviceType": serviceType,
+    "areaServed": areaServed,
+    "provider": getOrganizationSchema(),
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": `https://prometheusagency.co${url}`
+    }
   };
 };
 
@@ -84,6 +139,22 @@ export const getBreadcrumbSchema = (items: {name: string, url: string}[]) => {
       "position": index + 1,
       "name": item.name,
       "item": `https://prometheusagency.co${item.url}`
+    }))
+  };
+};
+
+// FAQ Page schema
+export const getFAQPageSchema = (faqs: {question: string, answer: string}[]) => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
     }))
   };
 };

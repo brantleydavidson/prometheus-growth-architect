@@ -1,3 +1,4 @@
+
 import React from 'react';
 // Import react-helmet-async properly using named exports
 import * as ReactHelmetAsync from 'react-helmet-async';
@@ -10,6 +11,10 @@ interface SEOProps {
   ogType?: string;
   ogImage?: string;
   schemaMarkup?: object;
+  faqSchema?: {
+    question: string;
+    answer: string;
+  }[];
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -18,12 +23,33 @@ const SEO: React.FC<SEOProps> = ({
   canonical,
   ogType = 'website',
   ogImage = 'https://prometheusagency.co/opengraph-image.png',
-  schemaMarkup = null
+  schemaMarkup = null,
+  faqSchema = null
 }) => {
   // Build full canonical URL if relative path is provided
   const fullCanonical = canonical 
     ? canonical.startsWith('http') ? canonical : `https://prometheusagency.co${canonical}` 
     : 'https://prometheusagency.co';
+
+  // Generate FAQPage schema if FAQs are provided
+  const generateFAQSchema = () => {
+    if (!faqSchema || faqSchema.length === 0) return null;
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": faqSchema.map(faq => ({
+        "@type": "Question",
+        "name": faq.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": faq.answer
+        }
+      }))
+    };
+  };
+
+  const faqSchemaMarkup = generateFAQSchema();
 
   return (
     <Helmet>
@@ -52,6 +78,13 @@ const SEO: React.FC<SEOProps> = ({
       {schemaMarkup && (
         <script type="application/ld+json">
           {JSON.stringify(schemaMarkup)}
+        </script>
+      )}
+      
+      {/* FAQ Schema (if provided) */}
+      {faqSchemaMarkup && (
+        <script type="application/ld+json">
+          {JSON.stringify(faqSchemaMarkup)}
         </script>
       )}
     </Helmet>
