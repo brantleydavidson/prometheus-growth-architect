@@ -15,6 +15,7 @@ import AIQuotientPage from "./pages/AIQuotient";
 import InsightsPage from "./pages/InsightsPage";
 import BookAuditPage from "./pages/BookAuditPage";
 import CRMConsultingPage from "./pages/InsightDetail/CRMConsultingPage";
+import CRMConsultingConwayARPage from "./pages/InsightDetail/CRMConsultingConwayARPage";
 
 const queryClient = new QueryClient();
 
@@ -32,7 +33,8 @@ const App = () => (
         <Route path="/services/consulting-gtm" element={<ConsultingPage />} />
         <Route path="/ai-quotient" element={<AIQuotientPage />} />
         <Route path="/insights" element={<InsightsPage />} />
-        <Route path="/insights/crm-consulting-services-conway-ar" element={<CRMConsultingPage />} />
+        <Route path="/insights/crm-consulting-services-conway-ar" element={<CRMConsultingConwayARPage />} />
+        <Route path="/insights/crm-consulting-services-in-conway-ar" element={<CRMConsultingConwayARPage />} />
         <Route path="/book-audit" element={<BookAuditPage />} />
         {/* Additional routes would be added as they are developed */}
         {/* <Route path="/manufacturing" element={<ManufacturingPage />} />

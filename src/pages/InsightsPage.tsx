@@ -46,6 +46,17 @@ const insightsData = [
     slug: "/insights/crm-consulting-services-conway-ar"
   },
   {
+    id: 7,
+    title: "CRM Consulting Services In Conway AR",
+    excerpt: "Discover how effective CRM consulting services can transform businesses in Conway, Arkansas by enhancing customer relationships, streamlining processes, and driving sustainable growth.",
+    category: "CRM Implementation",
+    date: "May 13, 2025",
+    readTime: "10 min read",
+    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    featured: false,
+    slug: "/insights/crm-consulting-services-in-conway-ar"
+  },
+  {
     id: 3,
     title: "Building a Resilient Data Spine for Your Organization",
     excerpt: "A strong data foundation is critical for AI success. Learn how to build a resilient data spine that powers meaningful insights.",
