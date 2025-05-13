@@ -1,13 +1,75 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import React from "react";
+import Navbar from "@/components/navigation/Navbar";
+import Footer from "@/components/layout/Footer";
+import HeroSection from "@/components/home/HeroSection";
+import ProofRibbon from "@/components/common/ProofRibbon";
+import WhoWeHelpPanel from "@/components/home/WhoWeHelpPanel";
+import ProcessStrip from "@/components/home/ProcessStrip";
+import CTABanner from "@/components/common/CTABanner";
 
 const Index = () => {
+  // Mock data for the ProofRibbon component
+  const clients = [
+    {
+      name: "Client 1",
+      logo: "https://placehold.co/200x100/gray/white?text=LOGO+1",
+    },
+    {
+      name: "Client 2",
+      logo: "https://placehold.co/200x100/gray/white?text=LOGO+2",
+    },
+    {
+      name: "Client 3",
+      logo: "https://placehold.co/200x100/gray/white?text=LOGO+3",
+    },
+    {
+      name: "Client 4",
+      logo: "https://placehold.co/200x100/gray/white?text=LOGO+4",
+    },
+    {
+      name: "Client 5",
+      logo: "https://placehold.co/200x100/gray/white?text=LOGO+5",
+    },
+  ];
+
+  const kpis = [
+    {
+      value: "+42%",
+      label: "Average Revenue Growth",
+    },
+    {
+      value: "-28%",
+      label: "Reduced Acquisition Cost",
+    },
+    {
+      value: "35%",
+      label: "Shorter Sales Cycles",
+    },
+    {
+      value: "47%",
+      label: "Increased Conversion Rates",
+    },
+  ];
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
-      </div>
-    </div>
+    <>
+      <Navbar />
+      <main>
+        <HeroSection />
+        <ProofRibbon clients={clients} kpis={kpis} />
+        <WhoWeHelpPanel />
+        <ProcessStrip />
+        <CTABanner
+          title="Ready to Transform Chaos into Growth?"
+          description="Book a complimentary Growth Audit to discover how we can help you tame your technology and unleash sustainable growth."
+          buttonText="Book Your Growth Audit"
+          buttonLink="/book-audit"
+          color="orange"
+        />
+      </main>
+      <Footer />
+    </>
   );
 };
 
