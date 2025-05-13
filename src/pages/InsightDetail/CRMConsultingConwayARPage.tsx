@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import SEO from "@/components/SEO";
@@ -6,7 +5,8 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Calendar, Clock, Share2, Tag, User } from "lucide-react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { ArrowLeft, Calendar, Clock, Share2, Tag, User, ChevronDown } from "lucide-react";
 import CTABanner from "@/components/common/CTABanner";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -567,37 +567,39 @@ const CRMConsultingConwayARPage = () => {
             
             {/* Sidebar */}
             <aside className="lg:w-1/3 space-y-8">
-              {/* Table of Contents */}
-              <div className="bg-gray-50 rounded-lg p-6 sticky top-24">
+              {/* Table of Contents - Modified to have fixed height with scroll */}
+              <div className="bg-gray-50 rounded-lg p-6">
                 <h3 className="font-bold text-xl mb-4">Table of Contents</h3>
-                <nav className="space-y-4">
-                  {blogData.tableOfContents.map((item) => (
-                    <div key={item.id} className="space-y-2">
-                      <a 
-                        href={`#${item.id}`} 
-                        className={cn(
-                          "block font-medium hover:text-prometheus-orange transition-colors",
-                          "text-prometheus-navy"
+                <ScrollArea className="h-[400px] pr-4">
+                  <nav className="space-y-4">
+                    {blogData.tableOfContents.map((item) => (
+                      <div key={item.id} className="space-y-2">
+                        <a 
+                          href={`#${item.id}`} 
+                          className={cn(
+                            "block font-medium hover:text-prometheus-orange transition-colors",
+                            "text-prometheus-navy"
+                          )}
+                        >
+                          {item.title}
+                        </a>
+                        {item.subItems && (
+                          <div className="ml-4 space-y-2 border-l-2 border-gray-200 pl-3">
+                            {item.subItems.map((subItem) => (
+                              <a
+                                key={subItem.id}
+                                href={`#${subItem.id}`}
+                                className="block text-sm text-gray-600 hover:text-prometheus-orange transition-colors"
+                              >
+                                {subItem.title}
+                              </a>
+                            ))}
+                          </div>
                         )}
-                      >
-                        {item.title}
-                      </a>
-                      {item.subItems && (
-                        <div className="ml-4 space-y-2 border-l-2 border-gray-200 pl-3">
-                          {item.subItems.map((subItem) => (
-                            <a
-                              key={subItem.id}
-                              href={`#${subItem.id}`}
-                              className="block text-sm text-gray-600 hover:text-prometheus-orange transition-colors"
-                            >
-                              {subItem.title}
-                            </a>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </nav>
+                      </div>
+                    ))}
+                  </nav>
+                </ScrollArea>
               </div>
               
               {/* CTA Box */}
