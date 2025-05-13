@@ -2,20 +2,22 @@
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
-import { Helmet, HelmetData } from 'react-helmet-async';
+import { HelmetData, HelmetProvider } from 'react-helmet-async';
 
 export async function render(url: string) {
-  // Create a fresh HelmetProvider context for each render
-  const helmetContext = {};
+  // Create a proper context object for Helmet
+  const helmetContext: { helmet?: HelmetData } = {};
   
   const html = ReactDOMServer.renderToString(
     <StaticRouter location={url}>
-      <App />
+      <HelmetProvider context={helmetContext}>
+        <App />
+      </HelmetProvider>
     </StaticRouter>
   );
   
   // Get the helmet data after rendering
-  const helmet = helmetContext.helmet as HelmetData;
+  const helmet = helmetContext.helmet;
   
   return {
     html,
