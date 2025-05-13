@@ -1,7 +1,25 @@
 
-# Allow all crawlers
+# Prometheus Agency Robots.txt
+
+# Allow all web crawlers
 User-agent: *
 Allow: /
 
-# Sitemap
+# Prevent crawling of sensitive or non-public areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /*?*
+
+# Allow Google Image
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /assets/
+
+# Crawl delay for specific bots (in seconds)
+User-agent: Baiduspider
+Crawl-delay: 10
+
+# Sitemap location
 Sitemap: https://prometheusagency.co/sitemap.xml

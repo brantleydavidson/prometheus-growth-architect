@@ -1,3 +1,4 @@
+
 import React from "react";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -7,6 +8,7 @@ import WhoWeHelpPanel from "@/components/home/WhoWeHelpPanel";
 import ProcessStrip from "@/components/home/ProcessStrip";
 import CTABanner from "@/components/common/CTABanner";
 import SEO from "@/components/SEO";
+import { getHomePageSchema } from "@/utils/schema";
 
 const Index = () => {
   // Mock data for the ProofRibbon component
@@ -52,12 +54,16 @@ const Index = () => {
     },
   ];
 
+  // Get structured data for the home page
+  const schemaMarkup = getHomePageSchema();
+
   return (
     <>
       <SEO 
         title="Prometheus Agency - Tame the Tech. Unleash the Growth."
         description="We help B2B and DTC businesses transform technology chaos into strategic growth engines with AI enablement and proven GTM strategies."
         canonical="/"
+        schemaMarkup={schemaMarkup}
       />
       
       <Navbar />

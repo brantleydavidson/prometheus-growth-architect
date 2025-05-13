@@ -8,6 +8,7 @@ interface SEOProps {
   canonical?: string;
   ogType?: string;
   ogImage?: string;
+  schemaMarkup?: object;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -15,7 +16,8 @@ const SEO: React.FC<SEOProps> = ({
   description = 'We help B2B and DTC businesses transform technology chaos into strategic growth engines with AI enablement and proven GTM strategies.',
   canonical,
   ogType = 'website',
-  ogImage = 'https://prometheusagency.co/opengraph-image.png'
+  ogImage = 'https://prometheusagency.co/opengraph-image.png',
+  schemaMarkup = null
 }) => {
   // Build full canonical URL if relative path is provided
   const fullCanonical = canonical 
@@ -44,6 +46,13 @@ const SEO: React.FC<SEOProps> = ({
       {/* Additional SEO tags */}
       <meta name="robots" content="index, follow" />
       <html lang="en" />
+      
+      {/* Schema.org JSON-LD */}
+      {schemaMarkup && (
+        <script type="application/ld+json">
+          {JSON.stringify(schemaMarkup)}
+        </script>
+      )}
     </Helmet>
   );
 };
