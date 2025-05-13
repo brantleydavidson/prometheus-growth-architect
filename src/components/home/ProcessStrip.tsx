@@ -16,7 +16,7 @@ const ProcessStrip = () => {
           {/* Map */}
           <div className="text-center bg-white p-8 rounded-lg shadow-md border border-gray-100 hover:border-prometheus-orange hover:shadow-lg transition-all">
             <div className="mx-auto w-16 h-16 rounded-full bg-prometheus-orange/10 flex items-center justify-center mb-6">
-              <MapPin size={32} className="text-prometheus-orange" alt="Map icon" />
+              <MapPin size={32} className="text-prometheus-orange" aria-label="Map icon" />
             </div>
             <h3 className="text-xl font-semibold text-prometheus-navy mb-3">Map</h3>
             <p className="text-prometheus-gray">
@@ -30,7 +30,7 @@ const ProcessStrip = () => {
           {/* Build */}
           <div className="text-center bg-white p-8 rounded-lg shadow-md border border-gray-100 hover:border-prometheus-orange hover:shadow-lg transition-all">
             <div className="mx-auto w-16 h-16 rounded-full bg-prometheus-orange/10 flex items-center justify-center mb-6">
-              <Building size={32} className="text-prometheus-orange" alt="Building icon" />
+              <Building size={32} className="text-prometheus-orange" aria-label="Building icon" />
             </div>
             <h3 className="text-xl font-semibold text-prometheus-navy mb-3">Build</h3>
             <p className="text-prometheus-gray">
@@ -44,7 +44,7 @@ const ProcessStrip = () => {
           {/* Train */}
           <div className="text-center bg-white p-8 rounded-lg shadow-md border border-gray-100 hover:border-prometheus-orange hover:shadow-lg transition-all">
             <div className="mx-auto w-16 h-16 rounded-full bg-prometheus-orange/10 flex items-center justify-center mb-6">
-              <Lightbulb size={32} className="text-prometheus-orange" alt="Lightbulb icon" />
+              <Lightbulb size={32} className="text-prometheus-orange" aria-label="Lightbulb icon" />
             </div>
             <h3 className="text-xl font-semibold text-prometheus-navy mb-3">Train</h3>
             <p className="text-prometheus-gray">
