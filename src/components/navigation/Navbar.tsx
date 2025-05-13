@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import WhoWeHelpMenu from "./WhoWeHelpMenu";
 import ServicesMenu from "./ServicesMenu";
+import InsightsMenu from "./InsightsMenu";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -46,9 +47,7 @@ const Navbar = () => {
         <nav className="hidden lg:flex items-center space-x-8">
           <WhoWeHelpMenu />
           <ServicesMenu />
-          <Link to="/insights" className="font-medium text-base hover:text-prometheus-orange transition-colors">
-            Insights & Playbooks
-          </Link>
+          <InsightsMenu />
           <Link to="/about" className="font-medium text-base hover:text-prometheus-orange transition-colors">
             About
           </Link>
@@ -92,6 +91,13 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               Insights & Playbooks
+            </Link>
+            <Link 
+              to="/ai-quotient" 
+              className="font-medium text-lg text-prometheus-navy py-2 border-b border-gray-100 pl-4"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              AI Quotient Assessment
             </Link>
             <Link 
               to="/about" 
