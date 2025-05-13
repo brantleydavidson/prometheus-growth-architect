@@ -18,7 +18,7 @@ const Footer = () => {
               <img
                 src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png"
                 alt="Prometheus Agency"
-                className="h-10 w-auto invert"
+                className="h-10 w-auto"
               />
             </Link>
             <p className="text-prometheus-gray mb-4">
