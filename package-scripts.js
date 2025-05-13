@@ -1,6 +1,5 @@
 
-#!/usr/bin/env node
-
+// ES module for updating package.json scripts
 import fs from 'fs';
 
 // Read the current package.json
