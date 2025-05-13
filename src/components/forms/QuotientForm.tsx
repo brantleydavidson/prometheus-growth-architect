@@ -5,13 +5,10 @@ import UserInfoForm from "./aiQuotient/UserInfoForm";
 import QuestionsForm from "./aiQuotient/QuestionsForm";
 import ResultsPage from "./aiQuotient/ResultsPage";
 import SubmitResultsForm from "./aiQuotient/SubmitResultsForm";
-import { UserInfo } from "@/types/aiQuotient";
+import { UserInfo, PillarType } from "@/types/aiQuotient";
+import { AssessmentFormProps } from "@/types/aiQuotient";
 
-interface QuotientFormProps {
-  testMode?: boolean;
-}
-
-const QuotientForm: React.FC<QuotientFormProps> = ({ testMode = false }) => {
+const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
   const {
     currentStep,
     userInfo,

@@ -5,14 +5,14 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
-import { Answer, Question } from "@/types/aiQuotient";
+import { Answer, Question, PillarType } from "@/types/aiQuotient";
 import { ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";
 
 interface QuestionsFormProps {
   questions: Question[];
-  currentPillar: string;
-  allPillars: string[];
-  completedPillars: string[];
+  currentPillar: PillarType;
+  allPillars: PillarType[];
+  completedPillars: PillarType[];
   answers: Answer[];
   progress: number;
   isTestMode: boolean;

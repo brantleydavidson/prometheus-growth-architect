@@ -21,10 +21,10 @@ export interface UseAIQuotientAssessment {
   currentStep: AssessmentStep;
   userInfo: UserInfo;
   answers: Answer[];
-  currentPillar: string;
+  currentPillar: PillarType;
   currentPillarQuestions: any[];
-  allPillars: string[];
-  completedPillars: string[];
+  allPillars: PillarType[];
+  completedPillars: PillarType[];
   result: AssessmentResult | null;
   isTestMode: boolean;
   progress: number;
@@ -32,7 +32,7 @@ export interface UseAIQuotientAssessment {
   submitAnswer: (answer: Answer) => void;
   moveToNextStep: () => void;
   moveToPreviousStep: () => void;
-  setCurrentPillar: (pillar: string) => void;
+  setCurrentPillar: (pillar: PillarType) => void;
   submitToHubSpot: () => Promise<boolean>;
   toggleTestMode: () => void;
 }
@@ -49,12 +49,12 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   const [currentStep, setCurrentStep] = useState<AssessmentStep>("user-info");
   const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
   const [answers, setAnswers] = useState<Answer[]>([]);
-  const [currentPillar, setCurrentPillar] = useState<string>("");
-  const [completedPillars, setCompletedPillars] = useState<string[]>([]);
+  const [currentPillar, setCurrentPillar] = useState<PillarType | null>(null);
+  const [completedPillars, setCompletedPillars] = useState<PillarType[]>([]);
   const [isTestMode, setIsTestMode] = useState<boolean>(initialTestMode);
 
   // Derived values
-  const allPillars = useMemo(() => getAllPillars(), []);
+  const allPillars = useMemo(() => getAllPillars() as PillarType[], []);
   
   // Set initial pillar if not set
   if (!currentPillar && allPillars.length > 0) {
@@ -103,16 +103,18 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     
     if (answeredQuestionsInPillar >= totalQuestionsInPillar) {
       // Mark this pillar as completed
-      if (!completedPillars.includes(currentPillar)) {
+      if (currentPillar && !completedPillars.includes(currentPillar)) {
         setCompletedPillars(prev => [...prev, currentPillar]);
       }
       
       // Move to next pillar or to results if all pillars completed
-      const currentPillarIndex = allPillars.indexOf(currentPillar);
-      if (currentPillarIndex < allPillars.length - 1) {
-        setCurrentPillar(allPillars[currentPillarIndex + 1]);
-      } else {
-        setCurrentStep("results");
+      if (currentPillar) {
+        const currentPillarIndex = allPillars.indexOf(currentPillar);
+        if (currentPillarIndex < allPillars.length - 1) {
+          setCurrentPillar(allPillars[currentPillarIndex + 1]);
+        } else {
+          setCurrentStep("results");
+        }
       }
     }
   }, [answers, currentPillar, completedPillars, isTestMode, allPillars]);
@@ -165,14 +167,21 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     // Reset answers when toggling test mode
     setAnswers([]);
     setCompletedPillars([]);
-    setCurrentPillar(allPillars[0]);
+    if (allPillars.length > 0) {
+      setCurrentPillar(allPillars[0]);
+    }
   }, [allPillars]);
+
+  // For TypeScript safety, ensure currentPillar is always a PillarType
+  // If it's null (which shouldn't happen due to our initialization),
+  // use the first pillar from allPillars or a default PillarType
+  const safeCurrentPillar = currentPillar || (allPillars.length > 0 ? allPillars[0] : "Data Spine Health");
 
   return {
     currentStep,
     userInfo,
     answers,
-    currentPillar,
+    currentPillar: safeCurrentPillar,
     currentPillarQuestions,
     allPillars,
     completedPillars,

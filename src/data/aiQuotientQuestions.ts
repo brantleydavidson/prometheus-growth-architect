@@ -1,5 +1,5 @@
 
-import { Question } from "@/types/aiQuotient";
+import { Question, PillarType } from "@/types/aiQuotient";
 
 // Sample questions for the AI Quotient Assessment
 // In a real implementation, you might want to expand this with all 25 questions
@@ -75,12 +75,12 @@ export const questions: Question[] = [
 ];
 
 // Helper function to get questions by pillar
-export const getQuestionsByPillar = (pillar: string) => {
+export const getQuestionsByPillar = (pillar: PillarType) => {
   return questions.filter(q => q.pillar === pillar);
 };
 
 // Get all unique pillars
-export const getAllPillars = () => {
+export const getAllPillars = (): PillarType[] => {
   const pillars = new Set(questions.map(q => q.pillar));
-  return Array.from(pillars);
+  return Array.from(pillars) as PillarType[];
 };
