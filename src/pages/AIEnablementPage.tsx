@@ -13,7 +13,8 @@ const AIEnablementPage = () => {
   const serviceSchema = getServicePageSchema(
     "AI Enablement Services",
     "Transform your business operations and decision-making with strategic AI implementation and integration services.",
-    "/services/ai-enablement"
+    "/services/ai-enablement",
+    "AI Implementation Services" // Added the required serviceType parameter
   );
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: "Home", url: "/" },

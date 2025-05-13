@@ -14,7 +14,8 @@ const ConsultingPage = () => {
   const serviceSchema = getServicePageSchema(
     "GTM Consulting Services",
     "Strategic go-to-market consulting to accelerate growth, shorten sales cycles and improve conversion rates.",
-    "/services/consulting-gtm"
+    "/services/consulting-gtm",
+    "Go-to-Market Consulting" // Added the required serviceType parameter
   );
   const breadcrumbSchema = getBreadcrumbSchema([
     { name: "Home", url: "/" },
