@@ -1,8 +1,6 @@
-
 import React from 'react';
-// Import react-helmet-async properly for SSR compatibility
-import pkg from 'react-helmet-async';
-const { Helmet } = pkg;
+// Import react-helmet-async properly for browser compatibility
+import { Helmet } from 'react-helmet-async';
 
 interface SEOProps {
   title?: string;
