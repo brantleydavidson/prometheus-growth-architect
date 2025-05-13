@@ -12,6 +12,8 @@ import ServicesPage from "./pages/ServicesPage";
 import AIEnablementPage from "./pages/AIEnablementPage";
 import ConsultingPage from "./pages/ConsultingPage";
 import AIQuotientPage from "./pages/AIQuotient";
+import InsightsPage from "./pages/InsightsPage";
+import BookAuditPage from "./pages/BookAuditPage";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +30,8 @@ const App = () => (
         <Route path="/services/ai-enablement" element={<AIEnablementPage />} />
         <Route path="/services/consulting-gtm" element={<ConsultingPage />} />
         <Route path="/ai-quotient" element={<AIQuotientPage />} />
+        <Route path="/insights" element={<InsightsPage />} />
+        <Route path="/book-audit" element={<BookAuditPage />} />
         {/* Additional routes would be added as they are developed */}
         {/* <Route path="/manufacturing" element={<ManufacturingPage />} />
         <Route path="/professional-services" element={<ProfessionalServicesPage />} />
@@ -36,9 +40,7 @@ const App = () => (
         <Route path="/services/customer-journey" element={<CustomerJourneyPage />} />
         <Route path="/services/paid-media" element={<PaidMediaPage />} />
         <Route path="/services/reporting-analytics" element={<ReportingAnalyticsPage />} />
-        <Route path="/insights" element={<InsightsPage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/book-audit" element={<BookAuditPage />} /> */}
+        <Route path="/about" element={<AboutPage />} /> */}
         
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />

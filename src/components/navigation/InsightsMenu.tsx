@@ -24,7 +24,6 @@ const InsightsMenu = () => {
           <Link to="/ai-quotient" className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors">
             AI Quotient Assessment
           </Link>
-          {/* Additional insight links can be added here in the future */}
           <Link to="/insights" className="text-base text-gray-700 hover:text-prometheus-orange transition-colors">
             All Insights
           </Link>
