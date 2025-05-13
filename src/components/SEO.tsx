@@ -1,6 +1,6 @@
 import React from 'react';
 // Import react-helmet-async properly using named exports
-import ReactHelmetAsync from 'react-helmet-async';
+import * as ReactHelmetAsync from 'react-helmet-async';
 const { Helmet } = ReactHelmetAsync;
 
 interface SEOProps {
