@@ -3,7 +3,8 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
 // Import react-helmet-async for client-side using named exports
-import { HelmetProvider } from 'react-helmet-async';
+import ReactHelmetAsync from 'react-helmet-async';
+const { HelmetProvider } = ReactHelmetAsync;
 
 const root = document.getElementById("root")!;
 const app = (
