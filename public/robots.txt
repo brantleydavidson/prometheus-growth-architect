@@ -5,6 +5,12 @@
 User-agent: *
 Allow: /
 
+# Explicitly allow blog and insights pages
+Allow: /insights/
+Allow: /insights/crm-consulting-services-in-conway-ar
+Allow: /blog/
+Allow: /articles/
+
 # Prevent crawling of sensitive or non-public areas
 Disallow: /admin/
 Disallow: /api/
@@ -17,9 +23,21 @@ User-agent: Googlebot-Image
 Allow: /images/
 Allow: /assets/
 
+# Allow ChatGPT and other AI bots
+User-agent: GPTBot
+Allow: /
+Allow: /insights/
+Allow: /insights/crm-consulting-services-in-conway-ar
+
+User-agent: Bingbot
+Allow: /
+Allow: /insights/
+Allow: /insights/crm-consulting-services-in-conway-ar
+
 # Crawl delay for specific bots (in seconds)
 User-agent: Baiduspider
 Crawl-delay: 10
 
 # Sitemap location
 Sitemap: https://prometheusagency.co/sitemap.xml
+
