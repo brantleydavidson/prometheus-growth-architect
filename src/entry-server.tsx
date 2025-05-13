@@ -2,7 +2,7 @@ import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
 // Import react-helmet-async properly for SSR using named exports
-import ReactHelmetAsync from 'react-helmet-async';
+import * as ReactHelmetAsync from 'react-helmet-async';
 const { HelmetProvider } = ReactHelmetAsync;
 
 export async function render(url: string) {
