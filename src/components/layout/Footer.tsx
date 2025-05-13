@@ -3,7 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Linkedin, Mail, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import EmailCapture from "@/components/hubspot/EmailCapture";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -132,16 +132,13 @@ const Footer = () => {
             <p className="text-prometheus-gray mb-4">
               Subscribe to our newsletter for growth insights and AI strategies.
             </p>
-            <div className="flex space-x-2">
-              <Input
-                type="email"
-                placeholder="Your email"
-                className="bg-white/10 border-white/20 text-white placeholder:text-white/50"
-              />
-              <Button className="bg-prometheus-orange hover:bg-prometheus-orange/90">
-                <ArrowRight size={16} />
-              </Button>
-            </div>
+            
+            {/* Replace the existing form with EmailCapture component */}
+            <EmailCapture 
+              buttonIcon={<ArrowRight size={16} />}
+              buttonText=""
+              listId="newsletter-subscribers"
+            />
           </div>
         </div>
 

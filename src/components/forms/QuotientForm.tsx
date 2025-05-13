@@ -29,11 +29,32 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
   } = useAIQuotientAssessment(testMode);
 
   const handleUserInfoSubmit = (data: UserInfo) => {
+    // Track form start in HubSpot
+    if (window._hsq) {
+      window._hsq.push(['identify', {
+        email: data.email,
+        firstname: data.firstName,
+        lastname: data.lastName,
+        company: data.company
+      }]);
+      window._hsq.push(['trackEvent', {
+        id: 'ai_quotient_assessment_started'
+      }]);
+    }
+    
     updateUserInfo(data);
     moveToNextStep();
   };
 
   const handleRequestReport = () => {
+    // Track completion in HubSpot
+    if (window._hsq && result) {
+      window._hsq.push(['trackEvent', {
+        id: 'ai_quotient_assessment_completed',
+        value: result.percentage
+      }]);
+    }
+    
     moveToNextStep();
   };
 
