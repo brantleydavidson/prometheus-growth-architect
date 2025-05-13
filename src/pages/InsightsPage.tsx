@@ -1,3 +1,4 @@
+
 import React from "react";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -32,6 +33,17 @@ const insightsData = [
     image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     featured: false,
     slug: "#"
+  },
+  {
+    id: 6,
+    title: "CRM Consulting Services: Enhancing Business Growth in Conway, AR",
+    excerpt: "Discover how our CRM consulting services are helping Conway businesses streamline customer relationships, increase sales efficiency, and drive sustainable growth.",
+    category: "CRM Implementation",
+    date: "May 13, 2025",
+    readTime: "8 min read",
+    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    featured: false,
+    slug: "/insights/crm-consulting-services-conway-ar"
   },
   {
     id: 3,
@@ -76,6 +88,7 @@ const categories = [
   "Data Strategy",
   "Automation",
   "Content Strategy",
+  "CRM Implementation",
   "DTC Marketing"
 ];
 
