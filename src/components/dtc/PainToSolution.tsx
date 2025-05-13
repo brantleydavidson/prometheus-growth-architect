@@ -8,7 +8,7 @@ interface PainPointProps {
   number: number;
   title: string;
   problem: string;
-  solution: string;
+  solution: React.ReactNode;
 }
 
 const PainPoint = ({ number, title, problem, solution }: PainPointProps) => {
