@@ -2,7 +2,9 @@
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
-import { HelmetProvider } from 'react-helmet-async';
+// Fix the import for react-helmet-async
+import pkg from 'react-helmet-async';
+const { HelmetProvider } = pkg;
 
 export async function render(url: string) {
   // Create a proper context object for Helmet
