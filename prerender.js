@@ -6,8 +6,7 @@ const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
 const toAbsolute = (p) => path.resolve(__dirname, p)
 
 const template = fs.readFileSync(toAbsolute('dist/client/index.html'), 'utf-8')
-// Import react-helmet-async as a CommonJS module
-import pkg from 'react-helmet-async';
+// Import the render function from entry-server.js
 const { render } = await import('./dist/server/entry-server.js')
 
 // Helper function to ensure directory exists
