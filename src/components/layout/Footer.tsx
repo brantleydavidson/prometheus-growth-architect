@@ -16,7 +16,7 @@ const Footer = () => {
           <div>
             <Link to="/" className="inline-block mb-4">
               <img
-                src="/logo-placeholder.svg"
+                src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png"
                 alt="Prometheus Agency"
                 className="h-10 w-auto invert"
               />
