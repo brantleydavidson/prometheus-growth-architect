@@ -4,13 +4,13 @@ import { Link } from "react-router-dom";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Robot, LineChart, Users, Database, BarChart3, Zap } from "lucide-react";
+import { ArrowRight, Bot, LineChart, Users, Database, BarChart3, Zap } from "lucide-react";
 import CTABanner from "@/components/common/CTABanner";
 
 const ServicesPage = () => {
   const services = [
     {
-      icon: Robot,
+      icon: Bot,
       title: "AI Enablement & Integration",
       description: "Harness the power of AI to automate processes, gain insights, and create competitive advantages.",
       link: "/services/ai-enablement",
