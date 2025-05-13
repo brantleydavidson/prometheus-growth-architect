@@ -1,4 +1,3 @@
-
 import React from "react";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +6,8 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Clock, Tag } from "lucide-react";
 import CTABanner from "@/components/common/CTABanner";
+import Navbar from "@/components/navigation/Navbar";
+import Footer from "@/components/layout/Footer";
 
 // Sample blog/insights data - in a real implementation, this would come from a CMS or API
 const insightsData = [
@@ -112,6 +113,8 @@ const InsightsPage = () => {
           }
         }}
       />
+      
+      <Navbar />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-purple-50 to-white py-16 md:py-24">
@@ -266,6 +269,8 @@ const InsightsPage = () => {
         buttonText="Book a Strategy Session"
         buttonLink="/book-audit"
       />
+      
+      <Footer />
     </>
   );
 };

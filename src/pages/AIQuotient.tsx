@@ -6,6 +6,8 @@ import QuotientForm from "@/components/forms/QuotientForm";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { ArrowRight, BarChart, Circle, Layers, Target, Users } from "lucide-react";
 import CTABanner from "@/components/common/CTABanner";
+import Navbar from "@/components/navigation/Navbar";
+import Footer from "@/components/layout/Footer";
 
 const AIQuotientPage = () => {
   return (
@@ -16,6 +18,8 @@ const AIQuotientPage = () => {
         canonical="/ai-quotient"
         ogType="website"
       />
+      
+      <Navbar />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-purple-50 to-white py-16 md:py-24">
@@ -110,6 +114,8 @@ const AIQuotientPage = () => {
         buttonText="Book a Strategy Session"
         buttonLink="/book-audit"
       />
+      
+      <Footer />
     </>
   );
 };
