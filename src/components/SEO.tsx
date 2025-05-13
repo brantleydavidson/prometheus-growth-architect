@@ -1,5 +1,6 @@
 
 import React from 'react';
+// Handle import properly for SSR compatibility
 import { Helmet } from 'react-helmet-async';
 
 interface SEOProps {
