@@ -42,19 +42,35 @@ console.log('Found routes to prerender:', routesToPrerender);
 
 ;(async () => {
   for (const url of routesToPrerender) {
-    const appHtml = await render(url);
-    const html = template.replace('<!--app-html-->', appHtml)
+    try {
+      const { html, helmet } = await render(url);
+      
+      // Inject the rendered content and SEO tags
+      let pageHtml = template;
+      
+      // Replace the app HTML
+      pageHtml = pageHtml.replace('<!--app-html-->', html);
+      
+      // Inject SEO tags if available
+      if (helmet) {
+        pageHtml = pageHtml
+          .replace('<title>Prometheus Agency - AI Enablement and GTM Strategy</title>', helmet.title.toString())
+          .replace('<meta name="description" content="We help B2B and DTC businesses transform technology chaos into strategic growth engines with AI enablement and proven GTM strategies." />', helmet.meta.toString());
+      }
 
-    // Determine the output file path, handling the root route as index.html
-    const outputPath = url === '/' 
-      ? 'dist/client/index.html'
-      : `dist/client${url}${url.endsWith('/') ? 'index' : ''}.html`;
+      // Determine the output file path
+      const outputPath = url === '/' 
+        ? 'dist/client/index.html'
+        : `dist/client${url}${url.endsWith('/') ? 'index' : ''}.html`;
 
-    // Ensure the directory exists
-    ensureDirectoryExists(toAbsolute(outputPath));
-    
-    // Write the file
-    fs.writeFileSync(toAbsolute(outputPath), html);
-    console.log('pre-rendered:', outputPath);
+      // Ensure the directory exists
+      ensureDirectoryExists(toAbsolute(outputPath));
+      
+      // Write the file
+      fs.writeFileSync(toAbsolute(outputPath), pageHtml);
+      console.log('pre-rendered:', outputPath);
+    } catch (e) {
+      console.error(`Error rendering ${url}:`, e);
+    }
   }
 })()

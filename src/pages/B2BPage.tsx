@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/navigation/Navbar";
@@ -7,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import TestimonialCard from "@/components/common/TestimonialCard";
 import CTABanner from "@/components/common/CTABanner";
+import SEO from "@/components/SEO";
 
 const B2BPage = () => {
   // Mock testimonial data
@@ -33,6 +33,12 @@ const B2BPage = () => {
 
   return (
     <>
+      <SEO 
+        title="B2B Solutions | Prometheus Agency"
+        description="Strategic technology solutions for B2B businesses that drive growth, efficiency, and competitive advantage."
+        canonical="/b2b"
+      />
+      
       <Navbar />
       <main>
         {/* Hero Section */}
