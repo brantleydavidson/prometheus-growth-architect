@@ -11,6 +11,7 @@ import DTCPage from "./pages/DTCPage";
 import ServicesPage from "./pages/ServicesPage";
 import AIEnablementPage from "./pages/AIEnablementPage";
 import ConsultingPage from "./pages/ConsultingPage";
+import AIQuotientPage from "./pages/AIQuotient";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
         <Route path="/services" element={<ServicesPage />} />
         <Route path="/services/ai-enablement" element={<AIEnablementPage />} />
         <Route path="/services/consulting-gtm" element={<ConsultingPage />} />
+        <Route path="/ai-quotient" element={<AIQuotientPage />} />
         {/* Additional routes would be added as they are developed */}
         {/* <Route path="/manufacturing" element={<ManufacturingPage />} />
         <Route path="/professional-services" element={<ProfessionalServicesPage />} />
