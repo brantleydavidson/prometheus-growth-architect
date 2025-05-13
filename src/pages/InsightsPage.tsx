@@ -1,4 +1,3 @@
-
 import React from "react";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -43,7 +42,7 @@ const insightsData = [
     readTime: "8 min read",
     image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
     featured: false,
-    slug: "/insights/crm-consulting-services-conway-ar"
+    slug: "/insights/crm-consulting-services-in-conway-ar"
   },
   {
     id: 7,

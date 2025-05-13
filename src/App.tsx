@@ -33,7 +33,6 @@ const App = () => (
         <Route path="/services/consulting-gtm" element={<ConsultingPage />} />
         <Route path="/ai-quotient" element={<AIQuotientPage />} />
         <Route path="/insights" element={<InsightsPage />} />
-        <Route path="/insights/crm-consulting-services-conway-ar" element={<CRMConsultingConwayARPage />} />
         <Route path="/insights/crm-consulting-services-in-conway-ar" element={<CRMConsultingConwayARPage />} />
         <Route path="/book-audit" element={<BookAuditPage />} />
         {/* Additional routes would be added as they are developed */}
