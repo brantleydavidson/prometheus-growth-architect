@@ -6,7 +6,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 export async function render(url: string) {
   // Create a proper context object for Helmet
-  const helmetContext: any = {};
+  const helmetContext = {};
   
   const html = ReactDOMServer.renderToString(
     <StaticRouter location={url}>
@@ -17,7 +17,7 @@ export async function render(url: string) {
   );
   
   // Get the helmet data after rendering
-  const { helmet } = helmetContext;
+  const { helmet } = helmetContext as any;
   
   return {
     html,
