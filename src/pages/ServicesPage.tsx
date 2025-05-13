@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Bot, LineChart, Users, Database, BarChart3, Zap } from "lucide-react";
 import CTABanner from "@/components/common/CTABanner";
+import SEO from "@/components/SEO";
 
 const ServicesPage = () => {
   const services = [
@@ -63,6 +64,12 @@ const ServicesPage = () => {
 
   return (
     <>
+      <SEO 
+        title="Services | Prometheus Agency"
+        description="Explore our range of strategic services designed to drive measurable business growth through technology and strategy."
+        canonical="/services"
+      />
+      
       <Navbar />
       <main>
         {/* Hero Section */}
@@ -72,10 +79,14 @@ const ServicesPage = () => {
               <h1 className="text-4xl md:text-5xl font-semibold mb-6">
                 Services That Drive Measurable Growth
               </h1>
-              <p className="text-white/80 text-lg mb-12 max-w-2xl mx-auto">
-                We don't just implement technology – we create integrated growth systems 
+              <p className="text-white/80 text-lg mb-6 max-w-2xl mx-auto">
+                We don't just implement technology – we create <strong>integrated growth systems</strong> 
                 that deliver tangible business outcomes. Every service we offer is 
                 designed to produce measurable ROI.
+              </p>
+              <p className="text-white/80 text-lg mb-12 max-w-2xl mx-auto">
+                Our team of experts combines technical expertise with strategic thinking to help you
+                navigate complex business challenges and capitalize on emerging opportunities.
               </p>
               <Link to="/book-audit">
                 <Button className="bg-prometheus-orange hover:bg-prometheus-orange/90 px-8 py-6 text-base">
@@ -108,7 +119,7 @@ const ServicesPage = () => {
                   } hover:shadow-xl transition-all`}
                 >
                   <div className={`w-14 h-14 rounded-full ${service.color} flex items-center justify-center mb-6`}>
-                    <service.icon size={28} className={service.textColor} />
+                    <service.icon size={28} className={service.textColor} aria-hidden="true" />
                   </div>
                   <h3 className="text-xl font-semibold text-prometheus-navy mb-3">
                     {service.title}
@@ -160,7 +171,7 @@ const ServicesPage = () => {
                   <div className="md:w-2/3 md:pt-4">
                     <p className="text-prometheus-gray">
                       We conduct a thorough analysis of your current systems, processes, 
-                      and market position to identify opportunities and challenges.
+                      and market position to identify <strong>opportunities and challenges</strong>.
                     </p>
                   </div>
                 </div>
@@ -173,7 +184,7 @@ const ServicesPage = () => {
                   </div>
                   <div className="md:w-2/3 md:pt-4">
                     <p className="text-prometheus-gray">
-                      We develop a customized roadmap with clear objectives, 
+                      We develop a customized roadmap with <strong>clear objectives</strong>, 
                       timelines, and success metrics aligned with your business goals.
                     </p>
                   </div>
@@ -188,7 +199,7 @@ const ServicesPage = () => {
                   <div className="md:w-2/3 md:pt-4">
                     <p className="text-prometheus-gray">
                       Our expert team executes the plan with precision, 
-                      implementing technology solutions and processes that drive results.
+                      implementing <strong>technology solutions</strong> and processes that drive results.
                     </p>
                   </div>
                 </div>
@@ -202,7 +213,7 @@ const ServicesPage = () => {
                   <div className="md:w-2/3 md:pt-4">
                     <p className="text-prometheus-gray">
                       We continuously measure results, refine strategies, and 
-                      identify new opportunities to maximize your ROI.
+                      identify new opportunities to <strong>maximize your ROI</strong>.
                     </p>
                   </div>
                 </div>

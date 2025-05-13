@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight } from "lucide-react";
 import TestimonialCard from "@/components/common/TestimonialCard";
 import CTABanner from "@/components/common/CTABanner";
+import SEO from "@/components/SEO";
 
 const DTCPage = () => {
   // Mock testimonial data
@@ -33,6 +34,12 @@ const DTCPage = () => {
 
   return (
     <>
+      <SEO 
+        title="DTC Solutions | Prometheus Agency"
+        description="Lower acquisition costs and higher conversions for Direct-to-Consumer businesses through AI-driven targeting and customer journey optimization."
+        canonical="/dtc"
+      />
+      
       <Navbar />
       <main>
         {/* Hero Section */}
@@ -43,9 +50,13 @@ const DTCPage = () => {
                 <h1 className="text-4xl md:text-5xl font-semibold mb-6 leading-tight">
                   Sell More Direct-to-Consumer with Lower Acquisition Costs
                 </h1>
-                <p className="text-white/80 text-lg mb-8 max-w-lg">
+                <p className="text-white/80 text-lg mb-4 max-w-lg">
                   Stop wasting ad spend on poorly targeted campaigns. We help DTC businesses 
-                  acquire more customers at a lower cost and increase their lifetime value.
+                  acquire more customers at a <strong>lower cost</strong> and increase their lifetime value.
+                </p>
+                <p className="text-white/80 text-lg mb-8 max-w-lg">
+                  Our specialized DTC strategies combine sophisticated targeting, personalized customer 
+                  journeys, and data-driven optimizations to maximize your marketing ROI.
                 </p>
                 <div className="p-6 bg-white/10 rounded-lg border border-white/20 mb-8">
                   <h3 className="text-xl font-medium mb-4">Free DTC Growth Audit</h3>
@@ -64,7 +75,7 @@ const DTCPage = () => {
               <div className="relative">
                 <div className="relative aspect-video rounded-lg overflow-hidden">
                   {/* This would be a video or image in the real implementation */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-prometheus-gold to-prometheus-orange opacity-30"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-prometheus-gold to-prometheus-orange opacity-30" aria-hidden="true"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <div className="bg-prometheus-navy/80 p-6 rounded-lg">
@@ -119,9 +130,9 @@ const DTCPage = () => {
                   </p>
                   <div className="p-4 bg-green-50 rounded-md border border-green-100">
                     <p className="flex items-start gap-2">
-                      <CheckCircle size={20} className="text-green-600 mt-1 flex-shrink-0" />
+                      <CheckCircle size={20} className="text-green-600 mt-1 flex-shrink-0" aria-hidden="true" />
                       <span className="text-green-800">
-                        We implement AI-powered targeting and optimization systems that 
+                        We implement <strong>AI-powered targeting</strong> and optimization systems that 
                         identify your most profitable customer segments and reduce wasted ad spend.
                       </span>
                     </p>

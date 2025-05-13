@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/navigation/Navbar";
@@ -49,9 +50,13 @@ const B2BPage = () => {
                 <h1 className="text-4xl md:text-5xl font-semibold mb-6 leading-tight">
                   Win More B2B Deals with Predictable Results
                 </h1>
-                <p className="text-white/80 text-lg mb-8 max-w-lg">
+                <p className="text-white/80 text-lg mb-4 max-w-lg">
                   Stop losing deals to indecision and complexity. We help B2B businesses 
-                  create streamlined sales processes that consistently win more profitable deals.
+                  create <strong>streamlined sales processes</strong> that consistently win more profitable deals.
+                </p>
+                <p className="text-white/80 text-lg mb-8 max-w-lg">
+                  Our proven methodologies and technology implementations create predictable 
+                  revenue growth and shorter sales cycles for B2B companies across industries.
                 </p>
                 <div className="p-6 bg-white/10 rounded-lg border border-white/20 mb-8">
                   <h3 className="text-xl font-medium mb-4">Free B2B Growth Teardown</h3>
@@ -70,7 +75,7 @@ const B2BPage = () => {
               <div className="relative">
                 <div className="relative aspect-video rounded-lg overflow-hidden">
                   {/* This would be a video or image in the real implementation */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-prometheus-orange to-prometheus-gold opacity-30"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-prometheus-orange to-prometheus-gold opacity-30" aria-hidden="true"></div>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                       <div className="bg-prometheus-navy/80 p-6 rounded-lg">
@@ -125,9 +130,9 @@ const B2BPage = () => {
                   </p>
                   <div className="p-4 bg-green-50 rounded-md border border-green-100">
                     <p className="flex items-start gap-2">
-                      <CheckCircle size={20} className="text-green-600 mt-1 flex-shrink-0" />
+                      <CheckCircle size={20} className="text-green-600 mt-1 flex-shrink-0" aria-hidden="true" />
                       <span className="text-green-800">
-                        We implement AI-powered lead scoring and qualification processes that 
+                        We implement <strong>AI-powered lead scoring</strong> and qualification processes that 
                         identify the most promising opportunities so you can focus resources effectively.
                       </span>
                     </p>
