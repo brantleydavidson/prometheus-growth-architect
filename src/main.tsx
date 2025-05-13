@@ -3,11 +3,15 @@ import { createRoot, hydrateRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
+// Import react-helmet-async for client-side
+import { HelmetProvider } from 'react-helmet-async'
 
 const root = document.getElementById("root")!;
 const app = (
   <BrowserRouter>
-    <App />
+    <HelmetProvider>
+      <App />
+    </HelmetProvider>
   </BrowserRouter>
 );
 
