@@ -18,6 +18,12 @@ import CRMConsultingConwayARPage from './pages/InsightDetail/CRMConsultingConway
 import CRMConsultingPage from './pages/InsightDetail/CRMConsultingPage';
 import NotFound from './pages/NotFound';
 
+// Subcategory pages
+import ManufacturingPage from './pages/subcategory/ManufacturingPage';
+import ProfessionalServicesPage from './pages/subcategory/ProfessionalServicesPage';
+import RestorationPage from './pages/subcategory/RestorationPage';
+import EcommercePage from './pages/subcategory/EcommercePage';
+
 // Admin pages
 import LoginPage from './pages/admin/LoginPage';
 import Dashboard from './pages/admin/Dashboard';
@@ -46,6 +52,12 @@ const App = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/insights/crm-consulting-services-in-conway-ar" element={<CRMConsultingConwayARPage />} />
         <Route path="/insights/crm-consulting" element={<CRMConsultingPage />} />
+        
+        {/* Subcategory Routes */}
+        <Route path="/manufacturing" element={<ManufacturingPage />} />
+        <Route path="/professional-services" element={<ProfessionalServicesPage />} />
+        <Route path="/restoration" element={<RestorationPage />} />
+        <Route path="/ecommerce" element={<EcommercePage />} />
         
         {/* Admin Routes */}
         <Route path="/admin/login" element={<LoginPage />} />

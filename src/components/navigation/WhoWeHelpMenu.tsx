@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -50,12 +51,11 @@ const WhoWeHelpMenu = () => {
                   Restoration — <span className="text-prometheus-gray">"Surface 40% more emergency leads."</span>
                 </Link>
               </li>
-              {/* eCommerce is hidden until assets exist, but keeping in code for future */}
-              {/* <li>
+              <li>
                 <Link to="/ecommerce" className="text-sm text-gray-700 hover:text-prometheus-orange transition-colors block">
                   eCommerce — <span className="text-prometheus-gray">"Lift repeat purchase rate by 25%."</span>
                 </Link>
-              </li> */}
+              </li>
             </ul>
           </div>
         </div>
