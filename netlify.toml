@@ -1,3 +1,20 @@
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' https://cdn.gpteng.co https://*.supabase.co; style-src 'self' 'unsafe-inline'; img-src * data:; connect-src 'self' https://*.supabase.co https://*.hubspot.com"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "SAMEORIGIN"
+
+[[redirects]]
+  from = "http://*prometheusagency.io/*"
+  to = "https://prometheusagency.io/:splat"
+  status = 301
+  force = true
+
+# Existing SPA fallback redirect
 [[redirects]]
   from = "/*"
   to = "/index.html"
