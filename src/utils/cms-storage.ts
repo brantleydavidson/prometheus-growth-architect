@@ -1,3 +1,4 @@
+
 /**
  * Utility functions for managing CMS data storage with Supabase
  */
@@ -116,7 +117,7 @@ export async function getPages(): Promise<CMSPage[]> {
     id: page.id,
     title: page.title,
     slug: page.slug,
-    content: isJsonRecord(page.content) ? page.content : {},
+    content: isRecordObject(page.content) ? page.content : {},
     seo: jsonToSEOData(page.seo),
     updatedAt: formatTimestamp(page.updated_at)
   }));
@@ -138,7 +139,7 @@ export async function getPageBySlug(slug: string): Promise<CMSPage | undefined> 
     id: data.id,
     title: data.title,
     slug: data.slug,
-    content: isJsonRecord(data.content) ? data.content : {},
+    content: isRecordObject(data.content) ? data.content : {},
     seo: jsonToSEOData(data.seo),
     updatedAt: formatTimestamp(data.updated_at)
   };
