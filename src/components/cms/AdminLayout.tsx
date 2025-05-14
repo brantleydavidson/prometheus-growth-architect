@@ -1,13 +1,16 @@
+
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { LogOut, User } from "lucide-react";
+import { LogOut, User, Menu } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { Image } from "@/components/ui/image";
+import { useState } from "react";
 
 const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleSignOut = async () => {
     await signOut();
@@ -19,7 +22,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
         <div className="flex h-16 items-center justify-between px-4 lg:px-6">
@@ -50,26 +53,46 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       </header>
 
       {/* Content */}
-      <div className="flex-1 flex">
+      <div className="flex flex-1">
         {/* Sidebar */}
         <aside className="w-64 border-r bg-muted/40 hidden md:block">
-          <div className="flex flex-col gap-1 p-4">
-            <Link to="/admin/media-library" className="text-sm">Media Library</Link>
-            <Link to="/admin/page-editor" className="text-sm">Page Editor</Link>
-            <Link to="/admin/blog-editor" className="text-sm">Blog Editor</Link>
-            <Link to="/admin/seo-manager" className="text-sm">SEO Manager</Link>
-          </div>
+          <nav className="flex flex-col gap-1 p-4">
+            <Link to="/admin" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Dashboard</Link>
+            <Link to="/admin/media-library" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Media Library</Link>
+            <Link to="/admin/page-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Page Editor</Link>
+            <Link to="/admin/blog-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Blog Editor</Link>
+            <Link to="/admin/seo-manager" className="text-sm py-2 px-3 hover:bg-muted rounded-md">SEO Manager</Link>
+          </nav>
         </aside>
 
         {/* Mobile menu */}
         <div className="md:hidden">
-          <Button variant="outline" size="icon" className="fixed bottom-4 right-4 z-40 rounded-full w-12 h-12 shadow-lg">
-            <span className="text-lg">Menu</span>
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="fixed bottom-4 right-4 z-40 rounded-full w-12 h-12 shadow-lg"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            <Menu className="h-5 w-5" />
           </Button>
+          
+          {mobileMenuOpen && (
+            <div className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm">
+              <div className="fixed bottom-20 right-4 bg-white rounded-lg shadow-lg p-4 w-48 border">
+                <nav className="flex flex-col gap-2">
+                  <Link to="/admin" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Dashboard</Link>
+                  <Link to="/admin/media-library" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Media Library</Link>
+                  <Link to="/admin/page-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Page Editor</Link>
+                  <Link to="/admin/blog-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Blog Editor</Link>
+                  <Link to="/admin/seo-manager" className="text-sm py-2 px-3 hover:bg-muted rounded-md">SEO Manager</Link>
+                </nav>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Main content */}
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6 overflow-auto">{children}</main>
       </div>
     </div>
   );

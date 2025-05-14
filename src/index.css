@@ -74,8 +74,8 @@
     @apply border-border;
   }
 
-  body {
-    @apply bg-background text-foreground font-inter;
+  html, body {
+    @apply bg-background text-foreground font-inter m-0 p-0 w-full min-h-screen;
     line-height: 1.5;
   }
 
