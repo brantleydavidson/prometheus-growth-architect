@@ -9,7 +9,114 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      cms_blog_posts: {
+        Row: {
+          author: string | null
+          content: string | null
+          cover_image: string | null
+          created_at: string
+          excerpt: string | null
+          id: string
+          published_at: string | null
+          seo: Json
+          slug: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          content?: string | null
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          seo?: Json
+          slug: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          content?: string | null
+          cover_image?: string | null
+          created_at?: string
+          excerpt?: string | null
+          id?: string
+          published_at?: string | null
+          seo?: Json
+          slug?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cms_media_items: {
+        Row: {
+          alt: string | null
+          dimensions: string | null
+          file_type: string
+          id: string
+          size: string | null
+          title: string
+          uploaded_at: string
+          url: string
+        }
+        Insert: {
+          alt?: string | null
+          dimensions?: string | null
+          file_type: string
+          id?: string
+          size?: string | null
+          title: string
+          uploaded_at?: string
+          url: string
+        }
+        Update: {
+          alt?: string | null
+          dimensions?: string | null
+          file_type?: string
+          id?: string
+          size?: string | null
+          title?: string
+          uploaded_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      cms_pages: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          seo: Json
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          content?: Json
+          created_at?: string
+          id?: string
+          seo?: Json
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          seo?: Json
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

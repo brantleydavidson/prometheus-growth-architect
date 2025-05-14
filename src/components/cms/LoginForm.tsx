@@ -5,37 +5,66 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "@/components/ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [mode, setMode] = useState<'login' | 'signup'>('login');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError(null);
 
-    // This is a temporary authentication method
-    // In a production environment, you would want to use proper authentication
-    setTimeout(() => {
-      // Demo credentials - in a real app, use proper auth!
-      if (username === "admin" && password === "admin123") {
-        localStorage.setItem("cms_authenticated", "true");
-        toast({
-          title: "Login successful",
-          description: "Welcome to the Prometheus CMS.",
+    try {
+      if (mode === 'login') {
+        const { data, error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
         });
-        navigate("/admin");
+
+        if (signInError) throw signInError;
+
+        if (data.session) {
+          toast({
+            title: "Login successful",
+            description: "Welcome to the Prometheus CMS.",
+          });
+          navigate("/admin");
+        }
       } else {
-        toast({
-          title: "Login failed",
-          description: "Invalid username or password.",
-          variant: "destructive",
+        const { data, error: signUpError } = await supabase.auth.signUp({
+          email,
+          password,
         });
+
+        if (signUpError) throw signUpError;
+
+        if (data.user) {
+          toast({
+            title: "Registration successful",
+            description: "Please check your email for verification. You can now log in.",
+          });
+          setMode('login');
+        }
       }
+    } catch (err: any) {
+      setError(err.message || "Authentication failed");
+      console.error("Authentication error:", err);
+      toast({
+        title: "Authentication failed",
+        description: err.message || "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
   return (
@@ -44,19 +73,29 @@ const LoginForm = () => {
         <CardHeader>
           <CardTitle className="text-2xl font-bold">Prometheus CMS</CardTitle>
           <CardDescription>
-            Login to manage your website content
+            {mode === 'login' 
+              ? 'Login to manage your website content' 
+              : 'Create an account to use the CMS'}
           </CardDescription>
         </CardHeader>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleAuth}>
           <CardContent className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+            
             <div className="space-y-2">
-              <label htmlFor="username" className="text-sm font-medium">
-                Username
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
               </label>
               <Input
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
               />
             </div>
@@ -70,13 +109,37 @@ const LoginForm = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                minLength={6}
               />
+              <p className="text-xs text-muted-foreground">
+                {mode === 'signup' && 'Password must be at least 6 characters long'}
+              </p>
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col space-y-2">
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Login"}
+              {isLoading 
+                ? (mode === 'login' ? "Logging in..." : "Signing up...") 
+                : (mode === 'login' ? "Login" : "Sign Up")}
             </Button>
+            
+            <div className="text-sm text-center">
+              {mode === 'login' ? (
+                <p>
+                  Don't have an account?{" "}
+                  <Button variant="link" className="p-0 h-auto" onClick={() => setMode('signup')}>
+                    Sign up
+                  </Button>
+                </p>
+              ) : (
+                <p>
+                  Already have an account?{" "}
+                  <Button variant="link" className="p-0 h-auto" onClick={() => setMode('login')}>
+                    Log in
+                  </Button>
+                </p>
+              )}
+            </div>
           </CardFooter>
         </form>
       </Card>

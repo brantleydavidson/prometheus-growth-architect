@@ -1,120 +1,75 @@
-
-import { useState } from "react";
-import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Menu, X, Home, FileText, Settings, Image, Search } from "lucide-react";
+import { LogOut, User } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
+import { Image } from "@/components/ui/image";
 
-const AdminLayout = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(
-    localStorage.getItem("cms_authenticated") === "true"
-  );
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
-  const location = useLocation();
-  
-  // If not authenticated, redirect to login
-  if (!isAuthenticated && location.pathname !== "/admin/login") {
-    navigate("/admin/login");
-    return null;
-  }
-  
-  const handleLogout = () => {
-    localStorage.removeItem("cms_authenticated");
-    setIsAuthenticated(false);
+  const { user, signOut } = useAuth();
+
+  const handleSignOut = async () => {
+    await signOut();
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out.",
+    });
     navigate("/admin/login");
   };
-  
-  // Only render the admin layout if authenticated
-  if (!isAuthenticated) return <Outlet />;
-
-  const menuItems = [
-    { name: "Dashboard", path: "/admin", icon: <Home className="w-5 h-5" /> },
-    { name: "Pages", path: "/admin/pages", icon: <FileText className="w-5 h-5" /> },
-    { name: "Blog Posts", path: "/admin/blogs", icon: <FileText className="w-5 h-5" /> },
-    { name: "SEO", path: "/admin/seo", icon: <Search className="w-5 h-5" /> },
-    { name: "Media Library", path: "/admin/media", icon: <Image className="w-5 h-5" /> },
-    { name: "Settings", path: "/admin/settings", icon: <Settings className="w-5 h-5" /> },
-  ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="flex h-16 items-center border-b bg-white px-4 lg:px-6">
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="lg:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-72">
-            <div className="flex flex-col h-full">
-              <div className="py-4">
-                <h2 className="text-lg font-semibold">Prometheus CMS</h2>
-              </div>
-              <Separator />
-              <div className="flex flex-col space-y-1 mt-4">
-                {menuItems.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                      location.pathname === item.path
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-accent hover:text-accent-foreground"
-                    }`}
-                  >
-                    {item.icon}
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
-        <div className="lg:block hidden">
-          <Link to="/admin" className="text-lg font-semibold">
-            Prometheus CMS
-          </Link>
-        </div>
-        <div className="ml-auto flex items-center gap-4">
-          <Button
-            variant="ghost"
-            onClick={handleLogout}
-            className="text-sm font-medium"
-          >
-            Logout
-          </Button>
-          <Button variant="outline" asChild>
-            <Link to="/" target="_blank" className="gap-2">
-              <Home className="w-4 h-4" />
-              View Site
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="sticky top-0 z-30 border-b bg-background/95 backdrop-blur">
+        <div className="flex h-16 items-center justify-between px-4 lg:px-6">
+          <div className="flex items-center gap-2">
+            <Link to="/" className="flex items-center">
+              <Image className="h-8 w-auto" src="/logo.png" alt="Prometheus Agency" />
+              <span className="ml-2 text-lg font-medium hidden sm:inline-block">
+                CMS
+              </span>
             </Link>
-          </Button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {user && (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <User className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm hidden md:block">{user.email}</span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  <span className="hidden sm:inline">Sign Out</span>
+                </Button>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="flex">
-        <aside className="hidden lg:flex flex-col w-64 border-r bg-white h-[calc(100vh-4rem)]">
-          <div className="flex flex-col space-y-1 p-4">
-            {menuItems.map((item) => (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium ${
-                  location.pathname === item.path
-                    ? "bg-primary text-primary-foreground"
-                    : "hover:bg-accent hover:text-accent-foreground"
-                }`}
-              >
-                {item.icon}
-                {item.name}
-              </Link>
-            ))}
+      </header>
+
+      {/* Content */}
+      <div className="flex-1 flex">
+        {/* Sidebar */}
+        <aside className="w-64 border-r bg-muted/40 hidden md:block">
+          <div className="flex flex-col gap-1 p-4">
+            <Link to="/admin/media-library" className="text-sm">Media Library</Link>
+            <Link to="/admin/page-editor" className="text-sm">Page Editor</Link>
+            <Link to="/admin/blog-editor" className="text-sm">Blog Editor</Link>
+            <Link to="/admin/seo-manager" className="text-sm">SEO Manager</Link>
           </div>
         </aside>
-        <main className="flex-1 p-6">
-          <Outlet />
-        </main>
+
+        {/* Mobile menu */}
+        <div className="md:hidden">
+          <Button variant="outline" size="icon" className="fixed bottom-4 right-4 z-40 rounded-full w-12 h-12 shadow-lg">
+            <span className="text-lg">Menu</span>
+          </Button>
+        </div>
+
+        {/* Main content */}
+        <main className="flex-1 p-6">{children}</main>
       </div>
     </div>
   );
