@@ -1,6 +1,5 @@
 
 import React from 'react';
-// Import react-helmet-async properly using named exports
 import * as ReactHelmetAsync from 'react-helmet-async';
 const { Helmet } = ReactHelmetAsync;
 
@@ -15,6 +14,9 @@ interface SEOProps {
     question: string;
     answer: string;
   }[];
+  author?: string;
+  datePublished?: string;
+  articleType?: string;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -24,7 +26,10 @@ const SEO: React.FC<SEOProps> = ({
   ogType = 'website',
   ogImage = 'https://prometheusagency.co/opengraph-image.png',
   schemaMarkup = null,
-  faqSchema = null
+  faqSchema = null,
+  author,
+  datePublished,
+  articleType
 }) => {
   // Build full canonical URL if relative path is provided
   const fullCanonical = canonical 
@@ -49,7 +54,39 @@ const SEO: React.FC<SEOProps> = ({
     };
   };
 
+  // Generate Article schema if this is a blog post
+  const generateArticleSchema = () => {
+    if (ogType !== 'article' || !author || !datePublished) return null;
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": title.split(' – ')[0], // Get title without site name
+      "description": description,
+      "image": ogImage,
+      "datePublished": datePublished,
+      "author": {
+        "@type": "Person",
+        "name": author
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Prometheus Agency",
+        "url": "https://prometheusagency.co",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://prometheusagency.co/logo.png"
+        }
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": fullCanonical
+      }
+    };
+  };
+
   const faqSchemaMarkup = generateFAQSchema();
+  const articleSchemaMarkup = generateArticleSchema();
 
   return (
     <Helmet>
@@ -74,7 +111,7 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="robots" content="index, follow" />
       <html lang="en" />
       
-      {/* Schema.org JSON-LD */}
+      {/* Schema.org JSON-LD for custom schema */}
       {schemaMarkup && (
         <script type="application/ld+json">
           {JSON.stringify(schemaMarkup)}
@@ -85,6 +122,13 @@ const SEO: React.FC<SEOProps> = ({
       {faqSchemaMarkup && (
         <script type="application/ld+json">
           {JSON.stringify(faqSchemaMarkup)}
+        </script>
+      )}
+      
+      {/* Article Schema (if blog post) */}
+      {articleSchemaMarkup && (
+        <script type="application/ld+json">
+          {JSON.stringify(articleSchemaMarkup)}
         </script>
       )}
     </Helmet>

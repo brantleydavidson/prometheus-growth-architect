@@ -19,6 +19,15 @@ import BookAuditPage from "./pages/BookAuditPage";
 import CRMConsultingPage from "./pages/InsightDetail/CRMConsultingPage";
 import CRMConsultingConwayARPage from "./pages/InsightDetail/CRMConsultingConwayARPage";
 
+// Import Admin Pages
+import AdminLayout from "./components/cms/AdminLayout";
+import LoginPage from "./pages/admin/LoginPage";
+import Dashboard from "./pages/admin/Dashboard";
+import PageEditor from "./pages/admin/PageEditor";
+import BlogEditor from "./pages/admin/BlogEditor";
+import MediaLibrary from "./pages/admin/MediaLibrary";
+import SEOManager from "./pages/admin/SEOManager";
+
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -39,6 +48,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <Routes>
+          {/* Public Routes */}
           <Route path="/" element={<Index />} />
           <Route path="/b2b" element={<B2BPage />} />
           <Route path="/dtc" element={<DTCPage />} />
@@ -49,17 +59,19 @@ const App = () => {
           <Route path="/insights" element={<InsightsPage />} />
           <Route path="/insights/crm-consulting-services-in-conway-ar" element={<CRMConsultingConwayARPage />} />
           <Route path="/book-audit" element={<BookAuditPage />} />
-          {/* Additional routes would be added as they are developed */}
-          {/* <Route path="/manufacturing" element={<ManufacturingPage />} />
-          <Route path="/professional-services" element={<ProfessionalServicesPage />} />
-          <Route path="/restoration" element={<RestorationPage />} />
-          <Route path="/services/crm-implementation" element={<CRMImplementationPage />} />
-          <Route path="/services/customer-journey" element={<CustomerJourneyPage />} />
-          <Route path="/services/paid-media" element={<PaidMediaPage />} />
-          <Route path="/services/reporting-analytics" element={<ReportingAnalyticsPage />} />
-          <Route path="/about" element={<AboutPage />} /> */}
           
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          {/* Admin CMS Routes */}
+          <Route path="/admin/login" element={<LoginPage />} />
+          <Route path="/admin" element={<AdminLayout />}>
+            <Route index element={<Dashboard />} />
+            <Route path="pages" element={<PageEditor />} />
+            <Route path="blogs" element={<BlogEditor />} />
+            <Route path="media" element={<MediaLibrary />} />
+            <Route path="seo" element={<SEOManager />} />
+            <Route path="settings" element={<Dashboard />} /> {/* Placeholder - replace with actual settings page when needed */}
+          </Route>
+          
+          {/* Catch-all Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </TooltipProvider>
