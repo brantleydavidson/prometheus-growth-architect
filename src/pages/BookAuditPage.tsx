@@ -1,4 +1,3 @@
-
 import React from "react";
 import SEO from "@/components/SEO";
 import { Card, CardContent } from "@/components/ui/card";
@@ -6,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BarChart, CheckCircle, Clock, MessageSquare, Users } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
+import Navbar from "@/components/navigation/Navbar";
+import Footer from "@/components/layout/Footer";
 
 const BookAuditPage = () => {
   return (
@@ -32,6 +33,8 @@ const BookAuditPage = () => {
           }
         }}
       />
+      
+      <Navbar />
       
       {/* Hero Section */}
       <section className="bg-gradient-to-b from-purple-50 to-white py-16 md:py-24">
@@ -276,6 +279,8 @@ const BookAuditPage = () => {
           </div>
         </div>
       </section>
+      
+      <Footer />
     </>
   );
 };
