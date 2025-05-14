@@ -13,6 +13,7 @@ import ConsultingPage from './pages/ConsultingPage';
 import B2BPage from './pages/B2BPage';
 import BookAuditPage from './pages/BookAuditPage';
 import InsightsPage from './pages/InsightsPage';
+import AboutPage from './pages/AboutPage';
 import CRMConsultingConwayARPage from './pages/InsightDetail/CRMConsultingConwayARPage';
 import CRMConsultingPage from './pages/InsightDetail/CRMConsultingPage';
 import NotFound from './pages/NotFound';
@@ -42,6 +43,7 @@ const App = () => {
         <Route path="/b2b" element={<B2BPage />} />
         <Route path="/book-audit" element={<BookAuditPage />} />
         <Route path="/insights" element={<InsightsPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/insights/crm-consulting-services-in-conway-ar" element={<CRMConsultingConwayARPage />} />
         <Route path="/insights/crm-consulting" element={<CRMConsultingPage />} />
         
