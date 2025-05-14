@@ -1,30 +1,22 @@
+import React from 'react';
+import './App.css';
+import { BrowserRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 
-// Since App.tsx is a read-only file, we'll create a wrapper for it
-
-import { AuthProvider } from "@/hooks/useAuth";
-import AuthProtected from "@/components/cms/AuthProtected";
-import { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
-import { initializeCMSData } from "@/utils/cms-storage";
-
-// Create a default export App component
 const App = () => {
-  useEffect(() => {
-    // Initialize CMS data on app load
-    initializeCMSData();
-  }, []);
-  
   return (
-    <div className="App">
-      <AuthProvider>
-        <Routes>
-          {/* Add your routes here */}
-        </Routes>
-      </AuthProvider>
-    </div>
+    <HelmetProvider>
+      <BrowserRouter>
+        <div className="App">
+          {/* Your app content */}
+        </div>
+      </BrowserRouter>
+    </HelmetProvider>
   );
 };
 
-// Export once and also named exports
-export { AuthProvider, AuthProtected, initializeCMSData };
+// For compatibility with existing imports
+export { App };
+
+// Default export
 export default App;

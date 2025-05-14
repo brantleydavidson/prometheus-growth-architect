@@ -1,31 +1,33 @@
 
-import { cn } from "@/lib/utils";
-import { HTMLAttributes } from "react";
+import React from "react";
 
-interface ImageProps extends HTMLAttributes<HTMLImageElement> {
+interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   src: string;
   alt: string;
+  width?: number;
+  height?: number;
   className?: string;
-  width?: number | string;
-  height?: number | string;
+  objectFit?: "contain" | "cover" | "fill" | "none" | "scale-down";
 }
 
-export function Image({
-  src,
-  alt,
-  className,
-  width,
-  height,
-  ...props
-}: ImageProps) {
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className={cn("max-w-full h-auto", className)}
-      width={width}
-      height={height}
-      {...props}
-    />
-  );
-}
+const Image = React.forwardRef<HTMLImageElement, ImageProps>(
+  ({ className, src, alt, width, height, objectFit = "cover", ...props }, ref) => {
+    return (
+      <img
+        ref={ref}
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+        style={{ objectFit }}
+        loading="lazy"
+        {...props}
+      />
+    );
+  }
+);
+
+Image.displayName = "Image";
+
+export { Image };

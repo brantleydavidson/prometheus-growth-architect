@@ -61,25 +61,28 @@ function isJsonRecord(json: Json): json is Record<string, any> {
   return typeof json === 'object' && json !== null && !Array.isArray(json);
 }
 
-// Helper function to convert Json to SEOData
+// Helper function to convert Json to SEOData with improved type checking
 function jsonToSEOData(json: Json): SEOData {
+  // Default SEO data if json is not a record
+  const defaultSEO: SEOData = {
+    title: '',
+    description: '',
+    ogType: 'website'
+  };
+  
   if (!isJsonRecord(json)) {
-    // Fallback if json is not a record
-    return {
-      title: '',
-      description: '',
-      ogType: 'website'
-    };
+    return defaultSEO;
   }
   
+  // Now we're sure json is a Record<string, any>
   return {
-    title: json.title as string || '',
-    description: json.description as string || '',
-    canonical: json.canonical as string,
-    ogType: json.ogType as string || 'website',
-    ogImage: json.ogImage as string,
-    faqs: json.faqs as Array<{question: string, answer: string}>,
-    schemaMarkup: json.schemaMarkup as Record<string, any>
+    title: typeof json.title === 'string' ? json.title : defaultSEO.title,
+    description: typeof json.description === 'string' ? json.description : defaultSEO.description,
+    canonical: typeof json.canonical === 'string' ? json.canonical : undefined,
+    ogType: typeof json.ogType === 'string' ? json.ogType : defaultSEO.ogType,
+    ogImage: typeof json.ogImage === 'string' ? json.ogImage : undefined,
+    faqs: Array.isArray(json.faqs) ? json.faqs as Array<{question: string, answer: string}> : undefined,
+    schemaMarkup: isJsonRecord(json.schemaMarkup) ? json.schemaMarkup : undefined
   };
 }
 
@@ -149,8 +152,8 @@ export async function savePage(page: CMSPage): Promise<void> {
       .update({
         title: page.title,
         slug: page.slug,
-        content: page.content as Json,
-        seo: seoDataToJson(page.seo) as Json,
+        content: page.content as unknown as Json,
+        seo: seoDataToJson(page.seo) as unknown as Json,
         updated_at: now
       })
       .eq('id', page.id);
@@ -164,8 +167,8 @@ export async function savePage(page: CMSPage): Promise<void> {
         id: uuidv4(),
         title: page.title,
         slug: page.slug,
-        content: page.content as Json,
-        seo: seoDataToJson(page.seo) as Json,
+        content: page.content as unknown as Json,
+        seo: seoDataToJson(page.seo) as unknown as Json,
         created_at: now,
         updated_at: now
       });
@@ -244,7 +247,7 @@ export async function saveBlogPost(post: CMSBlogPost): Promise<void> {
         status: post.status,
         published_at: post.status === 'published' ? (post.publishedAt || now) : post.publishedAt,
         updated_at: now,
-        seo: seoDataToJson(post.seo) as Json
+        seo: seoDataToJson(post.seo) as unknown as Json
       })
       .eq('id', post.id);
     
@@ -265,7 +268,7 @@ export async function saveBlogPost(post: CMSBlogPost): Promise<void> {
         published_at: post.status === 'published' ? (post.publishedAt || now) : null,
         created_at: now,
         updated_at: now,
-        seo: seoDataToJson(post.seo) as Json
+        seo: seoDataToJson(post.seo) as unknown as Json
       });
     
     if (error) console.error('Error creating blog post:', error);
