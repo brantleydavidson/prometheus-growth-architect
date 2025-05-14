@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
@@ -40,7 +39,9 @@ const Navbar = () => {
           <img 
             src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png" 
             alt="Prometheus Agency Logo" 
+            width="120" height="40"
             className="h-10 w-auto" 
+            loading="lazy" decoding="async"
           />
         </Link>
 
