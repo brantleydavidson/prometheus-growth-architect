@@ -71,3 +71,43 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+
+## Image Management Best Practices
+
+### Static Images (for blog, team, logos, etc.)
+- Place images in the `public/images/` directory, organized by type:
+  - `public/images/blog/` — Blog post images (use subfolders per post if needed)
+  - `public/images/team/` — Team member photos
+  - `public/images/logos/` — Logos and partners
+- Reference images in your content as `/images/<type>/<filename>` (e.g., `/images/blog/post-1/hero.jpg`).
+- Commit and push images to GitHub; Netlify will deploy them automatically.
+
+### Dynamic or Large Images (User uploads, large media)
+- Use Supabase Storage for scalable, cloud-hosted images.
+- Upload via the Supabase dashboard or API to a bucket (e.g., `media` or `uploads`).
+- Reference images by their public Supabase URL in your content or database.
+
+### Best Practices
+- Optimize images before uploading (WebP/AVIF preferred for new images).
+- Use descriptive filenames and folders for organization.
+- Always add alt text for accessibility and SEO.
+
+### Example Folder Structure
+```
+public/
+  images/
+    blog/
+      post-1/
+        hero.jpg
+        chart.png
+    team/
+      alice.jpg
+      bob.jpg
+    logos/
+      partner1.png
+```
+
+### Example Usage
+- Markdown: `![Alt text](/images/blog/post-1/hero.jpg)`
+- JSX: `<img src="/images/blog/post-1/hero.jpg" alt="Description" />`
+- Supabase: `<img src="https://<your-project>.supabase.co/storage/v1/object/public/media/blog/post-3/hero.jpg" alt="Description" />`
