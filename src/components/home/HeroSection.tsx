@@ -9,7 +9,7 @@ const HeroSection = () => {
     <section className="pt-16 pb-24 overflow-hidden">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="animate-grid-snap">
+          <div className="animate-grid-snap text-left">
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-prometheus-navy mb-6 leading-tight">
               Tame the Tech. <br/>
               <span className="text-prometheus-orange">Unleash the Growth.</span>

@@ -27,7 +27,7 @@ const DTCHero = () => {
     <section className="pt-24 pb-16 bg-gradient-to-br from-white to-gray-50">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
+          <div className="text-left">
             <h1 className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6 leading-tight">
               Grow Your DTC Brand <span className="text-prometheus-gold">Without Breaking the Bank</span>
             </h1>

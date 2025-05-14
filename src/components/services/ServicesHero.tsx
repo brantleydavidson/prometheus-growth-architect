@@ -9,7 +9,7 @@ const ServicesHero = () => {
     <section className="pt-24 pb-16 bg-gradient-to-br from-white to-gray-50">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-7 text-left">
             <h1 className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6 leading-tight">
               Strategic Services for <span className="text-prometheus-orange">Measurable Growth</span>
             </h1>

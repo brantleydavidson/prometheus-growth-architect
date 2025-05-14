@@ -83,6 +83,10 @@
     @apply font-montserrat font-semibold;
     line-height: 1.2;
   }
+  
+  body {
+    text-align: left;
+  }
 }
 
 @layer components {
@@ -103,10 +107,10 @@
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl lg:text-5xl font-semibold text-prometheus-navy mb-6;
+    @apply text-3xl md:text-4xl lg:text-5xl font-semibold text-prometheus-navy mb-6 text-left;
   }
   
   .section-subtitle {
-    @apply text-xl md:text-2xl font-medium text-prometheus-gray mb-8 max-w-3xl;
+    @apply text-xl md:text-2xl font-medium text-prometheus-gray mb-8 max-w-3xl text-left;
   }
 }
