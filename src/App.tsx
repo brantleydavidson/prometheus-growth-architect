@@ -1,17 +1,18 @@
+
 import React from 'react';
 import './App.css';
-import { BrowserRouter } from 'react-router-dom';
-import { HelmetProvider } from 'react-helmet-async';
+import Navbar from './components/navigation/Navbar';
+import Footer from './components/layout/Footer';
 
 const App = () => {
   return (
-    <HelmetProvider>
-      <BrowserRouter>
-        <div className="App">
-          {/* Your app content */}
-        </div>
-      </BrowserRouter>
-    </HelmetProvider>
+    <div className="App">
+      <Navbar />
+      <main>
+        {/* Main content will be rendered here */}
+      </main>
+      <Footer />
+    </div>
   );
 };
 

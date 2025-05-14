@@ -1,4 +1,3 @@
-
 /**
  * Utility functions for managing CMS data storage with Supabase
  */
@@ -56,33 +55,36 @@ const formatTimestamp = (timestamp: string | null): string => {
   return timestamp ? new Date(timestamp).toISOString() : new Date().toISOString();
 };
 
-// Type guard to ensure Json is a Record
-function isJsonRecord(json: Json): json is Record<string, any> {
-  return typeof json === 'object' && json !== null && !Array.isArray(json);
+// Type guard to check if value is a record object
+function isRecordObject(value: any): value is Record<string, any> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 // Helper function to convert Json to SEOData with improved type checking
-function jsonToSEOData(json: Json): SEOData {
-  // Default SEO data if json is not a record
+function jsonToSEOData(jsonInput: Json): SEOData {
+  // Default SEO data
   const defaultSEO: SEOData = {
     title: '',
     description: '',
     ogType: 'website'
   };
   
-  if (!isJsonRecord(json)) {
+  // If jsonInput is null or not an object, return default
+  if (!isRecordObject(jsonInput)) {
     return defaultSEO;
   }
   
-  // Now we're sure json is a Record<string, any>
+  // Now we can safely access properties
+  const json = jsonInput as Record<string, any>;
+  
   return {
     title: typeof json.title === 'string' ? json.title : defaultSEO.title,
     description: typeof json.description === 'string' ? json.description : defaultSEO.description,
     canonical: typeof json.canonical === 'string' ? json.canonical : undefined,
     ogType: typeof json.ogType === 'string' ? json.ogType : defaultSEO.ogType,
     ogImage: typeof json.ogImage === 'string' ? json.ogImage : undefined,
-    faqs: Array.isArray(json.faqs) ? json.faqs as Array<{question: string, answer: string}> : undefined,
-    schemaMarkup: isJsonRecord(json.schemaMarkup) ? json.schemaMarkup : undefined
+    faqs: Array.isArray(json.faqs) ? json.faqs : undefined,
+    schemaMarkup: isRecordObject(json.schemaMarkup) ? json.schemaMarkup : undefined
   };
 }
 
