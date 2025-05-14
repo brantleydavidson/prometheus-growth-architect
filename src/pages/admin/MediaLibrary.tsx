@@ -68,7 +68,7 @@ const MediaLibrary = () => {
             url: fileUrl,
             size: fileSize,
             dimensions: dimensions,
-            alt: '',
+            alt: file.name.replace(/\.[^/.]+$/, ""), // Use filename without extension as default alt
             uploadedAt: new Date().toISOString(),
           };
           
@@ -141,12 +141,13 @@ const MediaLibrary = () => {
       
       <div className="flex flex-col sm:flex-row gap-4 justify-between">
         <div className="relative w-full sm:w-64">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" aria-hidden="true" />
           <Input
             placeholder="Search media..."
             className="pl-8"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
+            aria-label="Search media files"
           />
         </div>
         
@@ -158,21 +159,23 @@ const MediaLibrary = () => {
             accept="image/*"
             multiple
             onChange={handleFileUpload}
+            aria-label="Upload files"
           />
           <Button 
             variant="outline"
             disabled={uploading}
             onClick={() => document.getElementById("file-upload")?.click()}
+            aria-busy={uploading}
           >
             {uploading ? (
               <>
-                <Skeleton className="h-5 w-5 rounded-full animate-spin mr-2" />
-                Uploading...
+                <Skeleton className="h-5 w-5 rounded-full animate-spin mr-2" aria-hidden="true" />
+                <span>Uploading...</span>
               </>
             ) : (
               <>
-                <Upload className="h-4 w-4 mr-2" />
-                Upload Files
+                <Upload className="h-4 w-4 mr-2" aria-hidden="true" />
+                <span>Upload Files</span>
               </>
             )}
           </Button>
@@ -180,14 +183,14 @@ const MediaLibrary = () => {
       </div>
       
       <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
-        <TabsList>
+        <TabsList aria-label="Filter media by type">
           <TabsTrigger value="all">All Media</TabsTrigger>
           <TabsTrigger value="image">Images</TabsTrigger>
           <TabsTrigger value="document">Documents</TabsTrigger>
         </TabsList>
         
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4" aria-live="polite" aria-busy="true">
             {Array(4).fill(0).map((_, i) => (
               <Card key={i} className="overflow-hidden">
                 <AspectRatio ratio={16/9}>
@@ -241,7 +244,7 @@ interface MediaGridProps {
 const MediaGrid = ({ items, onCopyUrl, onDelete }: MediaGridProps) => {
   if (items.length === 0) {
     return (
-      <div className="text-center py-12">
+      <div className="text-center py-12" aria-live="polite">
         <p className="text-muted-foreground">No media items found.</p>
       </div>
     );
@@ -256,7 +259,7 @@ const MediaGrid = ({ items, onCopyUrl, onDelete }: MediaGridProps) => {
               {item.fileType === "image" ? (
                 <img 
                   src={item.url} 
-                  alt={item.title} 
+                  alt={item.alt || item.title} 
                   className="object-cover w-full h-full" 
                 />
               ) : (
@@ -271,16 +274,20 @@ const MediaGrid = ({ items, onCopyUrl, onDelete }: MediaGridProps) => {
                 size="icon" 
                 className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm"
                 onClick={() => onCopyUrl(item.url)}
+                title="Copy URL"
+                aria-label={`Copy URL for ${item.title}`}
               >
-                <Clipboard className="h-4 w-4" />
+                <Clipboard className="h-4 w-4" aria-hidden="true" />
               </Button>
               <Button 
                 variant="destructive" 
                 size="icon" 
                 className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm"
                 onClick={() => onDelete(item.id)}
+                title="Delete"
+                aria-label={`Delete ${item.title}`}
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-4 w-4" aria-hidden="true" />
               </Button>
             </div>
           </div>
@@ -302,7 +309,7 @@ const MediaGrid = ({ items, onCopyUrl, onDelete }: MediaGridProps) => {
 const FileIcon = ({ fileType }: { fileType: string }) => {
   return (
     <div className="flex flex-col items-center">
-      <div className="h-12 w-12 bg-primary/10 flex items-center justify-center rounded">
+      <div className="h-12 w-12 bg-primary/10 flex items-center justify-center rounded" role="img" aria-label={`${fileType} file`}>
         <span className="text-xs font-bold uppercase">{fileType.slice(0, 3)}</span>
       </div>
     </div>

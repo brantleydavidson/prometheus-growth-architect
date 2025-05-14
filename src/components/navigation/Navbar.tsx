@@ -33,18 +33,19 @@ const Navbar = () => {
           ? "bg-white shadow-md py-2"
           : "bg-white/90 backdrop-blur-sm py-4"
       }`}
+      role="banner"
     >
       <div className="container-custom flex justify-between items-center">
         <Link to="/" className="flex items-center">
           <img 
             src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png" 
-            alt="Prometheus Agency" 
+            alt="Prometheus Agency Logo" 
             className="h-10 w-auto" 
           />
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden lg:flex items-center space-x-8">
+        <nav className="hidden lg:flex items-center space-x-8" aria-label="Main navigation">
           <WhoWeHelpMenu />
           <ServicesMenu />
           <InsightsMenu />
@@ -62,14 +63,17 @@ const Navbar = () => {
         <button
           className="lg:hidden text-prometheus-navy"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
+          aria-expanded={isMenuOpen}
+          aria-controls="mobile-menu"
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          {isMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
         </button>
       </div>
 
       {/* Mobile Navigation */}
       {isMenuOpen && (
-        <div className="lg:hidden bg-white w-full py-4 shadow-md">
+        <div id="mobile-menu" className="lg:hidden bg-white w-full py-4 shadow-md" role="navigation" aria-label="Mobile navigation">
           <div className="container-custom flex flex-col space-y-4">
             <Link 
               to="/who-we-help" 

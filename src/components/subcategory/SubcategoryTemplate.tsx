@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/navigation/Navbar";
@@ -43,6 +44,9 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
   imagePath,
   testimonial,
 }) => {
+  // Create a page-unique ID for ARIA purposes
+  const pageId = title.toLowerCase().replace(/\s+/g, '-');
+
   return (
     <>
       <SEO
@@ -55,7 +59,7 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
       <Navbar />
       
       {/* Hero Section */}
-      <section className="bg-gradient-to-b from-purple-50 to-white py-16 md:py-24">
+      <section className="bg-gradient-to-b from-purple-50 to-white py-16 md:py-24" aria-labelledby={`${pageId}-hero-heading`}>
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="text-left">
@@ -63,12 +67,13 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
                 <Link 
                   to={industry === 'b2b' ? "/b2b" : "/dtc"} 
                   className="text-sm font-medium text-prometheus-navy/70 hover:text-prometheus-orange flex items-center"
+                  aria-label={`Back to ${industry === 'b2b' ? "B2B" : "DTC"} Solutions`}
                 >
-                  <ArrowRight className="mr-2 h-4 w-4 rotate-180" />
+                  <ArrowRight className="mr-2 h-4 w-4 rotate-180" aria-hidden="true" />
                   {industry === 'b2b' ? "Back to B2B Solutions" : "Back to DTC Solutions"}
                 </Link>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold text-prometheus-navy mb-4 text-left">
+              <h1 id={`${pageId}-hero-heading`} className="text-4xl md:text-5xl font-bold text-prometheus-navy mb-4 text-left">
                 {title}
               </h1>
               <p className="text-xl md:text-2xl text-prometheus-gray mb-8 text-left">
@@ -89,7 +94,7 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
                 <AspectRatio ratio={16/9} className="bg-muted">
                   <img 
                     src={imagePath} 
-                    alt={title} 
+                    alt={`${title} visual representation`}
                     className="object-cover w-full h-full" 
                   />
                 </AspectRatio>
@@ -106,11 +111,11 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
       </section>
       
       {/* Main Content Section */}
-      <section className="py-16">
+      <section className="py-16" aria-labelledby={`${pageId}-challenges-heading`}>
         <div className="container-custom">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-8">
-              <h2 className="text-3xl font-bold text-prometheus-navy mb-6 text-left">
+              <h2 id={`${pageId}-challenges-heading`} className="text-3xl font-bold text-prometheus-navy mb-6 text-left">
                 The Challenge
               </h2>
               <p className="text-lg text-prometheus-gray mb-8 text-left">
@@ -119,10 +124,10 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
               
               <div className="mb-12">
                 <h3 className="text-xl font-semibold mb-4 text-left">Common Challenges:</h3>
-                <ul className="space-y-4">
+                <ul className="space-y-4" aria-label="List of common challenges">
                   {challenges.map((challenge, index) => (
                     <li key={index} className="flex items-start">
-                      <div className="mr-4 mt-1 text-prometheus-orange">
+                      <div className="mr-4 mt-1 text-prometheus-orange" aria-hidden="true">
                         <CheckCircle size={20} />
                       </div>
                       <span className="text-prometheus-gray">{challenge}</span>
@@ -131,7 +136,7 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
                 </ul>
               </div>
               
-              <h2 className="text-3xl font-bold text-prometheus-navy mb-6 text-left">
+              <h2 id={`${pageId}-solution-heading`} className="text-3xl font-bold text-prometheus-navy mb-6 text-left">
                 Our Solution
               </h2>
               <p className="text-lg text-prometheus-gray mb-8 text-left">
@@ -140,10 +145,10 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
               
               <div className="mb-12">
                 <h3 className="text-xl font-semibold mb-4 text-left">Key Benefits:</h3>
-                <ul className="space-y-4">
+                <ul className="space-y-4" aria-label="List of key benefits">
                   {benefits.map((benefit, index) => (
                     <li key={index} className="flex items-start">
-                      <div className="mr-4 mt-1 text-prometheus-orange">
+                      <div className="mr-4 mt-1 text-prometheus-orange" aria-hidden="true">
                         <CheckCircle size={20} />
                       </div>
                       <span className="text-prometheus-gray">{benefit}</span>
@@ -166,7 +171,7 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
                 </Button>
                 
                 {testimonial && (
-                  <div className="mt-8 p-6 bg-white rounded-lg shadow">
+                  <div className="mt-8 p-6 bg-white rounded-lg shadow" aria-label="Client testimonial">
                     <p className="italic text-prometheus-gray mb-4">"{testimonial.quote}"</p>
                     <div>
                       <p className="font-semibold text-prometheus-navy">{testimonial.author}</p>
@@ -181,9 +186,9 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
       </section>
       
       {/* CTA Banner */}
-      <section className="bg-prometheus-navy py-16">
+      <section className="bg-prometheus-navy py-16" aria-labelledby={`${pageId}-cta-heading`}>
         <div className="container-custom text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          <h2 id={`${pageId}-cta-heading`} className="text-3xl md:text-4xl font-bold text-white mb-6">
             Ready to Elevate Your {title} Strategy?
           </h2>
           <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">

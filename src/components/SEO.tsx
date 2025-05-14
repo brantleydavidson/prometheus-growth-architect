@@ -17,6 +17,7 @@ interface SEOProps {
   author?: string;
   datePublished?: string;
   articleType?: string;
+  lang?: string;
 }
 
 const SEO: React.FC<SEOProps> = ({
@@ -29,7 +30,8 @@ const SEO: React.FC<SEOProps> = ({
   faqSchema = null,
   author,
   datePublished,
-  articleType
+  articleType,
+  lang = 'en'
 }) => {
   // Build full canonical URL if relative path is provided
   const fullCanonical = canonical 
@@ -90,6 +92,7 @@ const SEO: React.FC<SEOProps> = ({
 
   return (
     <Helmet>
+      <html lang={lang} />
       <title>{title}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={fullCanonical} />
@@ -100,16 +103,17 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:url" content={fullCanonical} />
       <meta property="og:type" content={ogType} />
       <meta property="og:image" content={ogImage} />
+      <meta property="og:image:alt" content={`Image for ${title}`} />
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={ogImage} />
+      <meta name="twitter:image:alt" content={`Image for ${title}`} />
       
       {/* Additional SEO tags */}
       <meta name="robots" content="index, follow" />
-      <html lang="en" />
       
       {/* Schema.org JSON-LD for custom schema */}
       {schemaMarkup && (

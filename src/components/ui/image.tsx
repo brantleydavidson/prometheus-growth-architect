@@ -12,11 +12,14 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 
 const Image = React.forwardRef<HTMLImageElement, ImageProps>(
   ({ className, src, alt, width, height, objectFit = "cover", ...props }, ref) => {
+    // Ensure the alt text is properly used and not empty
+    const safeAlt = alt || "Image"; 
+    
     return (
       <img
         ref={ref}
         src={src}
-        alt={alt}
+        alt={safeAlt}
         width={width}
         height={height}
         className={className}

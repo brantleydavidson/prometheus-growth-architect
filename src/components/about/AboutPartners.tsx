@@ -2,15 +2,21 @@
 import React from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-const PartnerLogo = ({ src, alt, className = "" }) => {
+interface PartnerLogoProps {
+  src: string;
+  alt: string;
+  className?: string;
+}
+
+const PartnerLogo = ({ src, alt, className = "" }: PartnerLogoProps) => {
   return (
-    <div className={`p-4 flex items-center justify-center ${className}`}>
+    <div className={`p-4 flex items-center justify-center ${className}`} aria-label={`Partner: ${alt}`}>
       <div className="w-full max-w-[160px]">
         <AspectRatio ratio={3/1} className="bg-white rounded-md">
           <div className="h-full w-full flex items-center justify-center p-3">
             <img 
               src={src} 
-              alt={alt} 
+              alt={`${alt} logo - Prometheus Agency partner`}
               className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
             />
           </div>
@@ -38,8 +44,9 @@ const AboutPartners = () => {
   ];
 
   return (
-    <section className="py-12 bg-gray-50">
+    <section className="py-12 bg-gray-50" aria-labelledby="partners-heading">
       <div className="container-custom">
+        <h2 id="partners-heading" className="sr-only">Our Partners</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           {partners.map((partner, index) => (
             <PartnerLogo 

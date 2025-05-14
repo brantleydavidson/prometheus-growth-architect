@@ -1,13 +1,19 @@
 
 import React from "react";
 
-const TechLogo = ({ src, alt, className = "" }) => {
+interface TechLogoProps {
+  src: string;
+  alt: string;
+  className?: string;
+}
+
+const TechLogo = ({ src, alt, className = "" }: TechLogoProps) => {
   return (
-    <div className={`p-4 flex items-center justify-center ${className}`}>
+    <div className={`p-4 flex items-center justify-center ${className}`} aria-label={`Technology: ${alt}`}>
       <div className="w-full max-w-[120px]">
         <img 
           src={src} 
-          alt={alt}
+          alt={`${alt} logo - Technology used by Prometheus Agency`}
           className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100" 
         />
       </div>
@@ -33,10 +39,10 @@ const AboutTech = () => {
   ];
 
   return (
-    <section className="py-12 bg-white">
+    <section className="py-12 bg-white" aria-labelledby="technologies-heading">
       <div className="container-custom">
         <div className="mb-8 text-center lg:text-left">
-          <h3 className="text-2xl font-medium text-prometheus-navy mb-2">Empowering businesses with cutting-edge technology solutions</h3>
+          <h3 id="technologies-heading" className="text-2xl font-medium text-prometheus-navy mb-2">Empowering businesses with cutting-edge technology solutions</h3>
         </div>
         
         <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6">

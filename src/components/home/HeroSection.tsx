@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 
 const HeroSection = () => {
   return (
-    <section className="pt-16 pb-24 overflow-hidden">
+    <section className="pt-16 pb-24 overflow-hidden" aria-labelledby="main-heading">
       <div className="container-custom">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="animate-grid-snap text-left">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-semibold text-prometheus-navy mb-6 leading-tight">
+            <h1 id="main-heading" className="text-4xl md:text-5xl lg:text-6xl font-semibold text-prometheus-navy mb-6 leading-tight">
               Tame the Tech. <br/>
               <span className="text-prometheus-orange">Unleash the Growth.</span>
             </h1>
@@ -27,7 +27,7 @@ const HeroSection = () => {
               <Link to="/services">
                 <Button variant="outline" className="border-prometheus-navy text-prometheus-navy hover:bg-prometheus-navy hover:text-white px-6 py-6 text-base flex items-center gap-2 w-full sm:w-auto">
                   Explore Services
-                  <ArrowRight size={16} />
+                  <ArrowRight size={16} aria-hidden="true" />
                 </Button>
               </Link>
             </div>
@@ -50,16 +50,32 @@ const HeroSection = () => {
             
             {/* Floating selector tiles */}
             <div className="absolute -bottom-8 right-0 flex space-x-3">
-              <Link to="/b2b" className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm">
+              <Link 
+                to="/b2b" 
+                className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm"
+                aria-label="Learn about B2B solutions"
+              >
                 B2B
               </Link>
-              <Link to="/dtc" className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm">
+              <Link 
+                to="/dtc" 
+                className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm"
+                aria-label="Learn about DTC solutions"
+              >
                 DTC
               </Link>
-              <Link to="/services/ai-enablement" className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm">
+              <Link 
+                to="/services/ai-enablement" 
+                className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm"
+                aria-label="Explore AI enablement services"
+              >
                 AI Suite
               </Link>
-              <Link to="/services/consulting-gtm" className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm">
+              <Link 
+                to="/services/consulting-gtm" 
+                className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm"
+                aria-label="Explore consulting services"
+              >
                 Consulting
               </Link>
             </div>
