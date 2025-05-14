@@ -1,4 +1,4 @@
-import { createRoot, hydrateRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
@@ -18,9 +18,5 @@ const app = (
   </ErrorBoundary>
 );
 
-// Use hydration for SSR in production
-if (import.meta.env.PROD) {
-  hydrateRoot(root, app);
-} else {
-  createRoot(root).render(app);
-}
+// Always use client-side rendering to avoid hydration mismatch errors
+createRoot(root).render(app);
