@@ -7,5 +7,24 @@ import { useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { initializeCMSData } from "@/utils/cms-storage";
 
-// Import once and export
+// Create a default export App component
+const App = () => {
+  useEffect(() => {
+    // Initialize CMS data on app load
+    initializeCMSData();
+  }, []);
+  
+  return (
+    <div className="App">
+      <AuthProvider>
+        <Routes>
+          {/* Add your routes here */}
+        </Routes>
+      </AuthProvider>
+    </div>
+  );
+};
+
+// Export once and also named exports
 export { AuthProvider, AuthProtected, initializeCMSData };
+export default App;

@@ -4,6 +4,7 @@
  */
 import { supabase } from "@/integrations/supabase/client";
 import { v4 as uuidv4 } from 'uuid';
+import { Json } from "@/integrations/supabase/types";
 
 // Define types for CMS content
 export interface CMSPage {
@@ -36,7 +37,7 @@ export interface SEOData {
   ogType: string;
   ogImage?: string;
   faqs?: Array<{question: string, answer: string}>;
-  schemaMarkup?: object;
+  schemaMarkup?: Record<string, any>;
 }
 
 export interface MediaItem {
@@ -55,6 +56,46 @@ const formatTimestamp = (timestamp: string | null): string => {
   return timestamp ? new Date(timestamp).toISOString() : new Date().toISOString();
 };
 
+// Type guard to ensure Json is a Record
+function isJsonRecord(json: Json): json is Record<string, any> {
+  return typeof json === 'object' && json !== null && !Array.isArray(json);
+}
+
+// Helper function to convert Json to SEOData
+function jsonToSEOData(json: Json): SEOData {
+  if (!isJsonRecord(json)) {
+    // Fallback if json is not a record
+    return {
+      title: '',
+      description: '',
+      ogType: 'website'
+    };
+  }
+  
+  return {
+    title: json.title as string || '',
+    description: json.description as string || '',
+    canonical: json.canonical as string,
+    ogType: json.ogType as string || 'website',
+    ogImage: json.ogImage as string,
+    faqs: json.faqs as Array<{question: string, answer: string}>,
+    schemaMarkup: json.schemaMarkup as Record<string, any>
+  };
+}
+
+// Helper function to convert SEOData to Json
+function seoDataToJson(seoData: SEOData): Record<string, any> {
+  return {
+    title: seoData.title,
+    description: seoData.description,
+    canonical: seoData.canonical,
+    ogType: seoData.ogType,
+    ogImage: seoData.ogImage,
+    faqs: seoData.faqs,
+    schemaMarkup: seoData.schemaMarkup
+  };
+}
+
 // Pages
 export async function getPages(): Promise<CMSPage[]> {
   const { data, error } = await supabase
@@ -70,8 +111,8 @@ export async function getPages(): Promise<CMSPage[]> {
     id: page.id,
     title: page.title,
     slug: page.slug,
-    content: page.content,
-    seo: page.seo,
+    content: isJsonRecord(page.content) ? page.content : {},
+    seo: jsonToSEOData(page.seo),
     updatedAt: formatTimestamp(page.updated_at)
   }));
 }
@@ -92,8 +133,8 @@ export async function getPageBySlug(slug: string): Promise<CMSPage | undefined> 
     id: data.id,
     title: data.title,
     slug: data.slug,
-    content: data.content,
-    seo: data.seo,
+    content: isJsonRecord(data.content) ? data.content : {},
+    seo: jsonToSEOData(data.seo),
     updatedAt: formatTimestamp(data.updated_at)
   };
 }
@@ -108,8 +149,8 @@ export async function savePage(page: CMSPage): Promise<void> {
       .update({
         title: page.title,
         slug: page.slug,
-        content: page.content,
-        seo: page.seo,
+        content: page.content as Json,
+        seo: seoDataToJson(page.seo) as Json,
         updated_at: now
       })
       .eq('id', page.id);
@@ -123,8 +164,8 @@ export async function savePage(page: CMSPage): Promise<void> {
         id: uuidv4(),
         title: page.title,
         slug: page.slug,
-        content: page.content,
-        seo: page.seo,
+        content: page.content as Json,
+        seo: seoDataToJson(page.seo) as Json,
         created_at: now,
         updated_at: now
       });
@@ -155,7 +196,7 @@ export async function getBlogPosts(): Promise<CMSBlogPost[]> {
     status: post.status as 'draft' | 'published',
     publishedAt: post.published_at ? formatTimestamp(post.published_at) : undefined,
     updatedAt: formatTimestamp(post.updated_at),
-    seo: post.seo
+    seo: jsonToSEOData(post.seo)
   }));
 }
 
@@ -182,7 +223,7 @@ export async function getBlogPostBySlug(slug: string): Promise<CMSBlogPost | und
     status: data.status as 'draft' | 'published',
     publishedAt: data.published_at ? formatTimestamp(data.published_at) : undefined,
     updatedAt: formatTimestamp(data.updated_at),
-    seo: data.seo
+    seo: jsonToSEOData(data.seo)
   };
 }
 
@@ -203,7 +244,7 @@ export async function saveBlogPost(post: CMSBlogPost): Promise<void> {
         status: post.status,
         published_at: post.status === 'published' ? (post.publishedAt || now) : post.publishedAt,
         updated_at: now,
-        seo: post.seo
+        seo: seoDataToJson(post.seo) as Json
       })
       .eq('id', post.id);
     
@@ -224,7 +265,7 @@ export async function saveBlogPost(post: CMSBlogPost): Promise<void> {
         published_at: post.status === 'published' ? (post.publishedAt || now) : null,
         created_at: now,
         updated_at: now,
-        seo: post.seo
+        seo: seoDataToJson(post.seo) as Json
       });
     
     if (error) console.error('Error creating blog post:', error);
