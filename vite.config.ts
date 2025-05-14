@@ -23,5 +23,6 @@ export default defineConfig(({ mode }) => ({
     outDir: 'dist/client',
     // Support for SSR
     ssrManifest: true,
+    sourcemap: true,
   },
 }));
