@@ -18,14 +18,14 @@ interface ProofRibbonProps {
 
 const ProofRibbon = ({ clients, kpis }: ProofRibbonProps) => {
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-24 bg-gray-50">
       <div className="container-custom">
-        <h2 className="text-2xl font-semibold text-center text-prometheus-navy mb-12">
+        <h2 className="text-2xl font-semibold text-center text-prometheus-navy mb-16">
           Trusted by Industry Leaders
         </h2>
         
         {/* Client Logos */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center justify-items-center mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-12 items-center justify-items-center mb-24">
           {clients.map((client, index) => (
             <div key={index} className="flex items-center justify-center">
               <img
@@ -38,14 +38,14 @@ const ProofRibbon = ({ clients, kpis }: ProofRibbonProps) => {
         </div>
         
         {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {kpis.map((kpi, index) => (
             <div
               key={index}
-              className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center animate-counter-up"
+              className="bg-white p-8 rounded-lg shadow-sm border border-gray-100 text-center animate-counter-up"
               style={{ animationDelay: `${index * 100}ms` }}
             >
-              <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">
+              <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-3">
                 {kpi.value}
               </div>
               <div className="text-prometheus-gray">{kpi.label}</div>

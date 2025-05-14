@@ -23,7 +23,7 @@ const WhoWeHelpPanel = () => {
               We help you create <strong>efficient pipelines</strong> and convert more leads into customers.
             </p>
             
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3 mb-10">
               <li className="flex items-start gap-2">
                 <CheckCircle size={20} className="text-prometheus-orange mt-1 flex-shrink-0" aria-hidden="true" />
                 <span>Shorten sales cycles by up to 35%</span>
@@ -38,22 +38,7 @@ const WhoWeHelpPanel = () => {
               </li>
             </ul>
             
-            <div className="space-y-2">
-              <p className="font-medium text-prometheus-gold mb-2">Industries we serve:</p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                <Link to="/manufacturing" className="text-sm bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">
-                  Manufacturing
-                </Link>
-                <Link to="/professional-services" className="text-sm bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">
-                  Professional Services
-                </Link>
-                <span className="text-sm bg-white/10 px-3 py-1 rounded-full text-white/50">
-                  SaaS (Coming Soon)
-                </span>
-              </div>
-            </div>
-            
-            <Link to="/b2b">
+            <Link to="/b2b" className="block mt-auto">
               <Button className="w-full bg-prometheus-orange hover:bg-prometheus-orange/90 text-white group-hover:translate-y-0 translate-y-1 transition-transform flex items-center justify-center gap-2">
                 Explore B2B Solutions
                 <ArrowRight size={16} />
@@ -69,7 +54,7 @@ const WhoWeHelpPanel = () => {
               We help you find and convert more customers with <strong>precision targeting</strong>.
             </p>
             
-            <ul className="space-y-3 mb-8">
+            <ul className="space-y-3 mb-10">
               <li className="flex items-start gap-2">
                 <CheckCircle size={20} className="text-prometheus-gold mt-1 flex-shrink-0" aria-hidden="true" />
                 <span>Reduce customer acquisition costs by up to 28%</span>
@@ -84,22 +69,7 @@ const WhoWeHelpPanel = () => {
               </li>
             </ul>
             
-            <div className="space-y-2">
-              <p className="font-medium text-prometheus-gold mb-2">Industries we serve:</p>
-              <div className="flex flex-wrap gap-2 mb-6">
-                <Link to="/restoration" className="text-sm bg-white/10 px-3 py-1 rounded-full hover:bg-white/20 transition-colors">
-                  Restoration
-                </Link>
-                <span className="text-sm bg-white/10 px-3 py-1 rounded-full text-white/50">
-                  eCommerce (Coming Soon)
-                </span>
-                <span className="text-sm bg-white/10 px-3 py-1 rounded-full text-white/50">
-                  Home Services (Coming Soon)
-                </span>
-              </div>
-            </div>
-            
-            <Link to="/dtc">
+            <Link to="/dtc" className="block mt-auto">
               <Button className="w-full bg-prometheus-gold hover:bg-prometheus-gold/90 text-white group-hover:translate-y-0 translate-y-1 transition-transform flex items-center justify-center gap-2">
                 Explore DTC Solutions
                 <ArrowRight size={16} />
