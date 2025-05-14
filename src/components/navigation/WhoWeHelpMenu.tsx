@@ -29,12 +29,12 @@ const WhoWeHelpMenu = () => {
             <ul className="mt-2 space-y-2 pl-2">
               <li>
                 <Link to="/manufacturing" className="text-sm text-gray-700 hover:text-prometheus-orange transition-colors block">
-                  Manufacturing — <span className="text-prometheus-gray">"Turn idle line-time into booked POs."</span>
+                  Manufacturing
                 </Link>
               </li>
               <li>
                 <Link to="/professional-services" className="text-sm text-gray-700 hover:text-prometheus-orange transition-colors block">
-                  Professional Services — <span className="text-prometheus-gray">"Cut proposal cycles by 30%."</span>
+                  Professional Services
                 </Link>
               </li>
             </ul>
@@ -48,12 +48,12 @@ const WhoWeHelpMenu = () => {
             <ul className="mt-2 space-y-2 pl-2">
               <li>
                 <Link to="/restoration" className="text-sm text-gray-700 hover:text-prometheus-orange transition-colors block">
-                  Restoration — <span className="text-prometheus-gray">"Surface 40% more emergency leads."</span>
+                  Restoration
                 </Link>
               </li>
               <li>
                 <Link to="/ecommerce" className="text-sm text-gray-700 hover:text-prometheus-orange transition-colors block">
-                  eCommerce — <span className="text-prometheus-gray">"Lift repeat purchase rate by 25%."</span>
+                  eCommerce
                 </Link>
               </li>
             </ul>
