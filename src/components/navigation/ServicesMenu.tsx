@@ -17,9 +17,6 @@ const ServicesMenu = () => {
         </button>
       </HoverCardTrigger>
       <HoverCardContent className="w-72 p-0 shadow-lg bg-white rounded-md border border-gray-200 animate-fade-in">
-        <div className="p-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-prometheus-navy">Our Services</h3>
-        </div>
         <div className="p-4 flex flex-col space-y-2">
           <Link to="/services/ai-enablement" className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors">
             AI Enablement & Integration

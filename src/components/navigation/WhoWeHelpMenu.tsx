@@ -17,9 +17,6 @@ const WhoWeHelpMenu = () => {
         </button>
       </HoverCardTrigger>
       <HoverCardContent className="w-96 p-0 shadow-lg bg-white rounded-md border border-gray-200 animate-fade-in">
-        <div className="p-4 border-b border-gray-100">
-          <h3 className="text-lg font-semibold text-prometheus-navy">Who We Help</h3>
-        </div>
         <div className="p-4">
           <div className="mb-6">
             <Link to="/b2b" className="text-lg font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors flex items-center justify-between">
