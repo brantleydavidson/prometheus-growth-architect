@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -12,12 +11,17 @@ const InsightsMenu = () => {
   return (
     <HoverCard openDelay={100} closeDelay={150}>
       <HoverCardTrigger asChild>
-        <button className="flex items-center gap-1 font-medium text-base hover:text-prometheus-orange transition-colors">
-          Insights <ChevronDown size={16} />
+        <button 
+          className="flex items-center gap-1 font-medium text-base hover:text-prometheus-orange transition-colors"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Insights navigation"
+        >
+          Insights <ChevronDown size={16} aria-hidden="true" />
         </button>
       </HoverCardTrigger>
       <HoverCardContent className="w-72 p-0 shadow-lg bg-white rounded-md border border-gray-200 animate-fade-in">
-        <div className="p-4 flex flex-col space-y-2">
+        <nav className="p-4 flex flex-col space-y-2" aria-label="Insights submenu">
           <Link
             to="/ai-quotient"
             className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors"
@@ -30,7 +34,7 @@ const InsightsMenu = () => {
           >
             All Articles & Playbooks
           </Link>
-          <hr className="my-2" />
+          <hr className="my-2" aria-hidden="true" />
           <Link
             to="/insights/crm-consulting"
             className="text-base text-gray-700 hover:text-prometheus-orange transition-colors"
@@ -43,7 +47,7 @@ const InsightsMenu = () => {
           >
             CRM Consulting in Conway
           </Link>
-        </div>
+        </nav>
       </HoverCardContent>
     </HoverCard>
   );

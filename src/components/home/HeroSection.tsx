@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
@@ -40,8 +39,8 @@ const HeroSection = () => {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
                   <div className="bg-prometheus-navy/80 p-6 rounded-lg">
-                    <p className="text-xl font-medium mb-3">From Chaos to Control</p>
-                    <div className="text-4xl font-bold mb-2">+42%</div>
+                    <h2 className="text-xl font-medium mb-3">From Chaos to Control</h2>
+                    <div className="text-4xl font-bold mb-2" aria-label="Average Revenue Growth">+42%</div>
                     <p>Average Revenue Growth</p>
                   </div>
                 </div>
@@ -49,7 +48,7 @@ const HeroSection = () => {
             </div>
             
             {/* Floating selector tiles */}
-            <div className="absolute -bottom-8 right-0 flex space-x-3">
+            <div className="absolute -bottom-8 right-0 flex space-x-3" role="navigation" aria-label="Quick links">
               <Link 
                 to="/b2b" 
                 className="bg-white py-2 px-4 rounded shadow-lg border border-gray-100 text-prometheus-navy font-medium hover:border-prometheus-orange transition-colors text-sm"

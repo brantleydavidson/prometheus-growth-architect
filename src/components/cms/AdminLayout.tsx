@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -55,8 +54,8 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
       {/* Content */}
       <div className="flex flex-1">
         {/* Sidebar */}
-        <aside className="w-64 border-r bg-muted/40 hidden md:block">
-          <nav className="flex flex-col gap-1 p-4">
+        <aside className="w-64 border-r bg-muted/40 hidden md:block" role="complementary" aria-label="Admin navigation">
+          <nav className="flex flex-col gap-1 p-4" aria-label="Admin menu">
             <Link to="/admin" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Dashboard</Link>
             <Link to="/admin/media-library" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Media Library</Link>
             <Link to="/admin/page-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Page Editor</Link>
@@ -72,14 +71,23 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             size="icon" 
             className="fixed bottom-4 right-4 z-40 rounded-full w-12 h-12 shadow-lg"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-admin-menu"
+            aria-label={mobileMenuOpen ? "Close admin menu" : "Open admin menu"}
           >
-            <Menu className="h-5 w-5" />
+            <Menu className="h-5 w-5" aria-hidden="true" />
           </Button>
           
           {mobileMenuOpen && (
-            <div className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm">
+            <div 
+              id="mobile-admin-menu"
+              className="fixed inset-0 z-30 bg-background/80 backdrop-blur-sm"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Admin navigation menu"
+            >
               <div className="fixed bottom-20 right-4 bg-white rounded-lg shadow-lg p-4 w-48 border">
-                <nav className="flex flex-col gap-2">
+                <nav className="flex flex-col gap-2" aria-label="Mobile admin menu">
                   <Link to="/admin" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Dashboard</Link>
                   <Link to="/admin/media-library" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Media Library</Link>
                   <Link to="/admin/page-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Page Editor</Link>
@@ -92,7 +100,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
         </div>
 
         {/* Main content */}
-        <main className="flex-1 p-6 overflow-auto">{children}</main>
+        <main id="main-content" className="flex-1 p-6 overflow-auto" role="main">{children}</main>
       </div>
     </div>
   );
