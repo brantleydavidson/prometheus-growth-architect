@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "@/components/navigation/Navbar";
@@ -49,11 +48,8 @@ const SubcategoryTemplate: React.FC<SubcategoryProps> = ({
       <SEO
         title={seoTitle}
         description={seoDescription}
-        openGraph={{
-          title: seoTitle,
-          description: seoDescription,
-          type: "website",
-        }}
+        ogType="website"
+        ogImage="https://prometheusagency.co/opengraph-image.png"
       />
       
       <Navbar />
