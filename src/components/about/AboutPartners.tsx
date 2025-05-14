@@ -1,4 +1,3 @@
-
 import React from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 
@@ -17,6 +16,8 @@ const PartnerLogo = ({ src, alt, className = "" }: PartnerLogoProps) => {
             <img 
               src={src} 
               alt={`${alt} logo - Prometheus Agency partner`}
+              width="160" height="60"
+              loading="lazy" decoding="async"
               className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
             />
           </div>

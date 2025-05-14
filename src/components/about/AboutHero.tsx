@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -26,6 +25,12 @@ const AboutHero = () => {
               src="/lovable-uploads/6bf1d2d6-a1a4-4a14-aa06-7ad2714adedd.png"
               alt="Enterprise-level strategies" 
               className="max-w-full h-auto rounded-lg shadow-lg"
+            />
+            <img
+              src="/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png"
+              alt="Team collaborating at Prometheus Agency"
+              width="640" height="400" loading="lazy" decoding="async"
+              className="rounded-lg shadow-lg"
             />
           </div>
         </div>

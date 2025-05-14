@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Rocket } from "lucide-react";
 
@@ -9,8 +8,12 @@ const AboutMission = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-5">
             <img 
-              src="/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png" 
-              alt="Our Mission" 
+              src="/lovable-uploads/placeholder.svg" 
+              alt="Our mission at Prometheus Agency" 
+              width="640" 
+              height="360" 
+              loading="lazy" 
+              decoding="async"
               className="max-w-full h-auto rounded-lg shadow-lg"
             />
           </div>
