@@ -12,16 +12,21 @@ const WhoWeHelpMenu = () => {
   return (
     <HoverCard openDelay={100} closeDelay={150}>
       <HoverCardTrigger asChild>
-        <button className="flex items-center gap-1 font-medium text-base hover:text-prometheus-orange transition-colors">
-          Who We Help <ChevronDown size={16} />
+        <button 
+          className="flex items-center gap-1 font-medium text-base hover:text-prometheus-orange transition-colors"
+          aria-expanded="false"
+          aria-haspopup="true"
+          aria-label="Who We Help navigation"
+        >
+          Who We Help <ChevronDown size={16} aria-hidden="true" />
         </button>
       </HoverCardTrigger>
       <HoverCardContent className="w-96 p-0 shadow-lg bg-white rounded-md border border-gray-200 animate-fade-in">
-        <div className="p-4">
+        <nav className="p-4" aria-label="Who We Help submenu">
           <div className="mb-6">
             <Link to="/b2b" className="text-lg font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors flex items-center justify-between">
-              Win More B2B Deals
-              <ChevronDown className="rotate-270" size={16} />
+              B2B
+              <ChevronDown className="rotate-270" size={16} aria-hidden="true" />
             </Link>
             <ul className="mt-2 space-y-2 pl-2">
               <li>
@@ -34,13 +39,18 @@ const WhoWeHelpMenu = () => {
                   Professional Services
                 </Link>
               </li>
+              <li>
+                <Link to="/saas" className="text-sm text-gray-700 hover:text-prometheus-orange transition-colors block">
+                  SaaS
+                </Link>
+              </li>
             </ul>
           </div>
           
           <div>
             <Link to="/dtc" className="text-lg font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors flex items-center justify-between">
-              Sell More Direct-to-Consumer
-              <ChevronDown className="rotate-270" size={16} />
+              DTC
+              <ChevronDown className="rotate-270" size={16} aria-hidden="true" />
             </Link>
             <ul className="mt-2 space-y-2 pl-2">
               <li>
@@ -53,9 +63,14 @@ const WhoWeHelpMenu = () => {
                   eCommerce
                 </Link>
               </li>
+              <li>
+                <Link to="/consumer-services" className="text-sm text-gray-700 hover:text-prometheus-orange transition-colors block">
+                  Consumer Services
+                </Link>
+              </li>
             </ul>
           </div>
-        </div>
+        </nav>
       </HoverCardContent>
     </HoverCard>
   );

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import WhoWeHelpMenu from "./WhoWeHelpMenu";
 import ServicesMenu from "./ServicesMenu";
-import InsightsMenu from "./InsightsMenu";
+import PlaybooksMenu from "./PlaybooksMenu";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
@@ -36,7 +36,7 @@ const Navbar = () => {
       role="banner"
     >
       <div className="container-custom flex justify-between items-center">
-        <Link to="/" className="flex items-center">
+        <Link to="/" className="flex items-center" aria-label="Prometheus Agency - Home">
           <img 
             src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png" 
             alt="Prometheus Agency Logo" 
@@ -48,7 +48,14 @@ const Navbar = () => {
         <nav className="hidden lg:flex items-center space-x-8" aria-label="Main navigation">
           <WhoWeHelpMenu />
           <ServicesMenu />
-          <InsightsMenu />
+          <PlaybooksMenu />
+          <Link 
+            to="/insights" 
+            className="font-medium text-base hover:text-prometheus-orange transition-colors"
+            aria-label="Insights"
+          >
+            Insights
+          </Link>
           <Link to="/about" className="font-medium text-base hover:text-prometheus-orange transition-colors">
             About
           </Link>
@@ -90,11 +97,11 @@ const Navbar = () => {
               Services
             </Link>
             <Link 
-              to="/insights" 
+              to="/playbooks" 
               className="font-medium text-lg text-prometheus-navy py-2 border-b border-gray-100"
               onClick={() => setIsMenuOpen(false)}
             >
-              Insights & Playbooks
+              Playbooks
             </Link>
             <Link 
               to="/ai-quotient" 
@@ -102,6 +109,13 @@ const Navbar = () => {
               onClick={() => setIsMenuOpen(false)}
             >
               AI Quotient Assessment
+            </Link>
+            <Link 
+              to="/insights" 
+              className="font-medium text-lg text-prometheus-navy py-2 border-b border-gray-100"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Insights
             </Link>
             <Link 
               to="/about" 
