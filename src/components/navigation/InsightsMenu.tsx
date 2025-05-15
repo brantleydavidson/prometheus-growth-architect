@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -46,6 +47,12 @@ const InsightsMenu = () => {
             className="text-base text-gray-700 hover:text-prometheus-orange transition-colors"
           >
             CRM Consulting in Conway
+          </Link>
+          <Link
+            to="/insights/salesforce-crm-integration-in-jackson-ms"
+            className="text-base text-gray-700 hover:text-prometheus-orange transition-colors"
+          >
+            Salesforce CRM in Jackson
           </Link>
         </nav>
       </HoverCardContent>
