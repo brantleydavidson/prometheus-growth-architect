@@ -1,28 +1,24 @@
 
-import ReactDOMServer from 'react-dom/server';
+import React from 'react';
+import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
-// Import react-helmet-async properly for SSR using named exports
-import * as ReactHelmetAsync from 'react-helmet-async';
-const { HelmetProvider } = ReactHelmetAsync;
+import { HelmetProvider, HelmetServerState } from 'react-helmet-async';
 
-export async function render(url: string) {
-  // Create a proper context object for Helmet
-  const helmetContext = {};
+export function render(url: string) {
+  const helmetContext: { helmet?: HelmetServerState } = {};
   
-  const html = ReactDOMServer.renderToString(
-    <StaticRouter location={url}>
-      <HelmetProvider context={helmetContext}>
+  // Render our React app to string
+  const html = renderToString(
+    <HelmetProvider context={helmetContext}>
+      <StaticRouter location={url}>
         <App />
-      </HelmetProvider>
-    </StaticRouter>
+      </StaticRouter>
+    </HelmetProvider>
   );
-  
-  // Get the helmet data after rendering
-  const { helmet } = helmetContext as any;
-  
-  return {
-    html,
-    helmet
-  };
+
+  // Get the helmet data for SEO
+  const { helmet } = helmetContext;
+
+  return { html, helmet };
 }
