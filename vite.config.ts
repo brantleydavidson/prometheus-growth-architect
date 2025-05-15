@@ -25,4 +25,8 @@ export default defineConfig(({ mode }) => ({
     ssrManifest: true,
     sourcemap: true,
   },
+  // Ensure certain dependencies are bundled for SSR instead of being treated as external
+  ssr: {
+    noExternal: ['react-helmet-async'],
+  },
 }));
