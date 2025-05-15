@@ -1,138 +1,228 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { toast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { DialogWithForm } from "@/components/cms/DialogWithForm";
-import { Save, Plus, Clock, Calendar, Eye, ArrowUpDown, Edit, Trash2 } from "lucide-react";
+import { Plus, Clock, Calendar, Eye, ArrowUpDown, Edit, Trash2, Save } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
+import { saveBlogPost, CMSBlogPost } from "@/utils/cms-storage";
+
+interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  author: string;
+  status: "published" | "draft";
+  publishedAt?: string;
+  updatedAt: string;
+  content: string;
+  seo: Record<string, any>;
+}
 
 const BlogEditor = () => {
-  const [blogs, setBlogs] = useState([
-    { 
-      id: 1, 
-      title: "CRM Consulting Services in Conway, AR", 
-      slug: "crm-consulting-services-in-conway-ar",
-      excerpt: "Expert CRM consulting services for Conway businesses looking to improve sales efficiency and customer relationships.", 
-      author: "Brantley Davidson",
-      status: "published",
-      date: "2025-05-13"
-    },
-    { 
-      id: 2, 
-      title: "Implementing AI for Small Businesses: A Guide", 
-      slug: "implementing-ai-for-small-businesses-guide",
-      excerpt: "Learn how small businesses can leverage AI technology without breaking the bank.", 
-      author: "Alex Johnson",
-      status: "draft",
-      date: "2023-11-15"
-    },
-    { 
-      id: 3, 
-      title: "Salesforce CRM Integration In Jackson MS", 
-      slug: "salesforce-crm-integration-in-jackson-ms",
-      excerpt: "Understand how Salesforce CRM integration can transform businesses in Jackson, Mississippi by improving customer relationships and streamlining operations.", 
-      author: "Brantley Davidson",
-      status: "published",
-      date: "2025-05-15"
-    },
-    {
-      id: 4,
-      title: "CRM Audit Services In Jackson MS",
-      slug: "crm-audit-services-in-jackson-ms",
-      excerpt: "Understand the importance of regular CRM audits for businesses in Jackson, MS and how they can enhance operational efficiency and customer relationships.",
-      author: "Brantley Davidson",
-      status: "published",
-      date: "2025-05-16"
-    },
-    {
-      id: 5,
-      title: "HubSpot Agency Partner In Conway AR",
-      slug: "hubspot-agency-partner-in-conway-ar",
-      excerpt: "Discover how partnering with a local HubSpot agency in Conway, AR can transform your digital marketing strategy and drive business growth.",
-      author: "Brantley Davidson",
-      status: "published",
-      date: "2025-05-17"
-    },
-    {
-      id: 6,
-      title: "CRM For Real Estate Agents In Little Rock AR",
-      slug: "crm-for-real-estate-agents-in-little-rock-ar",
-      excerpt: "Learn how real estate agents in Little Rock can leverage CRM technology to manage client relationships, streamline operations, and boost sales efficiency.",
-      author: "Brantley Davidson",
-      status: "published",
-      date: "2025-05-18"
-    }
-    // Add more blogs as needed
-  ]);
-  
-  const [selectedBlog, setSelectedBlog] = useState<number | null>(null);
+  const [blogs, setBlogs] = useState<BlogPost[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedBlog, setSelectedBlog] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [excerpt, setExcerpt] = useState("");
   const [content, setContent] = useState("");
+  const [author, setAuthor] = useState("");
+  const [status, setStatus] = useState<"published" | "draft">("draft");
   const [isNewDialogOpen, setIsNewDialogOpen] = useState(false);
   const [newBlogData, setNewBlogData] = useState({
     title: "",
     excerpt: "",
   });
+
+  // Fetch blogs from Supabase
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setIsLoading(true);
+        
+        const { data, error } = await supabase
+          .from('cms_blog_posts')
+          .select('*')
+          .order('published_at', { ascending: false });
+        
+        if (error) {
+          throw error;
+        }
+        
+        if (data) {
+          // Transform the data to match our BlogPost interface
+          const formattedBlogs: BlogPost[] = data.map(blog => {
+            // Parse SEO data properly
+            const seoData = typeof blog.seo === 'string' 
+              ? JSON.parse(blog.seo) 
+              : blog.seo as Record<string, any>;
+            
+            return {
+              id: blog.id,
+              title: blog.title || 'Untitled',
+              slug: blog.slug,
+              excerpt: blog.excerpt || '',
+              author: blog.author || 'Brantley Davidson',
+              status: blog.status as "published" | "draft",
+              publishedAt: blog.published_at,
+              updatedAt: blog.updated_at,
+              content: blog.content || '',
+              seo: seoData || {}
+            };
+          });
+          
+          setBlogs(formattedBlogs);
+        }
+      } catch (error) {
+        console.error('Error fetching blogs:', error);
+        toast.error('Failed to load blog posts');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchBlogs();
+  }, []);
   
-  const handleSelectBlog = (id: number) => {
+  const handleSelectBlog = (id: string) => {
     setSelectedBlog(id);
     
-    // In a real app, fetch the blog details from an API
     const blog = blogs.find(b => b.id === id);
     if (blog) {
       setTitle(blog.title);
       setSlug(blog.slug);
-      setExcerpt(blog.excerpt);
-      setContent("This is the detailed content of the blog post. In a real CMS, this would be loaded from the database or API when selecting a blog post to edit.");
+      setExcerpt(blog.excerpt || '');
+      setContent(blog.content || '');
+      setAuthor(blog.author || 'Brantley Davidson');
+      setStatus(blog.status);
     }
   };
   
-  const handleSaveBlog = () => {
+  const handleSaveBlog = async () => {
     if (!selectedBlog) return;
     
-    // In a real app, save to a database or API
-    toast({
-      title: "Blog post saved",
-      description: "Your changes have been saved successfully.",
-    });
+    try {
+      const blog = blogs.find(b => b.id === selectedBlog);
+      if (!blog) return;
+      
+      // Create updated blog object
+      const updatedBlog: CMSBlogPost = {
+        id: blog.id,
+        title,
+        slug,
+        excerpt,
+        content,
+        author,
+        status,
+        coverImage: blog.seo?.ogImage,
+        publishedAt: blog.publishedAt,
+        updatedAt: new Date().toISOString(),
+        seo: {
+          title: blog.seo?.title || title,
+          description: blog.seo?.description || excerpt,
+          ogType: blog.seo?.ogType || "article",
+          ogImage: blog.seo?.ogImage
+        }
+      };
+      
+      // Save to Supabase using the cms-storage utility
+      await saveBlogPost(updatedBlog);
+      
+      // Update the blog in the local state
+      setBlogs(blogs.map(b => b.id === selectedBlog ? {...b, 
+        title, 
+        slug, 
+        excerpt, 
+        content,
+        author,
+        status,
+        updatedAt: new Date().toISOString()
+      } : b));
+      
+      toast.success('Blog post saved successfully');
+    } catch (error) {
+      console.error('Error saving blog post:', error);
+      toast.error('Failed to save blog post');
+    }
   };
   
-  const handleCreateBlog = () => {
+  const handleCreateBlog = async () => {
     if (!newBlogData.title) {
-      toast({
-        title: "Error",
-        description: "Please enter a blog title.",
-        variant: "destructive",
-      });
+      toast.error('Please enter a blog title');
       return;
     }
     
-    const newSlug = newBlogData.title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-    
-    const newBlog = {
-      id: blogs.length + 1,
-      title: newBlogData.title,
-      slug: newSlug,
-      excerpt: newBlogData.excerpt,
-      author: "Current User",
-      status: "draft",
-      date: new Date().toISOString().split("T")[0],
-    };
-    
-    setBlogs([...blogs, newBlog]);
-    setNewBlogData({ title: "", excerpt: "" });
-    setIsNewDialogOpen(false);
-    
-    toast({
-      title: "Blog created",
-      description: "New blog post has been created as a draft.",
-    });
+    try {
+      const newSlug = newBlogData.title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+      
+      // Create new blog post object
+      const newBlog: CMSBlogPost = {
+        id: '', // will be generated by saveBlogPost
+        title: newBlogData.title,
+        slug: newSlug,
+        excerpt: newBlogData.excerpt || '',
+        content: '',
+        author: 'Brantley Davidson',
+        status: 'draft',
+        updatedAt: new Date().toISOString(),
+        seo: {
+          title: newBlogData.title,
+          description: newBlogData.excerpt || '',
+          ogType: 'article'
+        }
+      };
+      
+      // Save to Supabase using the cms-storage utility
+      await saveBlogPost(newBlog);
+      
+      // Refresh the blog list
+      const { data } = await supabase
+        .from('cms_blog_posts')
+        .select('*')
+        .order('updated_at', { ascending: false });
+      
+      if (data) {
+        // Transform the data to match our BlogPost interface
+        const formattedBlogs: BlogPost[] = data.map(blog => {
+          // Parse SEO data properly
+          const seoData = typeof blog.seo === 'string' 
+            ? JSON.parse(blog.seo) 
+            : blog.seo as Record<string, any>;
+          
+          return {
+            id: blog.id,
+            title: blog.title || 'Untitled',
+            slug: blog.slug,
+            excerpt: blog.excerpt || '',
+            author: blog.author || 'Brantley Davidson',
+            status: blog.status as "published" | "draft",
+            publishedAt: blog.published_at,
+            updatedAt: blog.updated_at,
+            content: blog.content || '',
+            seo: seoData || {}
+          };
+        });
+        
+        setBlogs(formattedBlogs);
+      }
+      
+      setNewBlogData({ title: "", excerpt: "" });
+      setIsNewDialogOpen(false);
+      
+      toast.success('New blog post created successfully');
+    } catch (error) {
+      console.error('Error creating blog post:', error);
+      toast.error('Failed to create blog post');
+    }
   };
 
   return (
@@ -156,37 +246,45 @@ const BlogEditor = () => {
             <CardTitle>Blog Posts</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex justify-between text-sm font-medium text-muted-foreground px-2">
-                <span className="flex items-center">
-                  Title <ArrowUpDown className="ml-1 h-3 w-3" />
-                </span>
-                <span>Status</span>
-              </div>
-              
-              <ul className="space-y-1">
-                {blogs.map((blog) => (
-                  <li key={blog.id}>
-                    <Button
-                      variant={selectedBlog === blog.id ? "default" : "ghost"}
-                      className="w-full justify-start text-left"
-                      onClick={() => handleSelectBlog(blog.id)}
-                    >
-                      <div className="w-full flex justify-between items-center">
-                        <span className="truncate max-w-[70%]">{blog.title}</span>
-                        <span className={`text-xs px-2 py-1 rounded ${
-                          blog.status === "published" 
-                            ? "bg-green-100 text-green-800" 
-                            : "bg-amber-100 text-amber-800"
-                        }`}>
-                          {blog.status === "published" ? "Published" : "Draft"}
-                        </span>
-                      </div>
-                    </Button>
-                  </li>
+            {isLoading ? (
+              <div className="space-y-2">
+                {[1, 2, 3, 4, 5].map((item) => (
+                  <Skeleton key={item} className="h-12 w-full" />
                 ))}
-              </ul>
-            </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex justify-between text-sm font-medium text-muted-foreground px-2">
+                  <span className="flex items-center">
+                    Title <ArrowUpDown className="ml-1 h-3 w-3" />
+                  </span>
+                  <span>Status</span>
+                </div>
+                
+                <ul className="space-y-1">
+                  {blogs.map((blog) => (
+                    <li key={blog.id}>
+                      <Button
+                        variant={selectedBlog === blog.id ? "default" : "ghost"}
+                        className="w-full justify-start text-left"
+                        onClick={() => handleSelectBlog(blog.id)}
+                      >
+                        <div className="w-full flex justify-between items-center">
+                          <span className="truncate max-w-[70%]">{blog.title}</span>
+                          <span className={`text-xs px-2 py-1 rounded ${
+                            blog.status === "published" 
+                              ? "bg-green-100 text-green-800" 
+                              : "bg-amber-100 text-amber-800"
+                          }`}>
+                            {blog.status === "published" ? "Published" : "Draft"}
+                          </span>
+                        </div>
+                      </Button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </CardContent>
         </Card>
         
@@ -212,13 +310,15 @@ const BlogEditor = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex gap-4 text-sm text-muted-foreground">
-                  <div className="flex items-center">
-                    <Calendar className="mr-1 h-4 w-4" />
-                    <span>{blogs.find(b => b.id === selectedBlog)?.date}</span>
-                  </div>
+                  {blogs.find(b => b.id === selectedBlog)?.publishedAt && (
+                    <div className="flex items-center">
+                      <Calendar className="mr-1 h-4 w-4" />
+                      <span>{new Date(blogs.find(b => b.id === selectedBlog)?.publishedAt || '').toLocaleDateString()}</span>
+                    </div>
+                  )}
                   <div className="flex items-center">
                     <Clock className="mr-1 h-4 w-4" />
-                    <span>Last edited: 2 hours ago</span>
+                    <span>Last edited: {new Date(blogs.find(b => b.id === selectedBlog)?.updatedAt || '').toLocaleString()}</span>
                   </div>
                 </div>
                 
@@ -239,6 +339,28 @@ const BlogEditor = () => {
                       value={slug} 
                       onChange={(e) => setSlug(e.target.value)} 
                     />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="author" className="text-sm font-medium">Author</label>
+                    <Input 
+                      id="author" 
+                      value={author} 
+                      onChange={(e) => setAuthor(e.target.value)} 
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <label htmlFor="status" className="text-sm font-medium">Status</label>
+                    <select
+                      id="status"
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background"
+                      value={status}
+                      onChange={(e) => setStatus(e.target.value as "published" | "draft")}
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="published">Published</option>
+                    </select>
                   </div>
                   
                   <div className="space-y-2">
