@@ -1,3 +1,4 @@
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -14,7 +15,7 @@
   status = 301
   force = true
 
-# Existing SPA fallback redirect
+# Add a catch-all redirect for client-side routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -22,4 +23,4 @@
 
 [build]
   command = "npm run build"
-  publish = "dist/client" 
+  publish = "dist/client"
