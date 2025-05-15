@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
@@ -99,7 +98,7 @@ const InsightsPage = () => {
           <h2 className="text-2xl font-bold mb-8">All Insights</h2>
           
           {/* Dynamic Blog List Component */}
-          <DynamicBlogList />
+          <DynamicBlogList selectedCategory={selectedCategory} />
         </div>
       </section>
       

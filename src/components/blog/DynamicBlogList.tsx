@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -20,7 +19,11 @@ interface BlogPostSummary {
   featured: boolean;
 }
 
-const DynamicBlogList = () => {
+interface DynamicBlogListProps {
+  selectedCategory?: string;
+}
+
+const DynamicBlogList: React.FC<DynamicBlogListProps> = ({ selectedCategory = 'All Content' }) => {
   const [posts, setPosts] = useState<BlogPostSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -127,10 +130,15 @@ const DynamicBlogList = () => {
     );
   }
 
-  // Find the featured post (if any)
-  const featuredPost = posts.find(post => post.featured);
+  // Apply category filtering (ignore case)
+  const activePosts = selectedCategory === 'All Content'
+    ? posts
+    : posts.filter(p => (p.category || '').toLowerCase() === selectedCategory.toLowerCase());
+
+  // Find the featured post in the active list (if any)
+  const featuredPost = activePosts.find(post => post.featured);
   // Get the non-featured posts
-  const regularPosts = posts.filter(post => !post.featured);
+  const regularPosts = activePosts.filter(post => !post.featured);
 
   return (
     <>
