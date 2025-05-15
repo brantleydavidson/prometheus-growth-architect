@@ -55,6 +55,7 @@ const DynamicBlogPost = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [tocOpen, setTocOpen] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -188,11 +189,85 @@ const DynamicBlogPost = () => {
     };
 
     fetchBlogPost();
+
+    // Set up intersection observer for section headings
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setActiveSection(entry.target.id);
+        }
+      });
+    };
+
+    const observerOptions = {
+      rootMargin: '-80px 0px -80% 0px',
+      threshold: 0
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    
+    // Observer setup will be completed after content is loaded
+    // (see the effect below)
+
+    return () => {
+      observer.disconnect();
+    };
   }, [slug, navigate]);
 
-  // Handle content rendering with basic HTML
+  // Set up observers for headings after content is loaded
+  useEffect(() => {
+    if (post) {
+      const headings = document.querySelectorAll('h2[id], h3[id]');
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              setActiveSection(entry.target.id);
+            }
+          });
+        },
+        {
+          rootMargin: '-80px 0px -80% 0px',
+          threshold: 0
+        }
+      );
+
+      headings.forEach(heading => {
+        observer.observe(heading);
+      });
+
+      return () => {
+        observer.disconnect();
+      };
+    }
+  }, [post]);
+
+  // Handle content rendering with enhanced HTML
   const renderContent = (content: string) => {
-    return { __html: content };
+    // Process emojis: Replace emoji shortcodes with actual emojis if needed
+    let processedContent = content;
+    
+    // Support for emoji shortcodes like :smile: -> 😊
+    const emojiMap: Record<string, string> = {
+      ':smile:': '😊',
+      ':thumbsup:': '👍',
+      ':rocket:': '🚀',
+      ':warning:': '⚠️',
+      ':bulb:': '💡',
+      ':chart_with_upwards_trend:': '📈',
+      ':memo:': '📝',
+      ':star:': '⭐',
+      ':heart:': '❤️',
+      ':check:': '✅',
+      ':x:': '❌',
+      // Add more emoji mappings as needed
+    };
+    
+    Object.entries(emojiMap).forEach(([code, emoji]) => {
+      processedContent = processedContent.replace(new RegExp(code, 'g'), emoji);
+    });
+    
+    return { __html: processedContent };
   };
 
   const handleGoBack = () => {
@@ -205,6 +280,10 @@ const DynamicBlogPost = () => {
       section.scrollIntoView({ behavior: 'smooth' });
       setActiveSection(sectionId);
     }
+  };
+
+  const toggleTOC = () => {
+    setTocOpen(!tocOpen);
   };
 
   if (isLoading) {
@@ -343,64 +422,147 @@ const DynamicBlogPost = () => {
                 </div>
               )}
               
-              {/* Table of Contents */}
-              {post.table_of_contents && post.table_of_contents.length > 0 && (
-                <div className="my-8 p-6 bg-gray-50 rounded-lg">
-                  <h2 className="text-xl font-bold mb-4">Table of Contents</h2>
-                  <ul className="space-y-2">
-                    {post.table_of_contents.map((item) => (
-                      <li 
-                        key={item.id} 
-                        className={`${
-                          item.level === 1 ? 'ml-0' : item.level === 2 ? 'ml-4' : 'ml-8'
-                        } hover:text-prometheus-orange cursor-pointer transition-colors`}
-                        style={{ marginLeft: `${(item.level - 1) * 1}rem` }}
-                        onClick={() => scrollToSection(item.id)}
-                      >
-                        {item.text}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              
-              {/* Main content */}
-              <div className="prose prose-lg max-w-none">
-                {/* Render excerpt as lead paragraph if available */}
-                {post.excerpt && (
-                  <p className="lead font-medium text-lg md:text-xl text-gray-800 mb-8">
-                    {post.excerpt}
-                  </p>
+              {/* Content layout with sidebar TOC on larger screens */}
+              <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+                {/* Sidebar TOC for larger screens */}
+                {post.table_of_contents && post.table_of_contents.length > 0 && (
+                  <div className="hidden lg:block lg:col-span-1 relative">
+                    <div className="sticky top-24">
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <h2 className="text-lg font-bold mb-4 flex justify-between items-center">
+                          Table of Contents
+                        </h2>
+                        <nav className="toc-nav">
+                          <ul className="space-y-2">
+                            {post.table_of_contents.map((item) => (
+                              <li 
+                                key={item.id} 
+                                className={`${
+                                  item.level === 1 ? 'ml-0' : item.level === 2 ? 'ml-3' : 'ml-6'
+                                } ${
+                                  activeSection === item.id 
+                                    ? 'text-prometheus-orange font-medium' 
+                                    : 'text-gray-700 hover:text-prometheus-orange'
+                                } cursor-pointer transition-colors text-sm`}
+                                onClick={() => scrollToSection(item.id)}
+                              >
+                                {item.text}
+                              </li>
+                            ))}
+                          </ul>
+                        </nav>
+                      </div>
+                    </div>
+                  </div>
                 )}
                 
-                {/* Render main content */}
-                <div dangerouslySetInnerHTML={renderContent(post.content)} />
-              </div>
-              
-              {/* FAQ Section */}
-              {post.faqs && post.faqs.length > 0 && (
-                <div className="mt-12 border-t border-gray-200 pt-8">
-                  <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
-                  <div className="space-y-6">
-                    {post.faqs.map((faq, index) => (
-                      <div key={index} className="bg-gray-50 p-6 rounded-lg">
-                        <h3 className="text-xl font-semibold mb-3">{faq.question}</h3>
-                        <p className="text-gray-700">{faq.answer}</p>
+                {/* Main content */}
+                <div className={`${post.table_of_contents && post.table_of_contents.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}>
+                  {/* Mobile TOC toggle */}
+                  {post.table_of_contents && post.table_of_contents.length > 0 && (
+                    <div className="lg:hidden mb-8">
+                      <div 
+                        className="bg-gray-50 rounded-lg p-4 cursor-pointer"
+                        onClick={toggleTOC}
+                      >
+                        <div className="flex justify-between items-center">
+                          <h2 className="text-lg font-bold">Table of Contents</h2>
+                          {tocOpen ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                        </div>
+                        
+                        {tocOpen && (
+                          <nav className="mt-4">
+                            <ul className="space-y-2">
+                              {post.table_of_contents.map((item) => (
+                                <li 
+                                  key={item.id} 
+                                  className={`${
+                                    item.level === 1 ? 'ml-0' : item.level === 2 ? 'ml-3' : 'ml-6'
+                                  } ${
+                                    activeSection === item.id 
+                                      ? 'text-prometheus-orange font-medium' 
+                                      : 'text-gray-700'
+                                  } cursor-pointer transition-colors text-sm`}
+                                  onClick={() => scrollToSection(item.id)}
+                                >
+                                  {item.text}
+                                </li>
+                              ))}
+                            </ul>
+                          </nav>
+                        )}
                       </div>
-                    ))}
+                    </div>
+                  )}
+                  
+                  <div className="prose prose-lg max-w-none">
+                    {/* Render excerpt as lead paragraph if available */}
+                    {post.excerpt && (
+                      <p className="lead font-medium text-lg md:text-xl text-gray-800 mb-8">
+                        {post.excerpt}
+                      </p>
+                    )}
+                    
+                    {/* Render main content with emoji support */}
+                    <div 
+                      className="blog-content"
+                      dangerouslySetInnerHTML={renderContent(post.content)} 
+                    />
+                  </div>
+                  
+                  {/* FAQ Section */}
+                  {post.faqs && post.faqs.length > 0 && (
+                    <div className="mt-12 border-t border-gray-200 pt-8">
+                      <h2 id="frequently-asked-questions" className="text-2xl font-bold mb-6 scroll-mt-24">Frequently Asked Questions</h2>
+                      <div className="space-y-6">
+                        {post.faqs.map((faq, index) => (
+                          <div key={index} className="bg-gray-50 p-6 rounded-lg">
+                            <h3 className="text-xl font-semibold mb-3">{faq.question}</h3>
+                            <div className="text-gray-700" dangerouslySetInnerHTML={renderContent(faq.answer)} />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Key takeaways if available */}
+                  {post.key_takeaways && (
+                    <div className="mt-12 bg-blue-50 p-6 rounded-lg">
+                      <h2 className="text-xl font-bold mb-4">Key Takeaways</h2>
+                      <div className="prose prose-blue">
+                        <div dangerouslySetInnerHTML={renderContent(post.key_takeaways)} />
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Author info card */}
+                  <div className="mt-12 border-t border-gray-200 pt-8">
+                    <div className="flex items-start space-x-4">
+                      {post.author_image ? (
+                        <img 
+                          src={post.author_image} 
+                          alt={post.author} 
+                          className="w-16 h-16 rounded-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80";
+                          }}
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-500">
+                          {post.author.charAt(0)}
+                        </div>
+                      )}
+                      <div>
+                        <h3 className="font-semibold text-lg">{post.author}</h3>
+                        {post.author_title && (
+                          <p className="text-gray-600">{post.author_title}</p>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              )}
-              
-              {/* Key takeaways if available */}
-              {post.key_takeaways && (
-                <div className="mt-12 bg-blue-50 p-6 rounded-lg">
-                  <h2 className="text-xl font-bold mb-4">Key Takeaways</h2>
-                  <div className="prose prose-blue">
-                    <div dangerouslySetInnerHTML={renderContent(post.key_takeaways)} />
-                  </div>
-                </div>
-              )}
+              </div>
             </div>
           </div>
         </section>
@@ -465,6 +627,203 @@ const DynamicBlogPost = () => {
       </main>
       
       <Footer />
+      
+      {/* Add custom CSS for the blog content */}
+      <style>{`
+        /* Enhanced styling for blog content */
+        .blog-content h2 {
+          margin-top: 2rem;
+          margin-bottom: 1rem;
+          font-size: 1.75rem;
+          font-weight: 700;
+          color: #1A1F2C;
+          scroll-margin-top: 6rem;
+        }
+        
+        .blog-content h3 {
+          margin-top: 1.5rem;
+          margin-bottom: 0.75rem;
+          font-size: 1.5rem;
+          font-weight: 600;
+          color: #1A1F2C;
+          scroll-margin-top: 6rem;
+        }
+        
+        .blog-content p {
+          margin-bottom: 1.25rem;
+          line-height: 1.7;
+        }
+        
+        .blog-content ul {
+          margin-bottom: 1.5rem;
+          padding-left: 1.5rem;
+          list-style-type: disc;
+        }
+        
+        .blog-content ol {
+          margin-bottom: 1.5rem;
+          padding-left: 1.5rem;
+          list-style-type: decimal;
+        }
+        
+        .blog-content li {
+          margin-bottom: 0.5rem;
+        }
+        
+        .blog-content a {
+          color: #9b87f5;
+          text-decoration: underline;
+          transition: color 0.2s;
+        }
+        
+        .blog-content a:hover {
+          color: #7E69AB;
+        }
+        
+        .blog-content blockquote {
+          margin: 1.5rem 0;
+          padding: 1rem 1.5rem;
+          border-left: 4px solid #9b87f5;
+          background-color: #F1F0FB;
+          font-style: italic;
+          color: #403E43;
+        }
+        
+        .blog-content img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 0.375rem;
+          margin: 1.5rem 0;
+        }
+        
+        .blog-content code {
+          background-color: #F1F0FB;
+          padding: 0.2rem 0.4rem;
+          border-radius: 0.25rem;
+          font-family: monospace;
+          font-size: 0.9em;
+        }
+        
+        .blog-content pre {
+          background-color: #1A1F2C;
+          color: #F6F6F7;
+          padding: 1rem;
+          border-radius: 0.375rem;
+          overflow-x: auto;
+          margin: 1.5rem 0;
+        }
+        
+        .blog-content pre code {
+          background-color: transparent;
+          padding: 0;
+          color: inherit;
+        }
+        
+        /* Special formatting classes */
+        .blog-content .callout {
+          margin: 1.5rem 0;
+          padding: 1.25rem;
+          border-radius: 0.375rem;
+          border-left: 4px solid #9b87f5;
+          background-color: #F1F0FB;
+        }
+        
+        .blog-content .callout-warning {
+          border-left-color: #F97316;
+          background-color: #FDE1D3;
+        }
+        
+        .blog-content .callout-info {
+          border-left-color: #0EA5E9;
+          background-color: #D3E4FD;
+        }
+        
+        .blog-content .callout-success {
+          border-left-color: #10B981;
+          background-color: #F2FCE2;
+        }
+        
+        .blog-content .grid-cols-2 {
+          display: grid;
+          grid-template-columns: 1fr;
+          gap: 1.5rem;
+          margin: 1.5rem 0;
+        }
+        
+        @media (min-width: 768px) {
+          .blog-content .grid-cols-2 {
+            grid-template-columns: 1fr 1fr;
+          }
+        }
+        
+        .blog-content .feature-box {
+          padding: 1.25rem;
+          border-radius: 0.375rem;
+          border: 1px solid #C8C8C9;
+          background-color: #FFFFFF;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        /* Table styles */
+        .blog-content table {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 1.5rem 0;
+        }
+        
+        .blog-content th {
+          background-color: #F1F0FB;
+          padding: 0.75rem 1rem;
+          text-align: left;
+          font-weight: 600;
+        }
+        
+        .blog-content td {
+          padding: 0.75rem 1rem;
+          border-top: 1px solid #C8C8C9;
+        }
+        
+        .blog-content tr:nth-child(even) {
+          background-color: #F6F6F7;
+        }
+        
+        /* Lead paragraph */
+        .blog-content .lead {
+          font-size: 1.125rem;
+          font-weight: 500;
+          color: #403E43;
+          margin-bottom: 2rem;
+        }
+        
+        /* Step process */
+        .blog-content .step-process {
+          counter-reset: step-counter;
+        }
+        
+        .blog-content .step-process .step {
+          position: relative;
+          padding-left: 3rem;
+          margin-bottom: 1.5rem;
+          min-height: 2.5rem;
+        }
+        
+        .blog-content .step-process .step::before {
+          content: counter(step-counter);
+          counter-increment: step-counter;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 2.5rem;
+          height: 2.5rem;
+          background-color: #9b87f5;
+          color: white;
+          border-radius: 9999px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+        }
+      `}</style>
     </>
   );
 };
