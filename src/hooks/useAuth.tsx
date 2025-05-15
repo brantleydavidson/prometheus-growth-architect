@@ -10,6 +10,7 @@ interface AuthContextType {
   signOut: () => Promise<void>;
 }
 
+// Create the context with default values
 const AuthContext = createContext<AuthContextType>({
   user: null,
   session: null,
@@ -56,6 +57,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
-export const useAuth = () => useContext(AuthContext);
+// Modified to handle potential errors with the context
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
 
 export default useAuth;
