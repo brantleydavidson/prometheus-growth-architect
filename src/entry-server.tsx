@@ -3,7 +3,8 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
-import { HelmetProvider, HelmetServerState } from 'react-helmet-async';
+import ReactHelmetAsync from 'react-helmet-async';
+const { HelmetProvider, HelmetServerState } = ReactHelmetAsync;
 
 export function render(url: string) {
   const helmetContext: { helmet?: HelmetServerState } = {};
