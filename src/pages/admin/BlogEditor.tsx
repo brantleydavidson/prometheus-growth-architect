@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,15 @@ const BlogEditor = () => {
       status: "draft",
       date: "2023-11-15"
     },
+    { 
+      id: 3, 
+      title: "Salesforce CRM Integration In Jackson MS", 
+      slug: "salesforce-crm-integration-in-jackson-ms",
+      excerpt: "Understand how Salesforce CRM integration can transform businesses in Jackson, Mississippi by improving customer relationships and streamlining operations.", 
+      author: "Brantley Davidson",
+      status: "published",
+      date: "2025-05-15"
+    }
     // Add more blogs as needed
   ]);
   

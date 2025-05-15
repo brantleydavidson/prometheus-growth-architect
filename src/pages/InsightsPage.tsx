@@ -1,3 +1,4 @@
+
 import React from "react";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -56,6 +57,17 @@ const insightsData = [
     slug: "/insights/crm-consulting-services-in-conway-ar"
   },
   {
+    id: 8,
+    title: "Salesforce CRM Integration In Jackson MS",
+    excerpt: "Understand how Salesforce CRM integration can transform businesses in Jackson, Mississippi by improving customer relationships and streamlining operations.",
+    category: "CRM Implementation",
+    date: "May 15, 2025",
+    readTime: "12 min read",
+    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    featured: false,
+    slug: "/insights/salesforce-crm-integration-in-jackson-ms"
+  },
+  {
     id: 3,
     title: "Building a Resilient Data Spine for Your Organization",
     excerpt: "A strong data foundation is critical for AI success. Learn how to build a resilient data spine that powers meaningful insights.",
@@ -90,7 +102,7 @@ const insightsData = [
   }
 ];
 
-// Categories for filter
+// Categories for filter - updated to include all categories including the new one
 const categories = [
   "All Content",
   "AI Implementation",

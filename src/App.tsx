@@ -18,6 +18,7 @@ import InsightsPage from './pages/InsightsPage';
 import AboutPage from './pages/AboutPage';
 import CRMConsultingConwayARPage from './pages/InsightDetail/CRMConsultingConwayARPage';
 import CRMConsultingPage from './pages/InsightDetail/CRMConsultingPage';
+import SalesforceJacksonPage from './pages/InsightDetail/SalesforceJacksonPage';
 import NotFound from './pages/NotFound';
 import PlaybooksPage from './pages/PlaybooksPage';
 
@@ -68,6 +69,7 @@ const App = () => {
         <Route path="/about" element={<AboutPage />} />
         <Route path="/insights/crm-consulting-services-in-conway-ar" element={<CRMConsultingConwayARPage />} />
         <Route path="/insights/crm-consulting" element={<CRMConsultingPage />} />
+        <Route path="/insights/salesforce-crm-integration-in-jackson-ms" element={<SalesforceJacksonPage />} />
         
         {/* Subcategory Routes */}
         <Route path="/manufacturing" element={<ManufacturingPage />} />
