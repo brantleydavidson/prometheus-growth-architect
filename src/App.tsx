@@ -1,3 +1,4 @@
+
 import React from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
@@ -29,6 +30,8 @@ import SalesforceJacksonPage from './pages/InsightDetail/SalesforceJacksonPage';
 import CRMAuditServicesJacksonPage from './pages/InsightDetail/CRMAuditServicesJacksonPage';
 import HubSpotAgencyPartnerConwayARPage from './pages/InsightDetail/HubSpotAgencyPartnerConwayARPage';
 import CRMForRealEstateAgentsInLittleRockARPage from './pages/InsightDetail/CRMForRealEstateAgentsInLittleRockARPage';
+import HubSpotCRMIntegrationJacksonPage from './pages/InsightDetail/HubSpotCRMIntegrationJacksonPage';
+import CRMIntegrationServicesJacksonPage from './pages/InsightDetail/CRMIntegrationServicesJacksonPage';
 
 // Subcategory pages
 import ManufacturingPage from './pages/subcategory/ManufacturingPage';
@@ -84,6 +87,8 @@ const App = () => {
           <Route path="/insights/crm-audit-services-in-jackson-ms" element={<CRMAuditServicesJacksonPage />} />
           <Route path="/insights/hubspot-agency-partner-in-conway-ar" element={<HubSpotAgencyPartnerConwayARPage />} />
           <Route path="/insights/crm-for-real-estate-agents-in-little-rock-ar" element={<CRMForRealEstateAgentsInLittleRockARPage />} />
+          <Route path="/insights/hubspot-crm-integration-in-jackson-ms" element={<HubSpotCRMIntegrationJacksonPage />} />
+          <Route path="/insights/crm-integration-services-in-jackson-ms" element={<CRMIntegrationServicesJacksonPage />} />
           
           {/* Dynamic blog post route - this will handle all future blog posts */}
           <Route path="/insights/:slug" element={<DynamicBlogPost />} />
