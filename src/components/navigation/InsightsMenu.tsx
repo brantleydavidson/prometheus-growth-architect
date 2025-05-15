@@ -66,6 +66,12 @@ const InsightsMenu = () => {
           >
             CRM Audit Services in Jackson
           </Link>
+          <Link
+            to="/insights/crm-for-real-estate-agents-in-little-rock-ar"
+            className="text-base text-gray-700 hover:text-prometheus-orange transition-colors"
+          >
+            CRM for Real Estate in Little Rock
+          </Link>
         </nav>
       </HoverCardContent>
     </HoverCard>

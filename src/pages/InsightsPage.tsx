@@ -89,6 +89,17 @@ const insightsData = [
     slug: "/insights/hubspot-agency-partner-in-conway-ar"
   },
   {
+    id: 11,
+    title: "CRM For Real Estate Agents In Little Rock AR",
+    excerpt: "Learn how real estate agents in Little Rock can leverage CRM technology to manage client relationships, streamline operations, and boost sales efficiency.",
+    category: "CRM Implementation",
+    date: "May 18, 2025",
+    readTime: "10 min read",
+    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    featured: false,
+    slug: "/insights/crm-for-real-estate-agents-in-little-rock-ar"
+  },
+  {
     id: 3,
     title: "Building a Resilient Data Spine for Your Organization",
     excerpt: "A strong data foundation is critical for AI success. Learn how to build a resilient data spine that powers meaningful insights.",
@@ -133,7 +144,8 @@ const categories = [
   "Content Strategy",
   "CRM Implementation",
   "Marketing Automation",
-  "DTC Marketing"
+  "DTC Marketing",
+  "Real Estate"
 ];
 
 const InsightsPage = () => {

@@ -53,6 +53,15 @@ const BlogEditor = () => {
       author: "Brantley Davidson",
       status: "published",
       date: "2025-05-17"
+    },
+    {
+      id: 6,
+      title: "CRM For Real Estate Agents In Little Rock AR",
+      slug: "crm-for-real-estate-agents-in-little-rock-ar",
+      excerpt: "Learn how real estate agents in Little Rock can leverage CRM technology to manage client relationships, streamline operations, and boost sales efficiency.",
+      author: "Brantley Davidson",
+      status: "published",
+      date: "2025-05-18"
     }
     // Add more blogs as needed
   ]);
