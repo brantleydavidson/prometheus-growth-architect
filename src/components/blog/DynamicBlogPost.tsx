@@ -8,7 +8,7 @@ import Footer from '@/components/layout/Footer';
 import CTABanner from '@/components/common/CTABanner';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Clock, Tag } from 'lucide-react';
+import { ArrowLeft, Clock, Tag, ChevronDown, ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { Json } from '@/integrations/supabase/types';
 
@@ -35,6 +35,11 @@ interface BlogPost {
     excerpt: string;
     cover_image?: string;
   }>;
+  table_of_contents?: Array<{
+    id: string;
+    text: string;
+    level: number;
+  }>;
   seo: {
     title: string;
     description: string;
@@ -49,6 +54,7 @@ const DynamicBlogPost = () => {
   const [post, setPost] = useState<BlogPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -125,6 +131,17 @@ const DynamicBlogPost = () => {
           console.error('Error parsing FAQs:', err);
           faqsData = [];
         }
+
+        // Parse table of contents if available
+        let tocData: Array<{id: string, text: string, level: number}> = [];
+        try {
+          tocData = typeof data.table_of_contents === 'string'
+            ? JSON.parse(data.table_of_contents)
+            : (data.table_of_contents as Array<any>) || [];
+        } catch (err) {
+          console.error('Error parsing table of contents:', err);
+          tocData = [];
+        }
         
         // Transform the data to match our BlogPost interface
         const blogPost: BlogPost = {
@@ -150,6 +167,7 @@ const DynamicBlogPost = () => {
           key_takeaways: data.key_takeaways,
           faqs: faqsData,
           related_posts: relatedPostsData,
+          table_of_contents: tocData,
           seo: {
             title: seoData?.title || data.title || 'Prometheus Agency Blog',
             description: seoData?.description || data.excerpt || '',
@@ -179,6 +197,14 @@ const DynamicBlogPost = () => {
 
   const handleGoBack = () => {
     navigate('/insights');
+  };
+
+  const scrollToSection = (sectionId: string) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+      setActiveSection(sectionId);
+    }
   };
 
   if (isLoading) {
@@ -270,10 +296,10 @@ const DynamicBlogPost = () => {
                 {post.title}
               </h1>
               
-              <div className="flex items-center text-sm text-gray-600 mb-8">
+              <div className="flex flex-wrap items-center text-sm text-gray-600 mb-8">
                 <span className="mr-4">{post.publishedAt}</span>
                 <span className="mr-4">|</span>
-                <span>By {post.author}</span>
+                <span className="mr-4">By {post.author}</span>
                 {post.author_title && (
                   <>
                     <span className="mr-4">|</span>
@@ -281,20 +307,6 @@ const DynamicBlogPost = () => {
                   </>
                 )}
               </div>
-              
-              {post.coverImage && (
-                <div className="aspect-video bg-gray-200 mb-8 rounded-lg overflow-hidden">
-                  <img 
-                    src={post.coverImage} 
-                    alt={post.featured_image_alt || post.title}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.src = "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80";
-                    }}
-                  />
-                </div>
-              )}
               
               {/* Category tags if available */}
               {post.category_tags && post.category_tags.length > 0 && (
@@ -317,11 +329,46 @@ const DynamicBlogPost = () => {
                 </div>
               )}
               
+              {post.coverImage && (
+                <div className="aspect-video bg-gray-200 mb-8 rounded-lg overflow-hidden">
+                  <img 
+                    src={post.coverImage} 
+                    alt={post.featured_image_alt || post.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80";
+                    }}
+                  />
+                </div>
+              )}
+              
+              {/* Table of Contents */}
+              {post.table_of_contents && post.table_of_contents.length > 0 && (
+                <div className="my-8 p-6 bg-gray-50 rounded-lg">
+                  <h2 className="text-xl font-bold mb-4">Table of Contents</h2>
+                  <ul className="space-y-2">
+                    {post.table_of_contents.map((item) => (
+                      <li 
+                        key={item.id} 
+                        className={`${
+                          item.level === 1 ? 'ml-0' : item.level === 2 ? 'ml-4' : 'ml-8'
+                        } hover:text-prometheus-orange cursor-pointer transition-colors`}
+                        style={{ marginLeft: `${(item.level - 1) * 1}rem` }}
+                        onClick={() => scrollToSection(item.id)}
+                      >
+                        {item.text}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              
               {/* Main content */}
               <div className="prose prose-lg max-w-none">
                 {/* Render excerpt as lead paragraph if available */}
                 {post.excerpt && (
-                  <p className="lead">
+                  <p className="lead font-medium text-lg md:text-xl text-gray-800 mb-8">
                     {post.excerpt}
                   </p>
                 )}
