@@ -1,140 +1,15 @@
-import React from "react";
+
+import React, { useState } from "react";
 import SEO from "@/components/SEO";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Clock, Tag } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import CTABanner from "@/components/common/CTABanner";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
+import DynamicBlogList from "@/components/blog/DynamicBlogList";
 
-// Sample blog/insights data - in a real implementation, this would come from a CMS or API
-const insightsData = [
-  {
-    id: 1,
-    title: "The AI Quotient: Measuring Your Organization's AI Readiness",
-    excerpt: "Learn how to assess and improve your organization's readiness for AI implementation with our comprehensive AI Quotient framework.",
-    category: "AI Implementation",
-    date: "May 10, 2025",
-    readTime: "8 min read",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: true,
-    slug: "/ai-quotient"
-  },
-  {
-    id: 2,
-    title: "5 Steps to Transform Your B2B Marketing with AI",
-    excerpt: "Discover practical ways to integrate AI into your B2B marketing strategy to increase efficiency and drive better results.",
-    category: "B2B Strategy",
-    date: "May 8, 2025",
-    readTime: "6 min read",
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "#"
-  },
-  {
-    id: 6,
-    title: "CRM Consulting Services: Enhancing Business Growth in Conway, AR",
-    excerpt: "Discover how our CRM consulting services are helping Conway businesses streamline customer relationships, increase sales efficiency, and drive sustainable growth.",
-    category: "CRM Implementation",
-    date: "May 13, 2025",
-    readTime: "8 min read",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "/insights/crm-consulting-services-in-conway-ar"
-  },
-  {
-    id: 7,
-    title: "CRM Consulting Services In Conway AR",
-    excerpt: "Discover how effective CRM consulting services can transform businesses in Conway, Arkansas by enhancing customer relationships, streamlining processes, and driving sustainable growth.",
-    category: "CRM Implementation",
-    date: "May 13, 2025",
-    readTime: "10 min read",
-    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "/insights/crm-consulting-services-in-conway-ar"
-  },
-  {
-    id: 8,
-    title: "Salesforce CRM Integration In Jackson MS",
-    excerpt: "Understand how Salesforce CRM integration can transform businesses in Jackson, Mississippi by improving customer relationships and streamlining operations.",
-    category: "CRM Implementation",
-    date: "May 15, 2025",
-    readTime: "12 min read",
-    image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "/insights/salesforce-crm-integration-in-jackson-ms"
-  },
-  {
-    id: 9,
-    title: "CRM Audit Services In Jackson MS",
-    excerpt: "Understand the importance of regular CRM audits for businesses in Jackson, MS and how they can enhance operational efficiency and customer relationships.",
-    category: "CRM Implementation",
-    date: "May 16, 2025",
-    readTime: "12 min read",
-    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "/insights/crm-audit-services-in-jackson-ms"
-  },
-  {
-    id: 10,
-    title: "HubSpot Agency Partner In Conway AR",
-    excerpt: "Discover how partnering with a local HubSpot agency in Conway, AR can transform your digital marketing strategy and drive business growth.",
-    category: "Marketing Automation",
-    date: "May 17, 2025",
-    readTime: "10 min read",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "/insights/hubspot-agency-partner-in-conway-ar"
-  },
-  {
-    id: 11,
-    title: "CRM For Real Estate Agents In Little Rock AR",
-    excerpt: "Learn how real estate agents in Little Rock can leverage CRM technology to manage client relationships, streamline operations, and boost sales efficiency.",
-    category: "CRM Implementation",
-    date: "May 18, 2025",
-    readTime: "10 min read",
-    image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "/insights/crm-for-real-estate-agents-in-little-rock-ar"
-  },
-  {
-    id: 3,
-    title: "Building a Resilient Data Spine for Your Organization",
-    excerpt: "A strong data foundation is critical for AI success. Learn how to build a resilient data spine that powers meaningful insights.",
-    category: "Data Strategy",
-    date: "May 5, 2025",
-    readTime: "10 min read",
-    image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "#"
-  },
-  {
-    id: 4,
-    title: "Automating Customer Journey Touchpoints: A Practical Guide",
-    excerpt: "Step-by-step guidance on identifying and automating key customer touchpoints to improve experience and conversion rates.",
-    category: "Automation",
-    date: "May 2, 2025",
-    readTime: "7 min read",
-    image: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "#"
-  },
-  {
-    id: 5,
-    title: "The Future of Content Operations: AI-Driven Content Creation",
-    excerpt: "Explore how AI is transforming content operations and how businesses can leverage these tools for more effective content strategies.",
-    category: "Content Strategy",
-    date: "April 28, 2025",
-    readTime: "9 min read",
-    image: "https://images.unsplash.com/photo-1500673922987-e212871fec22?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-    featured: false,
-    slug: "#"
-  }
-];
-
-// Categories for filter - updated to include all categories including the new one
+// Categories for filter
 const categories = [
   "All Content",
   "AI Implementation",
@@ -149,15 +24,9 @@ const categories = [
 ];
 
 const InsightsPage = () => {
-  const [selectedCategory, setSelectedCategory] = React.useState("All Content");
+  const [selectedCategory, setSelectedCategory] = useState("All Content");
   
-  // Filter insights based on selected category
-  const filteredInsights = selectedCategory === "All Content" 
-    ? insightsData 
-    : insightsData.filter(insight => insight.category === selectedCategory);
-  
-  // Get featured insight
-  const featuredInsight = insightsData.find(insight => insight.featured);
+  // The filtering logic is now handled inside the DynamicBlogList component
   
   return (
     <>
@@ -206,45 +75,6 @@ const InsightsPage = () => {
         </div>
       </section>
       
-      {/* Featured Article */}
-      {featuredInsight && (
-        <section className="py-12 bg-white">
-          <div className="container mx-auto px-4">
-            <h2 className="text-2xl font-bold mb-8">Featured Insight</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-center">
-              <div className="lg:col-span-3">
-                <img 
-                  src={featuredInsight.image} 
-                  alt={featuredInsight.title}
-                  className="w-full h-80 object-cover rounded-lg"
-                />
-              </div>
-              <div className="lg:col-span-2">
-                <div className="flex items-center gap-2 mb-3">
-                  <Tag className="h-4 w-4 text-primary" />
-                  <span className="text-sm text-primary font-medium">{featuredInsight.category}</span>
-                </div>
-                <h3 className="text-2xl font-bold mb-3">{featuredInsight.title}</h3>
-                <p className="text-gray-700 mb-4">{featuredInsight.excerpt}</p>
-                <div className="flex items-center gap-4 text-sm text-gray-500 mb-5">
-                  <span>{featuredInsight.date}</span>
-                  <div className="flex items-center">
-                    <Clock className="h-4 w-4 mr-1" />
-                    <span>{featuredInsight.readTime}</span>
-                  </div>
-                </div>
-                <Link to={featuredInsight.slug}>
-                  <Button>
-                    Read More
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-      
       {/* Category Filter */}
       <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
@@ -268,46 +98,8 @@ const InsightsPage = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8">All Insights</h2>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredInsights.map(insight => (
-              <Card key={insight.id} className="h-full flex flex-col">
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={insight.image} 
-                    alt={insight.title}
-                    className="w-full h-full object-cover transition-transform hover:scale-105"
-                  />
-                </div>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Tag className="h-4 w-4 text-primary" />
-                    <span className="text-sm text-primary font-medium">{insight.category}</span>
-                  </div>
-                  <CardTitle className="text-xl">{insight.title}</CardTitle>
-                </CardHeader>
-                <CardContent className="pb-2 flex-grow">
-                  <CardDescription className="text-gray-700">
-                    {insight.excerpt}
-                  </CardDescription>
-                </CardContent>
-                <CardFooter className="pt-2 flex flex-col items-start">
-                  <div className="flex items-center gap-4 text-sm text-gray-500 mb-4 w-full">
-                    <span>{insight.date}</span>
-                    <div className="flex items-center">
-                      <Clock className="h-4 w-4 mr-1" />
-                      <span>{insight.readTime}</span>
-                    </div>
-                  </div>
-                  <Link to={insight.slug}>
-                    <Button variant="outline" className="group">
-                      Read More
-                      <ArrowRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
+          {/* Dynamic Blog List Component */}
+          <DynamicBlogList />
         </div>
       </section>
       

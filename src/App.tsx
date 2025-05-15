@@ -1,4 +1,3 @@
-
 import React from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
@@ -17,14 +16,19 @@ import B2BLandingPage from './pages/B2BLandingPage';
 import BookAuditPage from './pages/BookAuditPage';
 import InsightsPage from './pages/InsightsPage';
 import AboutPage from './pages/AboutPage';
+import NotFound from './pages/NotFound';
+import PlaybooksPage from './pages/PlaybooksPage';
+
+// Import for dynamic blog post component
+import DynamicBlogPost from './components/blog/DynamicBlogPost';
+
+// Static insight detail pages (keeping these for backward compatibility)
 import CRMConsultingConwayARPage from './pages/InsightDetail/CRMConsultingConwayARPage';
 import CRMConsultingPage from './pages/InsightDetail/CRMConsultingPage';
 import SalesforceJacksonPage from './pages/InsightDetail/SalesforceJacksonPage';
 import CRMAuditServicesJacksonPage from './pages/InsightDetail/CRMAuditServicesJacksonPage';
 import HubSpotAgencyPartnerConwayARPage from './pages/InsightDetail/HubSpotAgencyPartnerConwayARPage';
 import CRMForRealEstateAgentsInLittleRockARPage from './pages/InsightDetail/CRMForRealEstateAgentsInLittleRockARPage';
-import NotFound from './pages/NotFound';
-import PlaybooksPage from './pages/PlaybooksPage';
 
 // Subcategory pages
 import ManufacturingPage from './pages/subcategory/ManufacturingPage';
@@ -72,12 +76,17 @@ const App = () => {
           <Route path="/book-audit" element={<BookAuditPage />} />
           <Route path="/insights" element={<InsightsPage />} />
           <Route path="/about" element={<AboutPage />} />
+          
+          {/* Legacy static blog post routes - keep for backward compatibility */}
           <Route path="/insights/crm-consulting-services-in-conway-ar" element={<CRMConsultingConwayARPage />} />
           <Route path="/insights/crm-consulting" element={<CRMConsultingPage />} />
           <Route path="/insights/salesforce-crm-integration-in-jackson-ms" element={<SalesforceJacksonPage />} />
           <Route path="/insights/crm-audit-services-in-jackson-ms" element={<CRMAuditServicesJacksonPage />} />
           <Route path="/insights/hubspot-agency-partner-in-conway-ar" element={<HubSpotAgencyPartnerConwayARPage />} />
           <Route path="/insights/crm-for-real-estate-agents-in-little-rock-ar" element={<CRMForRealEstateAgentsInLittleRockARPage />} />
+          
+          {/* Dynamic blog post route - this will handle all future blog posts */}
+          <Route path="/insights/:slug" element={<DynamicBlogPost />} />
           
           {/* Subcategory Routes */}
           <Route path="/manufacturing" element={<ManufacturingPage />} />

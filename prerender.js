@@ -1,3 +1,4 @@
+
 import fs from 'node:fs'
 import path from 'node:path'
 import url from 'node:url'
@@ -29,7 +30,10 @@ let match;
 
 while ((match = routeRegex.exec(appContent)) !== null) {
   const route = match[1];
-  routesToPrerender.push(route);
+  // Skip dynamic routes with parameters for prerendering
+  if (!route.includes(':')) {
+    routesToPrerender.push(route);
+  }
 }
 
 // Add the root route if it's not already included
@@ -40,7 +44,38 @@ if (!routesToPrerender.includes('/')) {
 // Log the discovered routes
 console.log('Found routes to prerender:', routesToPrerender);
 
+// Import blog posts data from Supabase for prerendering
+import { createClient } from '@supabase/supabase-js'
+
+const supabaseUrl = "https://xkarbwfzxfxgtnefcout.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhrYXJid2Z6eGZ4Z3RuZWZjb3V0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDcxODE1NjQsImV4cCI6MjA2Mjc1NzU2NH0.dpioSL8nOpDeSlyq3MFGPiOdw5Yumy4Eac4Aks2fpFI";
+const supabase = createClient(supabaseUrl, supabaseKey);
+
 ;(async () => {
+  // Fetch blog posts for prerendering
+  try {
+    const { data: posts, error } = await supabase
+      .from('cms_blog_posts')
+      .select('slug')
+      .eq('status', 'published');
+    
+    if (error) {
+      console.error('Error fetching blog posts for prerendering:', error);
+    } else if (posts && posts.length) {
+      // Add blog post routes to prerender
+      posts.forEach(post => {
+        const blogRoute = `/insights/${post.slug}`;
+        if (!routesToPrerender.includes(blogRoute)) {
+          routesToPrerender.push(blogRoute);
+        }
+      });
+      console.log('Added blog posts to prerender:', posts.map(p => `/insights/${p.slug}`));
+    }
+  } catch (e) {
+    console.error('Failed to fetch blog posts for prerendering:', e);
+  }
+
+  // Proceed with prerendering
   for (const url of routesToPrerender) {
     try {
       const { html, helmet } = await render(url);
