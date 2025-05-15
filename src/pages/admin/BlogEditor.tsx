@@ -44,6 +44,15 @@ const BlogEditor = () => {
       author: "Brantley Davidson",
       status: "published",
       date: "2025-05-16"
+    },
+    {
+      id: 5,
+      title: "HubSpot Agency Partner In Conway AR",
+      slug: "hubspot-agency-partner-in-conway-ar",
+      excerpt: "Discover how partnering with a local HubSpot agency in Conway, AR can transform your digital marketing strategy and drive business growth.",
+      author: "Brantley Davidson",
+      status: "published",
+      date: "2025-05-17"
     }
     // Add more blogs as needed
   ]);

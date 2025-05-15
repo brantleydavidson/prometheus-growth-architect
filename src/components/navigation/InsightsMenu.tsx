@@ -49,6 +49,12 @@ const InsightsMenu = () => {
             CRM Consulting in Conway
           </Link>
           <Link
+            to="/insights/hubspot-agency-partner-in-conway-ar"
+            className="text-base text-gray-700 hover:text-prometheus-orange transition-colors"
+          >
+            HubSpot Partner in Conway
+          </Link>
+          <Link
             to="/insights/salesforce-crm-integration-in-jackson-ms"
             className="text-base text-gray-700 hover:text-prometheus-orange transition-colors"
           >

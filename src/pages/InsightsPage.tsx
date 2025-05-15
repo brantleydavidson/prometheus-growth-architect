@@ -1,4 +1,3 @@
-
 import React from "react";
 import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -79,6 +78,17 @@ const insightsData = [
     slug: "/insights/crm-audit-services-in-jackson-ms"
   },
   {
+    id: 10,
+    title: "HubSpot Agency Partner In Conway AR",
+    excerpt: "Discover how partnering with a local HubSpot agency in Conway, AR can transform your digital marketing strategy and drive business growth.",
+    category: "Marketing Automation",
+    date: "May 17, 2025",
+    readTime: "10 min read",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    featured: false,
+    slug: "/insights/hubspot-agency-partner-in-conway-ar"
+  },
+  {
     id: 3,
     title: "Building a Resilient Data Spine for Your Organization",
     excerpt: "A strong data foundation is critical for AI success. Learn how to build a resilient data spine that powers meaningful insights.",
@@ -122,6 +132,7 @@ const categories = [
   "Automation",
   "Content Strategy",
   "CRM Implementation",
+  "Marketing Automation",
   "DTC Marketing"
 ];
 
