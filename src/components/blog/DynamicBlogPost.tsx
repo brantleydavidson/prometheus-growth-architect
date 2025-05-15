@@ -7,6 +7,7 @@ import Navbar from '@/components/navigation/Navbar';
 import Footer from '@/components/layout/Footer';
 import CTABanner from '@/components/common/CTABanner';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Json } from '@/integrations/supabase/types';
 
 // Define the blog post type
 interface BlogPost {
@@ -49,6 +50,11 @@ const DynamicBlogPost = () => {
         }
         
         if (data) {
+          // Parse the SEO data properly
+          const seoData = typeof data.seo === 'string' 
+            ? JSON.parse(data.seo) 
+            : data.seo as Record<string, any>;
+          
           // Transform the data to match our BlogPost interface
           const blogPost: BlogPost = {
             id: data.id,
@@ -63,16 +69,12 @@ const DynamicBlogPost = () => {
               month: 'long',
               day: 'numeric'
             }),
-            seo: data.seo ? {
-              title: data.seo.title || data.title,
-              description: data.seo.description || data.excerpt || '',
-              canonical: data.seo.canonical,
-              ogType: data.seo.ogType || 'article',
-              ogImage: data.seo.ogImage
-            } : {
-              title: data.title,
-              description: data.excerpt || '',
-              ogType: 'article'
+            seo: {
+              title: seoData?.title || data.title,
+              description: seoData?.description || data.excerpt || '',
+              canonical: seoData?.canonical,
+              ogType: seoData?.ogType || 'article',
+              ogImage: seoData?.ogImage
             }
           };
           

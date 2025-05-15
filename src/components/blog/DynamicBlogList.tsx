@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Clock, Tag } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Json } from '@/integrations/supabase/types';
 
 interface BlogPostSummary {
   id: string;
@@ -41,21 +42,28 @@ const DynamicBlogList = () => {
         
         if (data) {
           // Transform the data to match our BlogPostSummary interface
-          const blogPosts: BlogPostSummary[] = data.map(post => ({
-            id: post.id,
-            title: post.title,
-            slug: post.slug,
-            excerpt: post.excerpt || '',
-            category: post.seo?.category || 'CRM Implementation',
-            publishedAt: new Date(post.published_at || post.created_at).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            }),
-            readTime: '8 min read', // Default value since we don't store this
-            coverImage: post.cover_image || 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-            featured: false // We'll set the first one as featured below
-          }));
+          const blogPosts: BlogPostSummary[] = data.map(post => {
+            // Parse SEO data properly
+            const seoData = typeof post.seo === 'string' 
+              ? JSON.parse(post.seo) 
+              : post.seo as Record<string, any>;
+              
+            return {
+              id: post.id,
+              title: post.title,
+              slug: post.slug,
+              excerpt: post.excerpt || '',
+              category: seoData?.category || 'CRM Implementation',
+              publishedAt: new Date(post.published_at || post.created_at).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              }),
+              readTime: '8 min read', // Default value since we don't store this
+              coverImage: post.cover_image || 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+              featured: false // We'll set the first one as featured below
+            };
+          });
           
           // Set the first post as featured if we have posts
           if (blogPosts.length > 0) {
