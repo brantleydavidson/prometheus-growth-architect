@@ -4,10 +4,11 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
 import ReactHelmetAsync from 'react-helmet-async';
-const { HelmetProvider, HelmetServerState } = ReactHelmetAsync;
+const { HelmetProvider } = ReactHelmetAsync;
 
 export function render(url: string) {
-  const helmetContext: { helmet?: HelmetServerState } = {};
+  // Define the helmet context as a generic object
+  const helmetContext = {};
   
   // Render our React app to string
   const html = renderToString(
@@ -19,7 +20,8 @@ export function render(url: string) {
   );
 
   // Get the helmet data for SEO
-  const { helmet } = helmetContext;
+  // TypeScript will accept this because we're accessing a property that gets added by HelmetProvider
+  const helmet = (helmetContext as any).helmet;
 
   return { html, helmet };
 }
