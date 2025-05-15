@@ -68,6 +68,17 @@ const insightsData = [
     slug: "/insights/salesforce-crm-integration-in-jackson-ms"
   },
   {
+    id: 9,
+    title: "CRM Audit Services In Jackson MS",
+    excerpt: "Understand the importance of regular CRM audits for businesses in Jackson, MS and how they can enhance operational efficiency and customer relationships.",
+    category: "CRM Implementation",
+    date: "May 16, 2025",
+    readTime: "12 min read",
+    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+    featured: false,
+    slug: "/insights/crm-audit-services-in-jackson-ms"
+  },
+  {
     id: 3,
     title: "Building a Resilient Data Spine for Your Organization",
     excerpt: "A strong data foundation is critical for AI success. Learn how to build a resilient data spine that powers meaningful insights.",

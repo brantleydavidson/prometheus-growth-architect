@@ -35,6 +35,15 @@ const BlogEditor = () => {
       author: "Brantley Davidson",
       status: "published",
       date: "2025-05-15"
+    },
+    {
+      id: 4,
+      title: "CRM Audit Services In Jackson MS",
+      slug: "crm-audit-services-in-jackson-ms",
+      excerpt: "Understand the importance of regular CRM audits for businesses in Jackson, MS and how they can enhance operational efficiency and customer relationships.",
+      author: "Brantley Davidson",
+      status: "published",
+      date: "2025-05-16"
     }
     // Add more blogs as needed
   ]);

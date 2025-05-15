@@ -54,6 +54,12 @@ const InsightsMenu = () => {
           >
             Salesforce CRM in Jackson
           </Link>
+          <Link
+            to="/insights/crm-audit-services-in-jackson-ms"
+            className="text-base text-gray-700 hover:text-prometheus-orange transition-colors"
+          >
+            CRM Audit Services in Jackson
+          </Link>
         </nav>
       </HoverCardContent>
     </HoverCard>
