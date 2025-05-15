@@ -12,43 +12,70 @@ export type Database = {
       cms_blog_posts: {
         Row: {
           author: string | null
+          author_image: string | null
+          author_title: string | null
+          category_tags: string[] | null
           content: string | null
           cover_image: string | null
           created_at: string
           excerpt: string | null
+          faqs: Json | null
+          featured_image_alt: string | null
           id: string
+          key_takeaways: string | null
           published_at: string | null
+          read_time: string | null
+          related_posts: Json | null
           seo: Json
           slug: string
           status: string
+          table_of_contents: Json | null
           title: string
           updated_at: string
         }
         Insert: {
           author?: string | null
+          author_image?: string | null
+          author_title?: string | null
+          category_tags?: string[] | null
           content?: string | null
           cover_image?: string | null
           created_at?: string
           excerpt?: string | null
+          faqs?: Json | null
+          featured_image_alt?: string | null
           id?: string
+          key_takeaways?: string | null
           published_at?: string | null
+          read_time?: string | null
+          related_posts?: Json | null
           seo?: Json
           slug: string
           status?: string
+          table_of_contents?: Json | null
           title: string
           updated_at?: string
         }
         Update: {
           author?: string | null
+          author_image?: string | null
+          author_title?: string | null
+          category_tags?: string[] | null
           content?: string | null
           cover_image?: string | null
           created_at?: string
           excerpt?: string | null
+          faqs?: Json | null
+          featured_image_alt?: string | null
           id?: string
+          key_takeaways?: string | null
           published_at?: string | null
+          read_time?: string | null
+          related_posts?: Json | null
           seo?: Json
           slug?: string
           status?: string
+          table_of_contents?: Json | null
           title?: string
           updated_at?: string
         }

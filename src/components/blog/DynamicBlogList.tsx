@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -13,6 +14,7 @@ interface BlogPostSummary {
   slug: string;
   excerpt: string;
   category?: string;
+  category_tags?: string[];
   publishedAt: string;
   readTime?: string;
   coverImage?: string;
@@ -51,18 +53,29 @@ const DynamicBlogList: React.FC<DynamicBlogListProps> = ({ selectedCategory = 'A
               ? JSON.parse(post.seo) 
               : post.seo as Record<string, any>;
               
+            // Get category from either category_tags array or seo.category
+            let category = '';
+            if (post.category_tags && post.category_tags.length > 0) {
+              category = post.category_tags[0];
+            } else if (seoData?.category) {
+              category = seoData.category;
+            } else {
+              category = 'CRM Implementation';
+            }
+              
             return {
               id: post.id,
               title: post.title,
               slug: post.slug,
               excerpt: post.excerpt || '',
-              category: seoData?.category || 'CRM Implementation',
+              category: category,
+              category_tags: post.category_tags || [],
               publishedAt: new Date(post.published_at || post.created_at).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
               }),
-              readTime: '8 min read', // Default value since we don't store this
+              readTime: post.read_time || '5 min read',
               coverImage: post.cover_image || 'https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
               featured: false // We'll set the first one as featured below
             };
@@ -133,7 +146,21 @@ const DynamicBlogList: React.FC<DynamicBlogListProps> = ({ selectedCategory = 'A
   // Apply category filtering (ignore case)
   const activePosts = selectedCategory === 'All Content'
     ? posts
-    : posts.filter(p => (p.category || '').toLowerCase() === selectedCategory.toLowerCase());
+    : posts.filter(p => {
+        // Check if category matches directly
+        if ((p.category || '').toLowerCase() === selectedCategory.toLowerCase()) {
+          return true;
+        }
+        
+        // Check if any tag in category_tags matches
+        if (p.category_tags && p.category_tags.length > 0) {
+          return p.category_tags.some(
+            tag => tag.toLowerCase() === selectedCategory.toLowerCase()
+          );
+        }
+        
+        return false;
+      });
 
   // Find the featured post in the active list (if any)
   const featuredPost = activePosts.find(post => post.featured);

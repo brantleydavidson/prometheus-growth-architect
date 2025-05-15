@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -7,25 +8,57 @@ import CTABanner from "@/components/common/CTABanner";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
 import DynamicBlogList from "@/components/blog/DynamicBlogList";
-
-// Categories for filter
-const categories = [
-  "All Content",
-  "AI Implementation",
-  "B2B Strategy",
-  "Data Strategy",
-  "Automation",
-  "Content Strategy",
-  "CRM Implementation",
-  "Marketing Automation",
-  "DTC Marketing",
-  "Real Estate"
-];
+import { supabase } from "@/integrations/supabase/client";
 
 const InsightsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Content");
+  const [categories, setCategories] = useState<string[]>(["All Content"]);
   
-  // The filtering logic is now handled inside the DynamicBlogList component
+  // Fetch unique categories from the blog posts
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('cms_blog_posts')
+          .select('category_tags, seo')
+          .eq('status', 'published');
+          
+        if (error) {
+          console.error("Error fetching categories:", error);
+          return;
+        }
+        
+        if (data && data.length > 0) {
+          // Extract categories from category_tags and seo
+          const allCategories = new Set<string>(["All Content"]);
+          
+          data.forEach(post => {
+            // Add categories from category_tags array
+            if (post.category_tags && Array.isArray(post.category_tags)) {
+              post.category_tags.forEach(tag => {
+                if (tag) allCategories.add(tag);
+              });
+            }
+            
+            // Add category from seo if available
+            const seoData = typeof post.seo === 'string' 
+              ? JSON.parse(post.seo) 
+              : post.seo;
+              
+            if (seoData && seoData.category) {
+              allCategories.add(seoData.category);
+            }
+          });
+          
+          setCategories(Array.from(allCategories));
+        }
+      } catch (err) {
+        console.error("Error processing categories:", err);
+      }
+    };
+    
+    fetchCategories();
+  }, []);
   
   return (
     <>

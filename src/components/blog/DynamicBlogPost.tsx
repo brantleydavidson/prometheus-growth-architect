@@ -8,11 +8,11 @@ import Footer from '@/components/layout/Footer';
 import CTABanner from '@/components/common/CTABanner';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Clock, Tag } from 'lucide-react';
 import { toast } from 'sonner';
 import { Json } from '@/integrations/supabase/types';
 
-// Define the blog post type
+// Define the blog post type with enhanced fields
 interface BlogPost {
   id: string;
   title: string;
@@ -20,8 +20,21 @@ interface BlogPost {
   content: string;
   excerpt: string;
   author: string;
+  author_title?: string;
+  author_image?: string;
   coverImage?: string;
+  featured_image_alt?: string;
   publishedAt: string;
+  read_time?: string;
+  category_tags?: string[];
+  key_takeaways?: string;
+  faqs?: Array<{question: string, answer: string}>;
+  related_posts?: Array<{
+    title: string;
+    slug: string;
+    excerpt: string;
+    cover_image?: string;
+  }>;
   seo: {
     title: string;
     description: string;
@@ -90,6 +103,28 @@ const DynamicBlogPost = () => {
           console.error('Error parsing SEO data:', err);
           seoData = {};
         }
+
+        // Parse related posts if available
+        let relatedPostsData: Array<any> = [];
+        try {
+          relatedPostsData = typeof data.related_posts === 'string'
+            ? JSON.parse(data.related_posts)
+            : (data.related_posts as Array<any>) || [];
+        } catch (err) {
+          console.error('Error parsing related posts:', err);
+          relatedPostsData = [];
+        }
+
+        // Parse FAQs if available
+        let faqsData: Array<{question: string, answer: string}> = [];
+        try {
+          faqsData = typeof data.faqs === 'string'
+            ? JSON.parse(data.faqs)
+            : (data.faqs as Array<any>) || [];
+        } catch (err) {
+          console.error('Error parsing FAQs:', err);
+          faqsData = [];
+        }
         
         // Transform the data to match our BlogPost interface
         const blogPost: BlogPost = {
@@ -99,7 +134,10 @@ const DynamicBlogPost = () => {
           content: data.content || '',
           excerpt: data.excerpt || '',
           author: data.author || 'Prometheus Agency',
+          author_title: data.author_title || 'Consultant',
+          author_image: data.author_image,
           coverImage: data.cover_image,
+          featured_image_alt: data.featured_image_alt || data.title,
           publishedAt: data.published_at || data.created_at 
             ? new Date(data.published_at || data.created_at).toLocaleDateString('en-US', {
                 year: 'numeric',
@@ -107,12 +145,17 @@ const DynamicBlogPost = () => {
                 day: 'numeric'
               })
             : 'Publication date not available',
+          read_time: data.read_time || '5 min read',
+          category_tags: data.category_tags || [],
+          key_takeaways: data.key_takeaways,
+          faqs: faqsData,
+          related_posts: relatedPostsData,
           seo: {
             title: seoData?.title || data.title || 'Prometheus Agency Blog',
             description: seoData?.description || data.excerpt || '',
             canonical: seoData?.canonical,
             ogType: seoData?.ogType || 'article',
-            ogImage: seoData?.ogImage
+            ogImage: seoData?.ogImage || data.cover_image
           }
         };
         
@@ -185,55 +228,194 @@ const DynamicBlogPost = () => {
         canonical={post.seo.canonical || `/insights/${post.slug}`}
         ogType={post.seo.ogType}
         ogImage={post.seo.ogImage}
+        faqSchema={post.faqs}
+        author={post.author}
+        datePublished={post.publishedAt}
+        articleType="Article"
       />
       
       <Navbar />
       
-      <main className="bg-white py-16">
-        {/* Breadcrumb + Back link */}
-        <div className="container mx-auto px-4 mb-8">
-          <div className="flex items-center">
-            <Link to="/insights" className="flex items-center text-prometheus-navy hover:text-prometheus-orange transition-colors">
-              <ArrowLeft className="h-4 w-4 mr-1" />
-              <span>Back to Insights</span>
-            </Link>
+      <main className="bg-white" id="main-content">
+        {/* Breadcrumbs */}
+        <div className="bg-gray-50 py-4">
+          <div className="container mx-auto px-4">
+            <nav className="flex text-sm" aria-label="Breadcrumb">
+              <ol className="inline-flex items-center space-x-1 md:space-x-3">
+                <li className="inline-flex items-center">
+                  <Link to="/" className="text-gray-600 hover:text-prometheus-orange">Home</Link>
+                </li>
+                <li>
+                  <div className="flex items-center">
+                    <span className="mx-2 text-gray-400">/</span>
+                    <Link to="/insights" className="text-gray-600 hover:text-prometheus-orange">Insights</Link>
+                  </div>
+                </li>
+                <li aria-current="page">
+                  <div className="flex items-center">
+                    <span className="mx-2 text-gray-400">/</span>
+                    <span className="text-prometheus-orange">{post.title}</span>
+                  </div>
+                </li>
+              </ol>
+            </nav>
           </div>
         </div>
         
-        <div className="container mx-auto px-4">
-          <article className="max-w-4xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">{post.title}</h1>
-            
-            <div className="flex items-center text-gray-600 mb-8">
-              <span className="text-sm">{post.publishedAt}</span>
-              <span className="mx-2">•</span>
-              <span className="text-sm">{post.author}</span>
-            </div>
-            
-            {post.coverImage && (
-              <div className="mb-10">
-                <img 
-                  src={post.coverImage}
-                  alt={post.title}
-                  className="w-full h-auto rounded-lg"
-                />
+        {/* Hero Section */}
+        <section className="py-12 bg-white">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6">
+                {post.title}
+              </h1>
+              
+              <div className="flex items-center text-sm text-gray-600 mb-8">
+                <span className="mr-4">{post.publishedAt}</span>
+                <span className="mr-4">|</span>
+                <span>By {post.author}</span>
+                {post.author_title && (
+                  <>
+                    <span className="mr-4">|</span>
+                    <span>{post.author_title}</span>
+                  </>
+                )}
               </div>
-            )}
-            
-            <div 
-              className="prose prose-lg max-w-none"
-              dangerouslySetInnerHTML={renderContent(post.content)}
-            />
-          </article>
-        </div>
+              
+              {post.coverImage && (
+                <div className="aspect-video bg-gray-200 mb-8 rounded-lg overflow-hidden">
+                  <img 
+                    src={post.coverImage} 
+                    alt={post.featured_image_alt || post.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.src = "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=1470&q=80";
+                    }}
+                  />
+                </div>
+              )}
+              
+              {/* Category tags if available */}
+              {post.category_tags && post.category_tags.length > 0 && (
+                <div className="flex items-center gap-2 mb-6 flex-wrap">
+                  {post.category_tags.map((tag, index) => (
+                    <div key={index} className="flex items-center">
+                      <Tag className="h-4 w-4 text-primary mr-1" />
+                      <span className="text-sm text-primary font-medium">{tag}</span>
+                      {index < post.category_tags!.length - 1 && <span className="mx-2">•</span>}
+                    </div>
+                  ))}
+                </div>
+              )}
+              
+              {/* Reading time */}
+              {post.read_time && (
+                <div className="flex items-center gap-2 mb-6">
+                  <Clock className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm text-gray-500">{post.read_time}</span>
+                </div>
+              )}
+              
+              {/* Main content */}
+              <div className="prose prose-lg max-w-none">
+                {/* Render excerpt as lead paragraph if available */}
+                {post.excerpt && (
+                  <p className="lead">
+                    {post.excerpt}
+                  </p>
+                )}
+                
+                {/* Render main content */}
+                <div dangerouslySetInnerHTML={renderContent(post.content)} />
+              </div>
+              
+              {/* FAQ Section */}
+              {post.faqs && post.faqs.length > 0 && (
+                <div className="mt-12 border-t border-gray-200 pt-8">
+                  <h2 className="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+                  <div className="space-y-6">
+                    {post.faqs.map((faq, index) => (
+                      <div key={index} className="bg-gray-50 p-6 rounded-lg">
+                        <h3 className="text-xl font-semibold mb-3">{faq.question}</h3>
+                        <p className="text-gray-700">{faq.answer}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              
+              {/* Key takeaways if available */}
+              {post.key_takeaways && (
+                <div className="mt-12 bg-blue-50 p-6 rounded-lg">
+                  <h2 className="text-xl font-bold mb-4">Key Takeaways</h2>
+                  <div className="prose prose-blue">
+                    <div dangerouslySetInnerHTML={renderContent(post.key_takeaways)} />
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+        
+        {/* Related Articles */}
+        {post.related_posts && post.related_posts.length > 0 && (
+          <section className="py-16 bg-white">
+            <div className="container mx-auto px-4">
+              <h2 className="text-2xl font-bold mb-8 text-center">Related Insights</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {post.related_posts.map((relatedPost, index) => (
+                  <div key={index} className="bg-white rounded-lg overflow-hidden shadow-sm border hover:shadow-md transition-shadow">
+                    <Link to={`/insights/${relatedPost.slug}`}>
+                      <img 
+                        src={relatedPost.cover_image || "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"} 
+                        alt={relatedPost.title} 
+                        className="w-full h-48 object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.src = "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80";
+                        }}
+                      />
+                      <div className="p-6">
+                        <h3 className="text-lg font-semibold mb-2">{relatedPost.title}</h3>
+                        <p className="text-gray-600 mb-4">{relatedPost.excerpt}</p>
+                        <span className="text-prometheus-orange font-medium">Read More →</span>
+                      </div>
+                    </Link>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+        
+        {/* CTA Section */}
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                Ready to elevate your business?
+              </h2>
+              <p className="text-lg text-gray-700 mb-8">
+                At Prometheus Agency, we're committed to crafting personalized strategies that align with your unique goals. Our AI-driven solutions and expert guidance are designed to streamline your operations and enhance efficiency.
+              </p>
+              <Link to="/book-audit">
+                <Button size="lg">
+                  Book a Strategy Session
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+        
+        {/* Global CTA Banner */}
+        <CTABanner 
+          title="Ready to Transform Your Business with AI?"
+          description="Book a strategy session with our experts to discuss how we can help implement AI solutions tailored to your business needs."
+          buttonText="Book a Strategy Session"
+          buttonLink="/book-audit"
+        />
       </main>
-      
-      <CTABanner 
-        title="Ready to Transform Your Business with AI?"
-        description="Book a strategy session with our experts to discuss how we can help implement AI solutions tailored to your business needs."
-        buttonText="Book a Strategy Session"
-        buttonLink="/book-audit"
-      />
       
       <Footer />
     </>
