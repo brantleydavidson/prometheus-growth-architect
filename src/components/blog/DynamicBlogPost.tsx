@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -57,6 +56,7 @@ const DynamicBlogPost = () => {
   const [activeSection, setActiveSection] = useState<string | null>(null);
   const [tocOpen, setTocOpen] = useState(true);
   const navigate = useNavigate();
+  const [mediaItems, setMediaItems] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const fetchBlogPost = async () => {
@@ -96,6 +96,19 @@ const DynamicBlogPost = () => {
           toast.error('Blog post not found');
           return;
         }
+        
+        // Fetch all media items to use in the blog post
+        const { data: mediaData } = await supabase
+          .from('cms_media_items')
+          .select('*');
+          
+        const mediaMap: Record<string, string> = {};
+        if (mediaData) {
+          mediaData.forEach(item => {
+            mediaMap[item.title] = item.url;
+          });
+        }
+        setMediaItems(mediaMap);
         
         console.log('Blog post data retrieved:', data);
         
@@ -242,9 +255,9 @@ const DynamicBlogPost = () => {
     }
   }, [post]);
 
-  // Handle content rendering with enhanced HTML
+  // Enhance the content rendering to include media references
   const renderContent = (content: string) => {
-    // Process emojis: Replace emoji shortcodes with actual emojis if needed
+    // Process emojis: Replace emoji shortcodes with actual emojis
     let processedContent = content;
     
     // Support for emoji shortcodes like :smile: -> 😊
@@ -265,6 +278,16 @@ const DynamicBlogPost = () => {
     
     Object.entries(emojiMap).forEach(([code, emoji]) => {
       processedContent = processedContent.replace(new RegExp(code, 'g'), emoji);
+    });
+    
+    // Replace media references like [media:Title of Media Item] with actual <img> tags
+    const mediaRegex = /\[media:(.*?)\]/g;
+    processedContent = processedContent.replace(mediaRegex, (match, mediaTitle) => {
+      const mediaUrl = mediaItems[mediaTitle];
+      if (mediaUrl) {
+        return `<img src="${mediaUrl}" alt="${mediaTitle}" class="my-4 rounded-lg max-w-full h-auto" />`;
+      }
+      return match; // Keep the original if not found
     });
     
     return { __html: processedContent };
@@ -503,7 +526,7 @@ const DynamicBlogPost = () => {
                       </p>
                     )}
                     
-                    {/* Render main content with emoji support */}
+                    {/* Render main content with emoji and media support */}
                     <div 
                       className="blog-content"
                       dangerouslySetInnerHTML={renderContent(post.content)} 

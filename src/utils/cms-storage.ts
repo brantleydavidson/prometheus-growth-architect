@@ -1,4 +1,3 @@
-
 /**
  * Utility functions for managing CMS data storage with Supabase
  */
@@ -286,6 +285,53 @@ export async function getMediaItems(): Promise<MediaItem[]> {
   
   if (error) {
     console.error('Error fetching media items:', error);
+    return [];
+  }
+  
+  return data.map(item => ({
+    id: item.id,
+    title: item.title,
+    fileType: item.file_type,
+    url: item.url,
+    size: item.size || '',
+    dimensions: item.dimensions,
+    alt: item.alt,
+    uploadedAt: formatTimestamp(item.uploaded_at)
+  }));
+}
+
+export async function getMediaItemByTitle(title: string): Promise<MediaItem | undefined> {
+  const { data, error } = await supabase
+    .from('cms_media_items')
+    .select('*')
+    .eq('title', title)
+    .single();
+  
+  if (error || !data) {
+    console.error('Error fetching media item by title:', error);
+    return undefined;
+  }
+  
+  return {
+    id: data.id,
+    title: data.title,
+    fileType: data.file_type,
+    url: data.url,
+    size: data.size || '',
+    dimensions: data.dimensions,
+    alt: data.alt,
+    uploadedAt: formatTimestamp(data.uploaded_at)
+  };
+}
+
+export async function getMediaItemsByType(fileType: string): Promise<MediaItem[]> {
+  const { data, error } = await supabase
+    .from('cms_media_items')
+    .select('*')
+    .ilike('file_type', `${fileType}%`);
+  
+  if (error) {
+    console.error('Error fetching media items by type:', error);
     return [];
   }
   
