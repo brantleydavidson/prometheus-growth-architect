@@ -48,6 +48,7 @@ import MediaLibrary from './pages/admin/MediaLibrary';
 import PageEditor from './pages/admin/PageEditor';
 import BlogEditor from './pages/admin/BlogEditor';
 import SEOManager from './pages/admin/SEOManager';
+import MigrateStaticContentPage from './pages/MigrateStaticContentPage';
 
 // Auth protection
 import AuthProtected from './components/cms/AuthProtected';
@@ -108,6 +109,7 @@ const App = () => {
           <Route path="/admin/page-editor" element={<AuthProtected><PageEditor /></AuthProtected>} />
           <Route path="/admin/blog-editor" element={<AuthProtected><BlogEditor /></AuthProtected>} />
           <Route path="/admin/seo-manager" element={<AuthProtected><SEOManager /></AuthProtected>} />
+          <Route path="/admin/migrate-content" element={<AuthProtected><MigrateStaticContentPage /></AuthProtected>} />
           
           {/* 404 Page */}
           <Route path="*" element={<NotFound />} />

@@ -1,3 +1,4 @@
+
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -61,6 +62,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
             <Link to="/admin/page-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Page Editor</Link>
             <Link to="/admin/blog-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Blog Editor</Link>
             <Link to="/admin/seo-manager" className="text-sm py-2 px-3 hover:bg-muted rounded-md">SEO Manager</Link>
+            <Link to="/admin/migrate-content" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Migrate Content</Link>
           </nav>
         </aside>
 
@@ -93,6 +95,7 @@ const AdminLayout = ({ children }: { children: React.ReactNode }) => {
                   <Link to="/admin/page-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Page Editor</Link>
                   <Link to="/admin/blog-editor" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Blog Editor</Link>
                   <Link to="/admin/seo-manager" className="text-sm py-2 px-3 hover:bg-muted rounded-md">SEO Manager</Link>
+                  <Link to="/admin/migrate-content" className="text-sm py-2 px-3 hover:bg-muted rounded-md">Migrate Content</Link>
                 </nav>
               </div>
             </div>
