@@ -172,16 +172,13 @@ In conclusion, CRM consulting services in Conway, AR, represent a valuable oppor
       // Migrate the blog post to CMS
       await migrateStaticBlogPostToCMS('crm-consulting-services-in-conway-ar', blogContent);
       
-      toast({
-        title: "Content migrated successfully",
-        description: "The blog post has been saved to the CMS",
+      toast.success("Content migrated successfully", {
+        description: "The blog post has been saved to the CMS"
       });
     } catch (error) {
       console.error('Error migrating content:', error);
-      toast({
-        variant: "destructive",
-        title: "Error migrating content",
-        description: error instanceof Error ? error.message : "Unknown error occurred",
+      toast.error("Error migrating content", {
+        description: error instanceof Error ? error.message : "Unknown error occurred"
       });
     } finally {
       setIsLoading(false);
