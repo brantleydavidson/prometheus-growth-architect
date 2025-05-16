@@ -63,7 +63,7 @@ export async function saveBlogPostToSupabase(blogData: BlogPostInput): Promise<{
     // Check if post with this slug already exists
     const { data: existingPost, error: fetchError } = await supabase
       .from('cms_blog_posts')
-      .select('id')
+      .select('id, published_at')
       .eq('slug', blogData.slug)
       .single();
       

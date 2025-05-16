@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { saveBlogPostToSupabase, extractTableOfContents, addHeadingIdsToContent } from '@/utils/blog-content-manager';
+import { saveBlogPostToSupabase, extractTableOfContents, addHeadingIdsToContent, BlogPostInput } from '@/utils/blog-content-manager';
 import AdminLayout from '@/components/cms/AdminLayout';
 
 const BlogContentTemplate = () => {
@@ -168,7 +168,8 @@ const BlogContentTemplate = () => {
       // Extract TOC from the content
       const tableOfContents = extractTableOfContents(processedContent);
       
-      const blogData = {
+      // Create the blog data object with the correct type for status
+      const blogData: BlogPostInput = {
         title: "CRM Consulting Services in Conway AR",
         slug: "crm-consulting-services-in-conway-ar",
         content: processedContent,
@@ -179,7 +180,7 @@ const BlogContentTemplate = () => {
         coverImage: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0",
         featured_image_alt: "CRM dashboard showing Conway business metrics with sales pipeline visualization",
         read_time: "10 min read",
-        status: "published",
+        status: "published", // Explicitly setting as a literal "published" type
         category_tags: [
           "CRM Implementation",
           "Conway AR",
