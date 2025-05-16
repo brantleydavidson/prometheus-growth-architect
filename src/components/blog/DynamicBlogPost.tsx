@@ -570,17 +570,6 @@ const DynamicBlogPost = () => {
                         </nav>
                       </div>
 
-                      {/* CTA Block */}
-                      {post.cta_block && (
-                        <div className="p-6 rounded-lg bg-primary/10 border-l-4 border-primary">
-                          <h3 className="text-lg font-bold mb-2">{post.cta_block.title}</h3>
-                          <p className="text-sm mb-4">{post.cta_block.body}</p>
-                          <Link to={post.cta_block.buttonLink}>
-                            <Button size="sm">{post.cta_block.buttonText}</Button>
-                          </Link>
-                        </div>
-                      )}
-
                       {/* FAQ accordion */}
                       {post.faqs && post.faqs.length > 0 && (
                         <div className="bg-gray-50 rounded-lg p-4">
@@ -593,6 +582,17 @@ const DynamicBlogPost = () => {
                               <div className="mt-2 text-sm" dangerouslySetInnerHTML={renderContent(faq.answer)} />
                             </details>
                           ))}
+                        </div>
+                      )}
+
+                      {/* CTA Block */}
+                      {post.cta_block && (
+                        <div className="p-6 rounded-lg bg-primary/10 border-l-4 border-primary">
+                          <h3 className="text-lg font-bold mb-2">{post.cta_block.title}</h3>
+                          <p className="text-sm mb-4">{post.cta_block.body}</p>
+                          <Link to={post.cta_block.buttonLink}>
+                            <Button size="sm">{post.cta_block.buttonText}</Button>
+                          </Link>
                         </div>
                       )}
                     </div>
