@@ -297,6 +297,10 @@ const DynamicBlogPost = () => {
       return match; // Keep the original if not found
     });
     
+    // Fix duplicated double-quotes created during SQL escaping, e.g.
+    // id=""some-id""  -> id="some-id"
+    processedContent = processedContent.replace(/\b(id|class)=\"\"([^\"]+)\"\"/g, '$1="$2"');
+    
     return { __html: processedContent };
   };
 
