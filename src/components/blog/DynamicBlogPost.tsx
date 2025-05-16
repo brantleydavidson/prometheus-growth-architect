@@ -442,17 +442,18 @@ const DynamicBlogPost = () => {
                 </div>
               )}
               
-              {/* Excerpt lead paragraph */}
-              {post.excerpt && (
-                <p className="lead font-medium text-lg md:text-xl text-gray-800 mb-8">
-                  {post.excerpt}
-                </p>
-              )}
               {/* Key Takeaways block */}
               {post.key_takeaways && (
                 <div className="mb-12 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
                   <div className="prose" dangerouslySetInnerHTML={renderContent(post.key_takeaways)} />
                 </div>
+              )}
+              
+              {/* Excerpt lead paragraph */}
+              {post.excerpt && (
+                <p className="lead font-medium text-lg md:text-xl text-gray-800 mb-8">
+                  {post.excerpt}
+                </p>
               )}
               
               {post.coverImage && (
