@@ -246,11 +246,22 @@ In conclusion, CRM consulting services in Conway, AR, represent a valuable oppor
       }
       
       setResult(`Successfully migrated content for "CRM Consulting Services In Conway AR"`);
-      toast.success("Content migration successful");
+      
+      // Use the correct toast method
+      toast({
+        title: "Success",
+        description: "Content migration successful",
+      });
     } catch (error) {
       console.error("Migration error:", error);
       setResult(`Error migrating content: ${error instanceof Error ? error.message : String(error)}`);
-      toast.error("Content migration failed");
+      
+      // Use the correct toast method
+      toast({
+        title: "Error",
+        description: "Content migration failed",
+        variant: "destructive",
+      });
     } finally {
       setIsLoading(false);
     }
