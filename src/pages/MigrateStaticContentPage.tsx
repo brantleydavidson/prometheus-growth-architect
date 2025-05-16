@@ -1,29 +1,22 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from "@/integrations/supabase/client";
-import { migrateStaticBlogPostToCMS } from "@/utils/cms-storage";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { toast } from '@/components/ui/use-toast';
-import AdminLayout from "@/components/cms/AdminLayout";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { migrateStaticBlogPostToCMS } from '@/utils/cms-storage';
 
 const MigrateStaticContentPage = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
-  const navigate = useNavigate();
 
-  const migrateConwayARContent = async () => {
+  const handleMigratePost = async () => {
     setIsLoading(true);
     try {
-      // Static content from CRMConsultingConwayARPage.tsx
-      const staticContent = {
-        title: "CRM Consulting Services In Conway AR",
-        slug: "crm-consulting-services-in-conway-ar",
-        excerpt: "Discover how effective CRM consulting services can transform businesses in Conway, Arkansas by enhancing customer relationships, streamlining processes, and driving sustainable growth.",
-        content: `
-Customer Relationship Management (CRM) consulting services are vital for businesses looking to enhance their customer interactions and drive growth. In Conway, Arkansas, these services are increasingly recognized for their potential to transform businesses. This article explores the importance of CRM consulting, how to select the right service, and the benefits of local consultants in Conway.
+      // Content for the blog post
+      const blogContent = {
+        title: 'CRM Consulting Services In Conway AR',
+        slug: 'crm-consulting-services-in-conway-ar',
+        excerpt: 'Discover how effective CRM consulting services can transform businesses in Conway, Arkansas by enhancing customer relationships, streamlining processes, and driving sustainable growth.',
+        content: `Customer Relationship Management (CRM) consulting services are vital for businesses looking to enhance their customer interactions and drive growth. In Conway, Arkansas, these services are increasingly recognized for their potential to transform businesses. This article explores the importance of CRM consulting, how to select the right service, and the benefits of local consultants in Conway.
 
 ## Understanding the Importance of CRM Consulting Services
 
@@ -125,141 +118,68 @@ Establishing a culture of continuous improvement will help ensure that the CRM s
 ## Conclusion
 
 In conclusion, CRM consulting services in Conway, AR, represent a valuable opportunity for businesses seeking to enhance customer relationships and drive growth. By understanding the importance of these services, wisely selecting consultants, leveraging local expertise, and committing to effective implementation and continuous improvement, companies can successfully navigate the complexities of CRM and achieve their business objectives.`,
-        author: "Michael Reynolds",
-        author_title: "CRM Strategy Lead",
-        author_image: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80",
-        cover_image: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
-        featured_image_alt: "CRM dashboard showing Conway business metrics with sales pipeline visualization",
-        status: "published",
-        read_time: "10 min read",
-        category_tags: ["CRM Implementation", "Conway AR", "Business Growth", "Customer Relationship", "Sales Automation", "Local Business"],
+        author: 'Michael Reynolds',
+        author_title: 'CRM Strategy Lead',
+        author_image: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=200&q=80',
+        coverImage: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+        featured_image_alt: 'CRM dashboard showing Conway business metrics with sales pipeline visualization',
+        status: 'published',
+        read_time: '10 min read',
+        category_tags: ['CRM Implementation', 'Conway AR', 'Business Growth', 'Customer Relationship', 'Sales Automation', 'Local Business'],
+        publishedAt: '2023-05-13T12:00:00.000Z',
         seo: {
-          title: "CRM Consulting Services in Conway, AR – Boost Sales Efficiency | Prometheus Agency",
-          description: "Expert CRM consulting in Conway, AR. Optimize your sales processes and customer relationships with our certified consultants.",
-          canonical: "/insights/crm-consulting-services-in-conway-ar",
-          ogType: "article",
-          ogImage: "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+          title: 'CRM Consulting Services in Conway, AR – Boost Sales Efficiency | Prometheus Agency',
+          description: 'Expert CRM consulting in Conway, AR. Optimize your sales processes and customer relationships with our certified consultants.',
+          canonical: '/insights/crm-consulting-services-in-conway-ar',
+          ogType: 'article',
+          ogImage: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
         },
-        faqs: [
-          {
-            question: "How long does CRM implementation take?",
-            answer: "Implementation timelines vary based on your business complexity, but typically range from 2-12 weeks. Our phased approach ensures you see value at each stage."
-          },
-          {
-            question: "What makes local CRM consultants better for Conway businesses?",
-            answer: "Local consultants understand the unique Conway business ecosystem, provide more personalized support, and can meet face-to-face more frequently, leading to stronger partnerships and better outcomes."
-          },
-          {
-            question: "How do you ensure successful CRM adoption?",
-            answer: "We focus on comprehensive training, change management best practices, and ongoing support. Our approach ensures team members understand the benefits and are comfortable with the new system."
-          }
-        ],
         table_of_contents: [
-          { id: "importance", text: "Understanding the Importance of CRM Consulting Services", level: 2 },
-          { id: "role-in-growth", text: "The Role of CRM in Business Growth", level: 3 },
-          { id: "key-features", text: "Key Features of Effective CRM Systems", level: 3 },
-          { id: "selecting", text: "Selecting the Right CRM Consulting Service in Conway AR", level: 2 },
-          { id: "factors", text: "Factors to Consider When Choosing a CRM Consultant", level: 3 },
-          { id: "mistakes", text: "Common Mistakes to Avoid in the Selection Process", level: 3 },
-          { id: "benefits", text: "Benefits of Hiring a Local CRM Consultant in Conway AR", level: 2 },
-          { id: "local-knowledge", text: "The Advantage of Local Market Knowledge", level: 3 },
-          { id: "relationships", text: "Building Stronger Business Relationships", level: 3 },
-          { id: "implementing", text: "Implementing CRM Strategies with a Consultant", level: 2 },
-          { id: "steps", text: "Steps in CRM Implementation", level: 3 },
-          { id: "challenges", text: "Overcoming Challenges in CRM Integration", level: 3 },
-          { id: "measuring", text: "Measuring the Success of Your CRM Strategy", level: 2 },
-          { id: "kpis", text: "Key Performance Indicators for CRM Success", level: 3 },
-          { id: "continuous-improvement", text: "Continuous Improvement of CRM Strategies", level: 3 }
+          {"id": "importance", "text": "Understanding the Importance of CRM Consulting Services", "level": 2},
+          {"id": "role-in-growth", "text": "The Role of CRM in Business Growth", "level": 3},
+          {"id": "key-features", "text": "Key Features of Effective CRM Systems", "level": 3},
+          {"id": "selecting", "text": "Selecting the Right CRM Consulting Service in Conway AR", "level": 2},
+          {"id": "factors", "text": "Factors to Consider When Choosing a CRM Consultant", "level": 3},
+          {"id": "mistakes", "text": "Common Mistakes to Avoid in the Selection Process", "level": 3},
+          {"id": "benefits", "text": "Benefits of Hiring a Local CRM Consultant in Conway AR", "level": 2},
+          {"id": "local-knowledge", "text": "The Advantage of Local Market Knowledge", "level": 3},
+          {"id": "relationships", "text": "Building Stronger Business Relationships", "level": 3},
+          {"id": "implementing", "text": "Implementing CRM Strategies with a Consultant", "level": 2},
+          {"id": "steps", "text": "Steps in CRM Implementation", "level": 3},
+          {"id": "challenges", "text": "Overcoming Challenges in CRM Integration", "level": 3},
+          {"id": "measuring", "text": "Measuring the Success of Your CRM Strategy", "level": 2},
+          {"id": "kpis", "text": "Key Performance Indicators for CRM Success", "level": 3},
+          {"id": "continuous-improvement", "text": "Continuous Improvement of CRM Strategies", "level": 3}
+        ],
+        faqs: [
+          {"question": "How long does CRM implementation take?", "answer": "Implementation timelines vary based on your business complexity, but typically range from 2-12 weeks. Our phased approach ensures you see value at each stage."},
+          {"question": "What makes local CRM consultants better for Conway businesses?", "answer": "Local consultants understand the unique Conway business ecosystem, provide more personalized support, and can meet face-to-face more frequently, leading to stronger partnerships and better outcomes."},
+          {"question": "How do you ensure successful CRM adoption?", "answer": "We focus on comprehensive training, change management best practices, and ongoing support. Our approach ensures team members understand the benefits and are comfortable with the new system."}
         ],
         related_posts: [
-          {
-            title: "The AI Quotient: Measuring Your Organization's AI Readiness",
-            slug: "/ai-quotient",
-            excerpt: "Discover how to assess and improve your organization's ability to implement AI solutions effectively.",
-            cover_image: "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-          },
-          {
-            title: "Building a Resilient Data Spine for Your Organization",
-            slug: "/data-spine",
-            excerpt: "Learn how a well-structured data foundation can support your business operations and drive better decision making.",
-            cover_image: "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-          },
-          {
-            title: "5 Steps to Transform Your B2B Marketing with AI",
-            slug: "/b2b-marketing-ai",
-            excerpt: "Practical approaches to leveraging artificial intelligence to enhance your B2B marketing strategies and outcomes.",
-            cover_image: "https://images.unsplash.com/photo-1535378620166-273708d44e4c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-          }
-        ],
-        publishedAt: "2023-05-13T12:00:00.000Z"
+          {"title": "The AI Quotient: Measuring Your Organization's AI Readiness", "slug": "/ai-quotient", "excerpt": "Discover how to assess and improve your organization's ability to implement AI solutions effectively.", "cover_image": "https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"},
+          {"title": "Building a Resilient Data Spine for Your Organization", "slug": "/data-spine", "excerpt": "Learn how a well-structured data foundation can support your business operations and drive better decision making.", "cover_image": "https://images.unsplash.com/photo-1516110833967-0b5716ca1387?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"},
+          {"title": "5 Steps to Transform Your B2B Marketing with AI", "slug": "/b2b-marketing-ai", "excerpt": "Practical approaches to leveraging artificial intelligence to enhance your B2B marketing strategies and outcomes.", "cover_image": "https://images.unsplash.com/photo-1535378620166-273708d44e4c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"}
+        ]
       };
 
-      // Migrate the content to the CMS database
-      await migrateStaticBlogPostToCMS('crm-consulting-services-in-conway-ar', staticContent);
+      // Save image references to the media library
+      await addMediaItem('CRM Dashboard Example', 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80');
+      await addMediaItem('Conway Business District', 'https://images.unsplash.com/photo-1631130428034-4d6cea9af959?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80');
+      await addMediaItem('Customer Service Team', 'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1266&q=80');
       
-      // Update media items to ensure they exist
-      const mediaItems = [
-        {
-          title: 'CRM Dashboard Example',
-          fileType: 'image/jpeg',
-          url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-          size: '245 KB',
-          dimensions: '1470x980',
-          alt: 'CRM dashboard with sales analytics and customer data'
-        },
-        {
-          title: 'Conway Business District',
-          fileType: 'image/jpeg',
-          url: 'https://images.unsplash.com/photo-1631130428034-4d6cea9af959?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1472&q=80',
-          size: '312 KB',
-          dimensions: '1472x981',
-          alt: 'Downtown Conway, Arkansas business district'
-        },
-        {
-          title: 'Customer Service Team',
-          fileType: 'image/jpeg',
-          url: 'https://images.unsplash.com/photo-1556745757-8d76bdb6984b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1266&q=80',
-          size: '356 KB',
-          dimensions: '1266x844',
-          alt: 'Customer service team working with CRM system'
-        }
-      ];
+      // Migrate the blog post to CMS
+      await migrateStaticBlogPostToCMS('crm-consulting-services-in-conway-ar', blogContent);
       
-      // Ensure media items exist
-      for (const item of mediaItems) {
-        const { data: existingItem } = await supabase
-          .from('cms_media_items')
-          .select('*')
-          .eq('title', item.title)
-          .single();
-          
-        if (!existingItem) {
-          await supabase.from('cms_media_items').insert({
-            title: item.title,
-            file_type: item.fileType,
-            url: item.url,
-            size: item.size,
-            dimensions: item.dimensions,
-            alt: item.alt
-          });
-        }
-      }
-      
-      setResult(`Successfully migrated content for "CRM Consulting Services In Conway AR"`);
-      
-      // Use the correct toast method
       toast({
-        title: "Success",
-        description: "Content migration successful",
+        title: "Content migrated successfully",
+        description: "The blog post has been saved to the CMS",
       });
     } catch (error) {
-      console.error("Migration error:", error);
-      setResult(`Error migrating content: ${error instanceof Error ? error.message : String(error)}`);
-      
-      // Use the correct toast method
+      console.error('Error migrating content:', error);
       toast({
-        title: "Error",
-        description: "Content migration failed",
+        title: "Error migrating content",
+        description: error instanceof Error ? error.message : "Unknown error occurred",
         variant: "destructive",
       });
     } finally {
@@ -267,44 +187,58 @@ In conclusion, CRM consulting services in Conway, AR, represent a valuable oppor
     }
   };
 
+  // Helper function to add media items
+  const addMediaItem = async (title: string, url: string) => {
+    try {
+      const { data: existingMedia } = await supabase
+        .from('cms_media_items')
+        .select('*')
+        .eq('title', title)
+        .single();
+      
+      if (!existingMedia) {
+        await supabase.from('cms_media_items').insert({
+          title: title,
+          file_type: 'image/jpeg',
+          url: url,
+          alt: title,
+          size: '250 KB',
+        });
+        console.log(`Added media item: ${title}`);
+      }
+    } catch (error) {
+      console.error(`Error adding media item ${title}:`, error);
+    }
+  };
+
   return (
-    <AdminLayout>
-      <div className="container mx-auto py-8 px-4">
-        <Card>
-          <CardHeader>
-            <CardTitle>Content Migration Tool</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="mb-4">This tool helps you migrate static content into the dynamic CMS system.</p>
-            <p className="mb-6">Available migrations:</p>
-            
-            <div className="space-y-4">
-              <div className="p-4 border rounded-md bg-gray-50">
-                <h3 className="font-medium mb-2">CRM Consulting Services In Conway AR</h3>
-                <p className="text-sm text-gray-600 mb-4">Migrate the static page content to the CMS database for dynamic rendering.</p>
-                <Button onClick={migrateConwayARContent} disabled={isLoading}>
-                  {isLoading ? "Migrating..." : "Migrate Content"}
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-          <CardFooter>
-            {result && (
-              <Alert className={result.includes("Error") ? "bg-red-50" : "bg-green-50"}>
-                <AlertTitle>{result.includes("Error") ? "Error" : "Success"}</AlertTitle>
-                <AlertDescription>{result}</AlertDescription>
-              </Alert>
-            )}
-          </CardFooter>
-        </Card>
-        
-        <div className="mt-6">
-          <Button variant="outline" onClick={() => navigate('/insights/crm-consulting-services-in-conway-ar')}>
-            View Page
-          </Button>
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Migrate Static Content</h1>
+          <p className="text-muted-foreground">
+            Move static content to the CMS for easier management
+          </p>
         </div>
       </div>
-    </AdminLayout>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Conway CRM Blog Post</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-4">
+            Migrate the Conway CRM Consulting Services blog post to the CMS database.
+          </p>
+          <Button 
+            onClick={handleMigratePost} 
+            disabled={isLoading}
+          >
+            {isLoading ? "Migrating..." : "Migrate Post"}
+          </Button>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 
