@@ -1,9 +1,10 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { migrateStaticBlogPostToCMS } from '@/utils/cms-storage';
+import { supabase } from '@/integrations/supabase/client';
 
 const MigrateStaticContentPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -178,9 +179,9 @@ In conclusion, CRM consulting services in Conway, AR, represent a valuable oppor
     } catch (error) {
       console.error('Error migrating content:', error);
       toast({
+        variant: "destructive",
         title: "Error migrating content",
         description: error instanceof Error ? error.message : "Unknown error occurred",
-        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
