@@ -1,14 +1,13 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from "@/integrations/supabase/client";
 import { migrateStaticBlogPostToCMS } from "@/utils/cms-storage";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { toast } from 'sonner';
-import Navbar from "@/components/navigation/Navbar";
-import Footer from "@/components/layout/Footer";
+import { toast } from '@/components/ui/use-toast';
+import AdminLayout from "@/components/cms/AdminLayout";
 
 const MigrateStaticContentPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -258,9 +257,8 @@ In conclusion, CRM consulting services in Conway, AR, represent a valuable oppor
   };
 
   return (
-    <>
-      <Navbar />
-      <div className="container mx-auto py-12 px-4">
+    <AdminLayout>
+      <div className="container mx-auto py-8 px-4">
         <Card>
           <CardHeader>
             <CardTitle>Content Migration Tool</CardTitle>
@@ -295,8 +293,7 @@ In conclusion, CRM consulting services in Conway, AR, represent a valuable oppor
           </Button>
         </div>
       </div>
-      <Footer />
-    </>
+    </AdminLayout>
   );
 };
 
