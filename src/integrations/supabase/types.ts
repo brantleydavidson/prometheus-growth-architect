@@ -32,6 +32,7 @@ export type Database = {
           table_of_contents: Json | null
           title: string
           updated_at: string
+          is_listed: boolean
         }
         Insert: {
           author?: string | null
@@ -55,6 +56,7 @@ export type Database = {
           table_of_contents?: Json | null
           title: string
           updated_at?: string
+          is_listed?: boolean
         }
         Update: {
           author?: string | null
@@ -78,6 +80,7 @@ export type Database = {
           table_of_contents?: Json | null
           title?: string
           updated_at?: string
+          is_listed?: boolean
         }
         Relationships: []
       }
