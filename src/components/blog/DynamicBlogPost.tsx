@@ -466,40 +466,8 @@ const DynamicBlogPost = () => {
               
               {/* Content layout with sidebar TOC on larger screens */}
               <div className="lg:grid lg:grid-cols-4 lg:gap-8">
-                {/* Sidebar TOC for larger screens */}
-                {post.table_of_contents && post.table_of_contents.length > 0 && (
-                  <div className="hidden lg:block lg:col-span-1 relative">
-                    <div className="sticky top-24">
-                      <div className="bg-gray-50 rounded-lg p-4">
-                        <h2 className="text-lg font-bold mb-4 flex justify-between items-center">
-                          Table of Contents
-                        </h2>
-                        <nav className="toc-nav">
-                          <ul className="space-y-2">
-                            {post.table_of_contents.map((item) => (
-                              <li 
-                                key={item.id} 
-                                className={`${
-                                  item.level === 1 ? 'ml-0' : item.level === 2 ? 'ml-3' : 'ml-6'
-                                } ${
-                                  activeSection === item.id 
-                                    ? 'text-prometheus-orange font-medium' 
-                                    : 'text-gray-700 hover:text-prometheus-orange'
-                                } cursor-pointer transition-colors text-sm`}
-                                onClick={() => scrollToSection(item.id)}
-                              >
-                                {item.text}
-                              </li>
-                            ))}
-                          </ul>
-                        </nav>
-                      </div>
-                    </div>
-                  </div>
-                )}
-                
-                {/* Main content */}
-                <div className={`${post.table_of_contents && post.table_of_contents.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'}`}>
+                {/* Main content (left) */}
+                <div className={`${post.table_of_contents && post.table_of_contents.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'} lg:order-1`}>
                   {/* Mobile TOC toggle */}
                   {post.table_of_contents && post.table_of_contents.length > 0 && (
                     <div className="lg:hidden mb-8">
@@ -550,17 +518,6 @@ const DynamicBlogPost = () => {
                       className="blog-content"
                       dangerouslySetInnerHTML={renderContent(post.content)}
                     />
-
-                    {/* Inline CTA block if provided */}
-                    {post.cta_block && (
-                      <div className="my-16 p-8 bg-primary/10 border-l-4 border-primary rounded-lg">
-                        <h3 className="text-2xl font-bold mb-2">{post.cta_block.title}</h3>
-                        <p className="mb-4">{post.cta_block.body}</p>
-                        <Link to={post.cta_block.buttonLink}>
-                          <Button>{post.cta_block.buttonText}</Button>
-                        </Link>
-                      </div>
-                    )}
                   </div>
                   
                   {/* Author info card */}
@@ -590,6 +547,57 @@ const DynamicBlogPost = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* Sidebar right */}
+                {post.table_of_contents && post.table_of_contents.length > 0 && (
+                  <div className="hidden lg:block lg:col-span-1 lg:order-2 relative">
+                    <div className="sticky top-24 space-y-8">
+                      {/* TOC card */}
+                      <div className="bg-gray-50 rounded-lg p-4">
+                        <h2 className="text-lg font-bold mb-4">Table of Contents</h2>
+                        <nav className="toc-nav">
+                          <ul className="space-y-2">
+                            {post.table_of_contents.map((item) => (
+                              <li
+                                key={item.id}
+                                className={`${item.level === 1 ? 'ml-0' : item.level === 2 ? 'ml-3' : 'ml-6'} ${activeSection === item.id ? 'text-prometheus-orange font-medium' : 'text-gray-700 hover:text-prometheus-orange'} cursor-pointer transition-colors text-sm`}
+                                onClick={() => scrollToSection(item.id)}
+                              >
+                                {item.text}
+                              </li>
+                            ))}
+                          </ul>
+                        </nav>
+                      </div>
+
+                      {/* CTA Block */}
+                      {post.cta_block && (
+                        <div className="p-6 rounded-lg bg-primary/10 border-l-4 border-primary">
+                          <h3 className="text-lg font-bold mb-2">{post.cta_block.title}</h3>
+                          <p className="text-sm mb-4">{post.cta_block.body}</p>
+                          <Link to={post.cta_block.buttonLink}>
+                            <Button size="sm">{post.cta_block.buttonText}</Button>
+                          </Link>
+                        </div>
+                      )}
+
+                      {/* FAQ accordion */}
+                      {post.faqs && post.faqs.length > 0 && (
+                        <div className="bg-gray-50 rounded-lg p-4">
+                          <h3 className="text-lg font-bold mb-4">FAQs</h3>
+                          {post.faqs.map((faq, i) => (
+                            <details key={i} className="mb-2 group">
+                              <summary className="cursor-pointer font-medium text-sm group-open:text-primary">
+                                {faq.question}
+                              </summary>
+                              <div className="mt-2 text-sm" dangerouslySetInnerHTML={renderContent(faq.answer)} />
+                            </details>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
