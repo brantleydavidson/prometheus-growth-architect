@@ -532,3 +532,33 @@ export async function initializeCMSData(): Promise<void> {
     await saveBlogPost(sampleBlog);
   }
 }
+
+// Helper function to enhance content migration
+export async function migrateStaticBlogPostToCMS(slug: string, staticContent: any): Promise<void> {
+  try {
+    // Check if the blog post already exists
+    const existingPost = await getBlogPostBySlug(slug);
+    
+    // Create or update the post
+    if (existingPost) {
+      console.log(`Updating existing blog post: ${slug}`);
+      await saveBlogPost({
+        ...existingPost,
+        ...staticContent,
+        updatedAt: new Date().toISOString()
+      });
+    } else {
+      console.log(`Creating new blog post: ${slug}`);
+      await saveBlogPost({
+        ...staticContent,
+        id: '', // Will be generated on save
+        updatedAt: new Date().toISOString()
+      });
+    }
+    
+    console.log(`Successfully migrated blog post: ${slug}`);
+  } catch (error) {
+    console.error('Error migrating static blog post to CMS:', error);
+    throw error;
+  }
+}
