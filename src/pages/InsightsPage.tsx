@@ -13,11 +13,13 @@ import { supabase } from "@/integrations/supabase/client";
 const InsightsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Content");
   const [categories, setCategories] = useState<string[]>(["All Content"]);
+  const [isLoading, setIsLoading] = useState(true);
   
-  // Fetch unique categories from the blog posts
+  // Fetch unique categories from the blog posts in Supabase
   useEffect(() => {
     const fetchCategories = async () => {
       try {
+        setIsLoading(true);
         const { data, error } = await supabase
           .from('cms_blog_posts')
           .select('category_tags, seo')
@@ -54,6 +56,8 @@ const InsightsPage = () => {
         }
       } catch (err) {
         console.error("Error processing categories:", err);
+      } finally {
+        setIsLoading(false);
       }
     };
     
@@ -111,16 +115,24 @@ const InsightsPage = () => {
       <section className="py-8 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="flex flex-wrap gap-2 justify-center">
-            {categories.map((category, index) => (
-              <Button
-                key={index}
-                variant={selectedCategory === category ? "default" : "outline"}
-                onClick={() => setSelectedCategory(category)}
-                className="mb-2"
-              >
-                {category}
-              </Button>
-            ))}
+            {isLoading ? (
+              // Show skeleton buttons while loading
+              Array(5).fill(0).map((_, i) => (
+                <div key={i} className="h-10 w-28 bg-gray-200 animate-pulse rounded-md mb-2"></div>
+              ))
+            ) : (
+              // Show actual category buttons when loaded
+              categories.map((category, index) => (
+                <Button
+                  key={index}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  onClick={() => setSelectedCategory(category)}
+                  className="mb-2"
+                >
+                  {category}
+                </Button>
+              ))
+            )}
           </div>
         </div>
       </section>
@@ -130,7 +142,7 @@ const InsightsPage = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8">All Insights</h2>
           
-          {/* Dynamic Blog List Component */}
+          {/* Dynamic Blog List Component - Only shows Supabase content */}
           <DynamicBlogList selectedCategory={selectedCategory} />
         </div>
       </section>
