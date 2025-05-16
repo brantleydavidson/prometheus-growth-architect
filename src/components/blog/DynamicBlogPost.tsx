@@ -563,21 +563,6 @@ const DynamicBlogPost = () => {
                     )}
                   </div>
                   
-                  {/* FAQ Section */}
-                  {post.faqs && post.faqs.length > 0 && (
-                    <div className="mt-12 border-t border-gray-200 pt-8">
-                      <h2 id="frequently-asked-questions" className="text-2xl font-bold mb-6 scroll-mt-24">Frequently Asked Questions</h2>
-                      <div className="space-y-6">
-                        {post.faqs.map((faq, index) => (
-                          <div key={index} className="bg-gray-50 p-6 rounded-lg">
-                            <h3 className="text-xl font-semibold mb-3">{faq.question}</h3>
-                            <div className="text-gray-700" dangerouslySetInnerHTML={renderContent(faq.answer)} />
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  
                   {/* Author info card */}
                   <div className="mt-12 border-t border-gray-200 pt-8">
                     <div className="flex items-start space-x-4">
@@ -641,13 +626,7 @@ const DynamicBlogPost = () => {
           </section>
         )}
         
-        {/* Global CTA Banner */}
-        <CTABanner 
-          title="Ready to Transform Your Business with AI?"
-          description="Book a strategy session with our experts to discuss how we can help implement AI solutions tailored to your business needs."
-          buttonText="Book a Strategy Session"
-          buttonLink="/book-audit"
-        />
+        {/* Global CTA Banner retained below if still desired elsewhere */}
       </main>
       
       <Footer />
