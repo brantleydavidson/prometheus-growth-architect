@@ -442,6 +442,19 @@ const DynamicBlogPost = () => {
                 </div>
               )}
               
+              {/* Excerpt lead paragraph */}
+              {post.excerpt && (
+                <p className="lead font-medium text-lg md:text-xl text-gray-800 mb-8">
+                  {post.excerpt}
+                </p>
+              )}
+              {/* Key Takeaways block */}
+              {post.key_takeaways && (
+                <div className="mb-12 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                  <div className="prose" dangerouslySetInnerHTML={renderContent(post.key_takeaways)} />
+                </div>
+              )}
+              
               {post.coverImage && (
                 <div className="aspect-video bg-gray-200 mb-8 rounded-lg overflow-hidden">
                   <img 
@@ -456,18 +469,10 @@ const DynamicBlogPost = () => {
                 </div>
               )}
               
-              {/* KEY TAKEAWAYS at top */}
-              {post.key_takeaways && (
-                <div className="mb-12 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
-                  <h2 className="text-xl font-bold mb-4">Key Takeaways</h2>
-                  <div className="prose" dangerouslySetInnerHTML={renderContent(post.key_takeaways)} />
-                </div>
-              )}
-              
               {/* Content layout with sidebar TOC on larger screens */}
-              <div className="lg:grid lg:grid-cols-4 lg:gap-8">
+              <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
                 {/* Main content (left) */}
-                <div className={`${post.table_of_contents && post.table_of_contents.length > 0 ? 'lg:col-span-3' : 'lg:col-span-4'} lg:order-1`}>
+                <div className="lg:order-1">
                   {/* Mobile TOC toggle */}
                   {post.table_of_contents && post.table_of_contents.length > 0 && (
                     <div className="lg:hidden mb-8">
