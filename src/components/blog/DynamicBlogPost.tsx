@@ -27,6 +27,12 @@ interface BlogPost {
   read_time?: string;
   category_tags?: string[];
   key_takeaways?: string;
+  cta_block?: {
+    title: string;
+    body: string;
+    buttonText: string;
+    buttonLink: string;
+  };
   faqs?: Array<{question: string, answer: string}>;
   related_posts?: Array<{
     title: string;
@@ -179,6 +185,7 @@ const DynamicBlogPost = () => {
           read_time: data.read_time || '5 min read',
           category_tags: data.category_tags || [],
           key_takeaways: data.key_takeaways,
+          cta_block: typeof (data as any).cta_block === 'string' ? JSON.parse((data as any).cta_block) : (data as any).cta_block,
           faqs: faqsData,
           related_posts: relatedPostsData,
           table_of_contents: tocData,
@@ -445,6 +452,14 @@ const DynamicBlogPost = () => {
                 </div>
               )}
               
+              {/* KEY TAKEAWAYS at top */}
+              {post.key_takeaways && (
+                <div className="mb-12 bg-blue-50 border-l-4 border-blue-500 p-6 rounded-lg">
+                  <h2 className="text-xl font-bold mb-4">Key Takeaways</h2>
+                  <div className="prose" dangerouslySetInnerHTML={renderContent(post.key_takeaways)} />
+                </div>
+              )}
+              
               {/* Content layout with sidebar TOC on larger screens */}
               <div className="lg:grid lg:grid-cols-4 lg:gap-8">
                 {/* Sidebar TOC for larger screens */}
@@ -527,10 +542,21 @@ const DynamicBlogPost = () => {
                     )}
                     
                     {/* Render main content with emoji and media support */}
-                    <div 
+                    <div
                       className="blog-content"
-                      dangerouslySetInnerHTML={renderContent(post.content)} 
+                      dangerouslySetInnerHTML={renderContent(post.content)}
                     />
+
+                    {/* Inline CTA block if provided */}
+                    {post.cta_block && (
+                      <div className="my-16 p-8 bg-primary/10 border-l-4 border-primary rounded-lg">
+                        <h3 className="text-2xl font-bold mb-2">{post.cta_block.title}</h3>
+                        <p className="mb-4">{post.cta_block.body}</p>
+                        <Link to={post.cta_block.buttonLink}>
+                          <Button>{post.cta_block.buttonText}</Button>
+                        </Link>
+                      </div>
+                    )}
                   </div>
                   
                   {/* FAQ Section */}
@@ -544,16 +570,6 @@ const DynamicBlogPost = () => {
                             <div className="text-gray-700" dangerouslySetInnerHTML={renderContent(faq.answer)} />
                           </div>
                         ))}
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Key takeaways if available */}
-                  {post.key_takeaways && (
-                    <div className="mt-12 bg-blue-50 p-6 rounded-lg">
-                      <h2 className="text-xl font-bold mb-4">Key Takeaways</h2>
-                      <div className="prose prose-blue">
-                        <div dangerouslySetInnerHTML={renderContent(post.key_takeaways)} />
                       </div>
                     </div>
                   )}
@@ -620,25 +636,6 @@ const DynamicBlogPost = () => {
             </div>
           </section>
         )}
-        
-        {/* CTA Section */}
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h2 className="text-2xl md:text-3xl font-bold mb-4">
-                Ready to elevate your business?
-              </h2>
-              <p className="text-lg text-gray-700 mb-8">
-                At Prometheus Agency, we're committed to crafting personalized strategies that align with your unique goals. Our AI-driven solutions and expert guidance are designed to streamline your operations and enhance efficiency.
-              </p>
-              <Link to="/book-audit">
-                <Button size="lg">
-                  Book a Strategy Session
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </section>
         
         {/* Global CTA Banner */}
         <CTABanner 
