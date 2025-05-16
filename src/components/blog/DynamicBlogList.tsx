@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
@@ -39,6 +38,7 @@ const DynamicBlogList: React.FC<DynamicBlogListProps> = ({ selectedCategory = 'A
           .from('cms_blog_posts')
           .select('*')
           .eq('status', 'published')
+          .eq('is_listed', true)
           .order('published_at', { ascending: false });
         
         if (error) {

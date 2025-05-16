@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import SEO from "@/components/SEO";
 import { Link } from "react-router-dom";
@@ -23,7 +22,8 @@ const InsightsPage = () => {
         const { data, error } = await supabase
           .from('cms_blog_posts')
           .select('category_tags, seo')
-          .eq('status', 'published');
+          .eq('status', 'published')
+          .eq('is_listed', true);
           
         if (error) {
           console.error("Error fetching categories:", error);
