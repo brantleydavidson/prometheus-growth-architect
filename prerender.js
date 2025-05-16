@@ -41,6 +41,25 @@ if (!routesToPrerender.includes('/')) {
   routesToPrerender.push('/');
 }
 
+// Manually add specific blog post routes that should always be prerendered
+// This ensures they are always available even if not dynamically detected
+const staticBlogPosts = [
+  '/insights/crm-consulting-services-in-conway-ar',
+  '/insights/hubspot-agency-partner-in-conway-ar',
+  '/insights/crm-for-real-estate-agents-in-little-rock-ar',
+  '/insights/salesforce-crm-integration-in-jackson-ms',
+  '/insights/crm-audit-services-in-jackson-ms',
+  '/insights/hubspot-crm-integration-in-jackson-ms',
+  '/insights/crm-integration-services-in-jackson-ms'
+];
+
+// Add the static blog posts to the routes to prerender
+staticBlogPosts.forEach(route => {
+  if (!routesToPrerender.includes(route)) {
+    routesToPrerender.push(route);
+  }
+});
+
 // Log the discovered routes
 console.log('Found routes to prerender:', routesToPrerender);
 
