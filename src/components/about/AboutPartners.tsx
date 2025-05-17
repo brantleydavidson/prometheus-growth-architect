@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { getMediaItemsByType } from "@/utils/cms-storage";
 import { MediaItem } from "@/utils/cms-storage";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface PartnerLogoProps {
   src: string;
@@ -26,6 +27,10 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
               width="160" height="60"
               loading="lazy" decoding="async"
               className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
+              onError={(e) => {
+                // Fallback to placeholder if image fails to load
+                e.currentTarget.src = "https://via.placeholder.com/160x60?text=Partner";
+              }}
             />
           </div>
         </AspectRatio>
@@ -47,10 +52,15 @@ const AboutPartners = () => {
       try {
         // Fetch logos from CMS media with file type containing "active logos"
         const logos = await getMediaItemsByType('image');
-        const activeLogs = logos.filter(logo => logo.title.toLowerCase().includes('active logo'));
-        setAllPartners(activeLogs);
+        // Filter for logos that have "active logo" in their title (case insensitive)
+        const activeLogos = logos.filter(logo => 
+          logo.title && logo.title.toLowerCase().includes('active logo')
+        );
+        
+        console.log("Found active logos:", activeLogos);
+        setAllPartners(activeLogos);
         // Initialize with the first set of logos
-        setDisplayedPartners(activeLogs.slice(0, displayCount));
+        setDisplayedPartners(activeLogos.slice(0, displayCount));
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching logos:", error);
@@ -91,14 +101,17 @@ const AboutPartners = () => {
   }, [allPartners]);
   
   // Fallback to placeholder logos if no logos are available or while loading
-  const partners = isLoading || allPartners.length === 0 ? [
+  const placeholderPartners = [
     { name: "American Commerce Bank", src: "https://via.placeholder.com/160x60?text=ACB", id: "1" },
     { name: "Humana", src: "https://via.placeholder.com/160x60?text=Humana", id: "2" },
     { name: "Service Master", src: "https://via.placeholder.com/160x60?text=ServiceMaster", id: "3" },
     { name: "Monesty", src: "https://via.placeholder.com/160x60?text=Monesty", id: "4" },
     { name: "Mutual of Omaha", src: "https://via.placeholder.com/160x60?text=MutualOfOmaha", id: "5" },
     { name: "Copperweld", src: "https://via.placeholder.com/160x60?text=Copperweld", id: "6" },
-  ] : displayedPartners;
+  ];
+  
+  const partners = isLoading || allPartners.length === 0 ? 
+    placeholderPartners : displayedPartners;
 
   return (
     <section className="py-12 bg-gray-50" aria-labelledby="partners-heading">
@@ -106,16 +119,27 @@ const AboutPartners = () => {
         <h2 id="partners-heading" className="text-3xl font-semibold text-prometheus-navy text-center mb-8">
           Our Experience Is Proven
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-          {partners.map((partner, index) => (
-            <PartnerLogo 
-              key={partner.id || index}
-              src={partner.url || partner.src}
-              alt={partner.title || partner.name}
-              visible={true}
-            />
-          ))}
-        </div>
+        
+        {isLoading ? (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {Array(6).fill(0).map((_, index) => (
+              <div key={index} className="p-4">
+                <Skeleton className="h-16 w-full rounded-md" />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+            {partners.map((partner, index) => (
+              <PartnerLogo 
+                key={partner.id || index}
+                src={partner.url || partner.src}
+                alt={partner.title || partner.name}
+                visible={true}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
