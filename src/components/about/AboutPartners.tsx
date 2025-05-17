@@ -4,7 +4,6 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { getMediaItemsByType } from "@/utils/cms-storage";
 import { MediaItem } from "@/utils/cms-storage";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Image } from "@/components/ui/image";
 import { toast } from "sonner";
 
 interface PartnerLogoProps {
@@ -43,6 +42,16 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
   );
 };
 
+// Static placeholder logos to use when no real logos are available
+const placeholderPartners = [
+  { name: "American Commerce Bank", src: "/logo-placeholder.svg", id: "1" },
+  { name: "Humana", src: "/logo-placeholder.svg", id: "2" },
+  { name: "Service Master", src: "/logo-placeholder.svg", id: "3" },
+  { name: "Monesty", src: "/logo-placeholder.svg", id: "4" },
+  { name: "Mutual of Omaha", src: "/logo-placeholder.svg", id: "5" },
+  { name: "Copperweld", src: "/logo-placeholder.svg", id: "6" },
+];
+
 const AboutPartners = () => {
   const [allPartners, setAllPartners] = useState<MediaItem[]>([]);
   const [displayedPartners, setDisplayedPartners] = useState<MediaItem[]>([]);
@@ -58,44 +67,21 @@ const AboutPartners = () => {
       setLoadError(null);
       
       try {
-        console.log("Fetching logos from CMS...");
         // First try to get all images
         const allImages = await getMediaItemsByType('image');
-        console.log("All fetched images:", allImages);
+        console.log("All fetched images from CMS:", allImages);
         
-        // Try different filters to find the logos
-        let activeLogos = allImages.filter(img => 
-          img.title && img.title.toLowerCase().includes('active logo')
-        );
-        
-        if (activeLogos.length === 0) {
-          // Try alternative filter if "active logo" not found
-          activeLogos = allImages.filter(img => 
-            img.title && (
-              img.title.toLowerCase().includes('logo') || 
-              img.title.toLowerCase().includes('partner')
-            )
-          );
-          
-          // If still empty, just use all images as a fallback
-          if (activeLogos.length === 0 && allImages.length > 0) {
-            console.log("No logos with specific naming found, using all images");
-            activeLogos = allImages;
-          }
-        }
-        
-        console.log("Filtered active logos:", activeLogos);
-        
-        if (activeLogos.length > 0) {
-          setAllPartners(activeLogos);
-          // Initialize with the first set of logos
-          setDisplayedPartners(activeLogos.slice(0, Math.min(displayCount, activeLogos.length)));
+        if (allImages.length > 0) {
+          // Use all available images for logos
+          setAllPartners(allImages);
+          setDisplayedPartners(allImages.slice(0, Math.min(displayCount, allImages.length)));
+          console.log("Using all images as logos:", allImages);
         } else {
-          console.log("No logos found in CMS, using placeholders");
-          setLoadError("No logos found in CMS");
+          console.log("No images found in CMS, using placeholders");
+          setLoadError("No images found in CMS");
         }
       } catch (error) {
-        console.error("Error fetching logos:", error);
+        console.error("Error fetching images:", error);
         setLoadError("Failed to load partner logos");
       } finally {
         setIsLoading(false);
@@ -134,16 +120,7 @@ const AboutPartners = () => {
     return () => clearInterval(interval);
   }, [allPartners, displayCount]);
   
-  // Fallback to placeholder logos if no logos are available or while loading
-  const placeholderPartners = [
-    { name: "American Commerce Bank", src: "/logo-placeholder.svg", id: "1" },
-    { name: "Humana", src: "/logo-placeholder.svg", id: "2" },
-    { name: "Service Master", src: "/logo-placeholder.svg", id: "3" },
-    { name: "Monesty", src: "/logo-placeholder.svg", id: "4" },
-    { name: "Mutual of Omaha", src: "/logo-placeholder.svg", id: "5" },
-    { name: "Copperweld", src: "/logo-placeholder.svg", id: "6" },
-  ];
-  
+  // Use placeholder partners if no real ones are available
   const partners = allPartners.length === 0 ? placeholderPartners : displayedPartners;
   
   // Display a toast if there was an error but only once

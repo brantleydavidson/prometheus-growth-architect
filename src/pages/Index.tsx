@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
 import HeroSection from "@/components/home/HeroSection";
-import ProofRibbon from "@/components/common/ProofRibbon";
 import WhoWeHelpPanel from "@/components/home/WhoWeHelpPanel";
 import ProcessStrip from "@/components/home/ProcessStrip";
 import CTABanner from "@/components/common/CTABanner";
@@ -12,49 +11,6 @@ import { Link } from "react-router-dom";
 import AboutPartners from "@/components/about/AboutPartners";
 
 const Index = () => {
-  // Mock data for the ProofRibbon component
-  const clients = [
-    {
-      name: "Morpheus Technologies",
-      logo: "https://placehold.co/200x100/gray/white?text=MORPHEUS"
-    },
-    {
-      name: "Apollo Systems",
-      logo: "https://placehold.co/200x100/gray/white?text=APOLLO"
-    },
-    {
-      name: "Athena Solutions",
-      logo: "https://placehold.co/200x100/gray/white?text=ATHENA"
-    },
-    {
-      name: "Hermes Logistics",
-      logo: "https://placehold.co/200x100/gray/white?text=HERMES"
-    },
-    {
-      name: "Poseidon Industries",
-      logo: "https://placehold.co/200x100/gray/white?text=POSEIDON"
-    }
-  ];
-
-  const kpis = [
-    {
-      value: "+42%",
-      label: "Average Revenue Growth"
-    },
-    {
-      value: "-28%",
-      label: "Reduced Acquisition Cost"
-    },
-    {
-      value: "35%",
-      label: "Shorter Sales Cycles"
-    },
-    {
-      value: "47%",
-      label: "Increased Conversion Rates"
-    }
-  ];
-
   // Get structured data for the home page
   const homeSchema = getHomePageSchema();
   const breadcrumbSchema = getBreadcrumbSchema([
@@ -102,9 +58,6 @@ const Index = () => {
         </section>
         
         <AboutPartners />
-        <ProofRibbon clients={clients} kpis={kpis} />
-        <WhoWeHelpPanel />
-        <ProcessStrip />
         
         {/* Additional Value Proposition Section */}
         <section className="py-20 bg-gray-50">
