@@ -29,7 +29,7 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
               className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
               onError={(e) => {
                 // Fallback to placeholder if image fails to load
-                e.currentTarget.src = "https://via.placeholder.com/160x60?text=Partner";
+                e.currentTarget.src = "https://placehold.co/160x60/gray/white?text=PARTNER";
               }}
             />
           </div>
@@ -50,17 +50,24 @@ const AboutPartners = () => {
   useEffect(() => {
     const fetchLogos = async () => {
       try {
-        // Fetch logos from CMS media with file type containing "active logos"
+        // Fetch all image type media items
         const logos = await getMediaItemsByType('image');
-        // Filter for logos that have "active logo" in their title (case insensitive)
+        
+        // Specifically look for 'active logo' in the title (case insensitive)
         const activeLogos = logos.filter(logo => 
-          logo.title && logo.title.toLowerCase().includes('active logo')
+          logo.title && 
+          logo.title.toLowerCase().includes('active logo')
         );
         
         console.log("Found active logos:", activeLogos);
-        setAllPartners(activeLogos);
-        // Initialize with the first set of logos
-        setDisplayedPartners(activeLogos.slice(0, displayCount));
+        
+        if (activeLogos.length > 0) {
+          setAllPartners(activeLogos);
+          // Initialize with the first set of logos
+          setDisplayedPartners(activeLogos.slice(0, Math.min(displayCount, activeLogos.length)));
+        } else {
+          console.log("No active logos found, using placeholders");
+        }
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching logos:", error);
@@ -102,16 +109,15 @@ const AboutPartners = () => {
   
   // Fallback to placeholder logos if no logos are available or while loading
   const placeholderPartners = [
-    { name: "American Commerce Bank", src: "https://via.placeholder.com/160x60?text=ACB", id: "1" },
-    { name: "Humana", src: "https://via.placeholder.com/160x60?text=Humana", id: "2" },
-    { name: "Service Master", src: "https://via.placeholder.com/160x60?text=ServiceMaster", id: "3" },
-    { name: "Monesty", src: "https://via.placeholder.com/160x60?text=Monesty", id: "4" },
-    { name: "Mutual of Omaha", src: "https://via.placeholder.com/160x60?text=MutualOfOmaha", id: "5" },
-    { name: "Copperweld", src: "https://via.placeholder.com/160x60?text=Copperweld", id: "6" },
+    { name: "American Commerce Bank", src: "https://placehold.co/160x60/gray/white?text=ACB", id: "1" },
+    { name: "Humana", src: "https://placehold.co/160x60/gray/white?text=HUMANA", id: "2" },
+    { name: "Service Master", src: "https://placehold.co/160x60/gray/white?text=SERVICEMASTER", id: "3" },
+    { name: "Monesty", src: "https://placehold.co/160x60/gray/white?text=MONESTY", id: "4" },
+    { name: "Mutual of Omaha", src: "https://placehold.co/160x60/gray/white?text=MUTUAL", id: "5" },
+    { name: "Copperweld", src: "https://placehold.co/160x60/gray/white?text=COPPERWELD", id: "6" },
   ];
   
-  const partners = isLoading || allPartners.length === 0 ? 
-    placeholderPartners : displayedPartners;
+  const partners = allPartners.length === 0 ? placeholderPartners : displayedPartners;
 
   return (
     <section className="py-12 bg-gray-50" aria-labelledby="partners-heading">
