@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -10,6 +9,7 @@ import CTABanner from "@/components/common/CTABanner";
 import SEO from "@/components/SEO";
 import { getHomePageSchema, getBreadcrumbSchema } from "@/utils/schema";
 import { Link } from "react-router-dom";
+import AboutPartners from "@/components/about/AboutPartners";
 
 const Index = () => {
   // Mock data for the ProofRibbon component
@@ -101,6 +101,7 @@ const Index = () => {
           </div>
         </section>
         
+        <AboutPartners />
         <ProofRibbon clients={clients} kpis={kpis} />
         <WhoWeHelpPanel />
         <ProcessStrip />
