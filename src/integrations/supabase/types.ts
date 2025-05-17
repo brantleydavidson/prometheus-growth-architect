@@ -18,10 +18,12 @@ export type Database = {
           content: string | null
           cover_image: string | null
           created_at: string
+          cta_block: Json | null
           excerpt: string | null
           faqs: Json | null
           featured_image_alt: string | null
           id: string
+          is_listed: boolean
           key_takeaways: string | null
           published_at: string | null
           read_time: string | null
@@ -32,7 +34,6 @@ export type Database = {
           table_of_contents: Json | null
           title: string
           updated_at: string
-          is_listed: boolean
         }
         Insert: {
           author?: string | null
@@ -42,10 +43,12 @@ export type Database = {
           content?: string | null
           cover_image?: string | null
           created_at?: string
+          cta_block?: Json | null
           excerpt?: string | null
           faqs?: Json | null
           featured_image_alt?: string | null
           id?: string
+          is_listed?: boolean
           key_takeaways?: string | null
           published_at?: string | null
           read_time?: string | null
@@ -56,7 +59,6 @@ export type Database = {
           table_of_contents?: Json | null
           title: string
           updated_at?: string
-          is_listed?: boolean
         }
         Update: {
           author?: string | null
@@ -66,10 +68,12 @@ export type Database = {
           content?: string | null
           cover_image?: string | null
           created_at?: string
+          cta_block?: Json | null
           excerpt?: string | null
           faqs?: Json | null
           featured_image_alt?: string | null
           id?: string
+          is_listed?: boolean
           key_takeaways?: string | null
           published_at?: string | null
           read_time?: string | null
@@ -80,7 +84,6 @@ export type Database = {
           table_of_contents?: Json | null
           title?: string
           updated_at?: string
-          is_listed?: boolean
         }
         Relationships: []
       }
