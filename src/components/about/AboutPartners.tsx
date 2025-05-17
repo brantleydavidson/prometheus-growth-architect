@@ -4,6 +4,8 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { getMediaItemsByType } from "@/utils/cms-storage";
 import { MediaItem } from "@/utils/cms-storage";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Image } from "@/components/ui/image";
+import { toast } from "sonner";
 
 interface PartnerLogoProps {
   src: string;
@@ -13,6 +15,8 @@ interface PartnerLogoProps {
 }
 
 const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) => {
+  const [imgError, setImgError] = useState(false);
+  
   return (
     <div 
       className={`p-4 flex items-center justify-center ${className} transition-opacity duration-700 ${visible ? 'opacity-100' : 'opacity-0'}`} 
@@ -22,14 +26,14 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
         <AspectRatio ratio={3/1} className="bg-white rounded-md">
           <div className="h-full w-full flex items-center justify-center p-3">
             <img 
-              src={src} 
+              src={imgError ? "/logo-placeholder.svg" : src}
               alt={`${alt} logo - Prometheus Agency partner`}
               width="160" height="60"
               loading="lazy" decoding="async"
               className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
               onError={(e) => {
-                // Fallback to placeholder if image fails to load
-                e.currentTarget.src = "https://placehold.co/160x60/gray/white?text=PARTNER";
+                console.log(`Image load error for ${alt}:`, src);
+                setImgError(true);
               }}
             />
           </div>
@@ -43,34 +47,57 @@ const AboutPartners = () => {
   const [allPartners, setAllPartners] = useState<MediaItem[]>([]);
   const [displayedPartners, setDisplayedPartners] = useState<MediaItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   
   // Number of logos to display at once
   const displayCount = 6;
   
   useEffect(() => {
     const fetchLogos = async () => {
+      setIsLoading(true);
+      setLoadError(null);
+      
       try {
-        // Fetch all image type media items
-        const logos = await getMediaItemsByType('image');
+        console.log("Fetching logos from CMS...");
+        // First try to get all images
+        const allImages = await getMediaItemsByType('image');
+        console.log("All fetched images:", allImages);
         
-        // Specifically look for 'active logo' in the title (case insensitive)
-        const activeLogos = logos.filter(logo => 
-          logo.title && 
-          logo.title.toLowerCase().includes('active logo')
+        // Try different filters to find the logos
+        let activeLogos = allImages.filter(img => 
+          img.title && img.title.toLowerCase().includes('active logo')
         );
         
-        console.log("Found active logos:", activeLogos);
+        if (activeLogos.length === 0) {
+          // Try alternative filter if "active logo" not found
+          activeLogos = allImages.filter(img => 
+            img.title && (
+              img.title.toLowerCase().includes('logo') || 
+              img.title.toLowerCase().includes('partner')
+            )
+          );
+          
+          // If still empty, just use all images as a fallback
+          if (activeLogos.length === 0 && allImages.length > 0) {
+            console.log("No logos with specific naming found, using all images");
+            activeLogos = allImages;
+          }
+        }
+        
+        console.log("Filtered active logos:", activeLogos);
         
         if (activeLogos.length > 0) {
           setAllPartners(activeLogos);
           // Initialize with the first set of logos
           setDisplayedPartners(activeLogos.slice(0, Math.min(displayCount, activeLogos.length)));
         } else {
-          console.log("No active logos found, using placeholders");
+          console.log("No logos found in CMS, using placeholders");
+          setLoadError("No logos found in CMS");
         }
-        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching logos:", error);
+        setLoadError("Failed to load partner logos");
+      } finally {
         setIsLoading(false);
       }
     };
@@ -105,19 +132,28 @@ const AboutPartners = () => {
     }, 5000);
     
     return () => clearInterval(interval);
-  }, [allPartners]);
+  }, [allPartners, displayCount]);
   
   // Fallback to placeholder logos if no logos are available or while loading
   const placeholderPartners = [
-    { name: "American Commerce Bank", src: "https://placehold.co/160x60/gray/white?text=ACB", id: "1" },
-    { name: "Humana", src: "https://placehold.co/160x60/gray/white?text=HUMANA", id: "2" },
-    { name: "Service Master", src: "https://placehold.co/160x60/gray/white?text=SERVICEMASTER", id: "3" },
-    { name: "Monesty", src: "https://placehold.co/160x60/gray/white?text=MONESTY", id: "4" },
-    { name: "Mutual of Omaha", src: "https://placehold.co/160x60/gray/white?text=MUTUAL", id: "5" },
-    { name: "Copperweld", src: "https://placehold.co/160x60/gray/white?text=COPPERWELD", id: "6" },
+    { name: "American Commerce Bank", src: "/logo-placeholder.svg", id: "1" },
+    { name: "Humana", src: "/logo-placeholder.svg", id: "2" },
+    { name: "Service Master", src: "/logo-placeholder.svg", id: "3" },
+    { name: "Monesty", src: "/logo-placeholder.svg", id: "4" },
+    { name: "Mutual of Omaha", src: "/logo-placeholder.svg", id: "5" },
+    { name: "Copperweld", src: "/logo-placeholder.svg", id: "6" },
   ];
   
   const partners = allPartners.length === 0 ? placeholderPartners : displayedPartners;
+  
+  // Display a toast if there was an error but only once
+  useEffect(() => {
+    if (loadError) {
+      toast.error(loadError, {
+        description: "Using placeholder logos instead"
+      });
+    }
+  }, [loadError]);
 
   return (
     <section className="py-12 bg-gray-50" aria-labelledby="partners-heading">
@@ -140,7 +176,7 @@ const AboutPartners = () => {
               <PartnerLogo 
                 key={partner.id || index}
                 src={partner.url || partner.src}
-                alt={partner.title || partner.name}
+                alt={partner.title || partner.name || `Partner ${index + 1}`}
                 visible={true}
               />
             ))}
