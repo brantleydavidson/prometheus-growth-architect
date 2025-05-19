@@ -88,8 +88,17 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
 
   // Update user information
   const updateUserInfo = useCallback((data: Partial<UserInfo>) => {
-    setUserInfo(prev => ({ ...prev, ...data }));
-  }, []);
+    // Immediately update the state with the new data
+    const updatedUserInfo = { ...userInfo, ...data };
+    setUserInfo(updatedUserInfo);
+    
+    // Log the update for debugging
+    console.log("User info updated:", {
+      previous: userInfo,
+      new: data,
+      updated: updatedUserInfo
+    });
+  }, [userInfo]);
 
   // Submit an answer
   const submitAnswer = useCallback((answer: Answer) => {
@@ -156,14 +165,21 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     }
     
     try {
+      // Log the data being submitted
+      console.log("Submitting to HubSpot with:", {
+        userInfo,
+        result,
+        currentUserInfo: userInfo
+      });
+
       // Ensure all required fields are present
       const formattedUserInfo: UserInfo = {
-        firstName: userInfo.firstName || '',
-        lastName: userInfo.lastName || '',
-        email: userInfo.email || '',
-        company: userInfo.company || '',
-        companySize: userInfo.companySize || '',
-        jobTitle: userInfo.jobTitle || '',
+        firstName: userInfo.firstName?.trim() || '',
+        lastName: userInfo.lastName?.trim() || '',
+        email: userInfo.email?.trim() || '',
+        company: userInfo.company?.trim() || '',
+        companySize: userInfo.companySize?.trim() || '',
+        jobTitle: userInfo.jobTitle?.trim() || '',
       };
 
       const hubspotData = prepareHubspotData(formattedUserInfo, result, answers);
