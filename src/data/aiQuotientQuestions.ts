@@ -166,3 +166,6 @@ export const getMaxPillarScore = (pillarName: string): number => {
 
 // Export all questions from all pillars
 export const questions: Question[] = pillars.flatMap(pillar => pillar.questions);
+
+// Export function to get all pillars
+export const getAllPillars = (): Pillar[] => pillars;
