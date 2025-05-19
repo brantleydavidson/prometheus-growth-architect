@@ -150,7 +150,10 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
 
   // HubSpot submission
   const submitToHubSpot = useCallback(async (userInfo: UserInfo, result: AssessmentResult): Promise<boolean> => {
-    if (!result) return false;
+    if (!result) {
+      console.error("No assessment result available");
+      return false;
+    }
     
     try {
       // Ensure all required fields are present
@@ -164,7 +167,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       };
 
       const hubspotData = prepareHubspotData(formattedUserInfo, result, answers);
-      console.log("Submitting to HubSpot:", hubspotData);
+      console.log("Prepared HubSpot data:", hubspotData);
       
       // Submit to HubSpot forms API
       const response = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/40043781/8309ec82-bc28-4185-bade-8e73f33d2b08`, {
@@ -184,17 +187,28 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
         })
       });
 
+      const responseData = await response.json();
+      console.log("HubSpot API response:", responseData);
+
       if (!response.ok) {
-        throw new Error('Failed to submit to HubSpot');
+        console.error("HubSpot API error:", responseData);
+        throw new Error(`Failed to submit to HubSpot: ${responseData.message || 'Unknown error'}`);
       }
 
-      const submitResult = await response.json();
-      return submitResult.inlineMessage !== undefined;
+      if (!responseData.inlineMessage) {
+        console.error("No inline message in response:", responseData);
+        throw new Error('Invalid response from HubSpot API');
+      }
+
+      return true;
     } catch (error) {
       console.error("Error submitting to HubSpot:", error);
+      if (error instanceof Error) {
+        console.error("Error details:", error.message);
+      }
       return false;
     }
-  }, []);
+  }, [answers]);
 
   // Toggle test mode
   const toggleTestMode = useCallback(() => {
