@@ -1,4 +1,3 @@
-
 import React from "react";
 import { useAIQuotientAssessment } from "@/hooks/useAIQuotientAssessment";
 import UserInfoForm from "./aiQuotient/UserInfoForm";
@@ -111,6 +110,7 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
             userInfo={userInfo}
             result={result}
             onSubmit={handleSubmitToHubSpot}
+            onUpdateUserInfo={updateUserInfo}
           />
         ) : (
           <div>No results available.</div>

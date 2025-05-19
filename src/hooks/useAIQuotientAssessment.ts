@@ -42,6 +42,7 @@ const initialUserInfo: UserInfo = {
   lastName: "",
   email: "",
   company: "",
+  companySize: "",
 };
 
 export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientAssessment => {
