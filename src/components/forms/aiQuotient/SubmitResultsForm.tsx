@@ -68,10 +68,7 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
         existingUserInfo: userInfo
       });
       
-      await new Promise<void>((resolve) => {
-        onUpdateUserInfo(updatedUserInfo);
-        resolve();
-      });
+      onUpdateUserInfo(updatedUserInfo);
       
       const updatedResult = {
         ...result,

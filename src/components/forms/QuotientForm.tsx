@@ -66,7 +66,6 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
     
     // Get the latest user info from the form
     const latestUserInfo = {
-      ...userInfo,
       firstName: userInfo.firstName || '',
       lastName: userInfo.lastName || '',
       email: userInfo.email || '',
@@ -83,7 +82,13 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
       pillarScores: result.pillarScores
     });
     
-    const success = await submitToHubSpot(latestUserInfo, result);
+    // Create a new result object with the latest user info
+    const updatedResult = {
+      ...result,
+      userInfo: latestUserInfo
+    };
+    
+    const success = await submitToHubSpot(latestUserInfo, updatedResult);
     if (success) {
       moveToNextStep();
     }
