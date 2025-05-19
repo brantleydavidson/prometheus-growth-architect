@@ -2,17 +2,20 @@ import React, { useEffect } from 'react';
 import UserInfoForm from './aiQuotient/UserInfoForm';
 import QuestionsForm from './aiQuotient/QuestionsForm';
 import SubmitResultsForm from './aiQuotient/SubmitResultsForm';
-import { useAiQuotientEngine } from '@/features/aiQuotient/useAiQuotientEngine';
+import useAiQuotientEngine from '@/features/aiQuotient/useAiQuotientEngine';
 import { useHubSpot } from '@/integrations/hubspot/HubSpotProvider';
 import { useToast } from '@/hooks/use-toast';
 
 const QuotientForm = () => {
   const { toast } = useToast();
-  const { 
-    state, 
-    actions, 
-    getPillarProgress 
-  } = useAiQuotientEngine();
+  const engine = useAiQuotientEngine();
+  
+  // Defensive guard – should never hit but prevents runtime crash if import mis-resolves
+  if (!engine) {
+    return <p className="text-center py-8">Loading assessment…</p>;
+  }
+
+  const { state, actions, getPillarProgress } = engine;
   
   const { 
     currentStep, 

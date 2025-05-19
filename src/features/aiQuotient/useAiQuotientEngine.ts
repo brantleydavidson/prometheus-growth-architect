@@ -221,4 +221,6 @@ export function useAiQuotientEngine() {
     },
     getPillarProgress,
   } as const;
-} 
+}
+
+export { useAiQuotientEngine as default }; 
