@@ -15,7 +15,7 @@ export const prepareHubspotData = (
     job_title: userInfo.jobTitle || '',
     
     // AI Quotient properties
-    score: result.percentage,
+    score__ai_quotient_: result.percentage,
     ai_readiness_category: result.readinessLevel,
     
     // Pillar scores
