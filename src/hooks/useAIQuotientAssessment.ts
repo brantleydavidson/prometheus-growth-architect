@@ -153,7 +153,17 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     if (!result) return false;
     
     try {
-      const hubspotData = prepareHubspotData(userInfo, result, answers);
+      // Ensure all required fields are present
+      const formattedUserInfo: UserInfo = {
+        firstName: userInfo.firstName || '',
+        lastName: userInfo.lastName || '',
+        email: userInfo.email || '',
+        company: userInfo.company || '',
+        companySize: userInfo.companySize || '',
+        jobTitle: userInfo.jobTitle || '',
+      };
+
+      const hubspotData = prepareHubspotData(formattedUserInfo, result, answers);
       console.log("Submitting to HubSpot:", hubspotData);
       
       // Submit to HubSpot forms API

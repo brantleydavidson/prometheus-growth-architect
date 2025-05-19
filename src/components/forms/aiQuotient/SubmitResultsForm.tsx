@@ -53,7 +53,15 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
     
     try {
       const { acceptTerms, ...userDetails } = data;
-      onUpdateUserInfo(userDetails);
+      onUpdateUserInfo({
+        firstName: userDetails.firstName,
+        lastName: userDetails.lastName,
+        email: userDetails.email,
+        jobTitle: userDetails.jobTitle,
+        company: userInfo.company,
+        companySize: userInfo.companySize,
+      });
+      
       const success = await onSubmit();
       if (success) {
         setIsSubmitted(true);
