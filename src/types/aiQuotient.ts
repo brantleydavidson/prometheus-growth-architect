@@ -1,9 +1,10 @@
-
 export interface UserInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
   company: string;
+  companySize?: string;
+  jobTitle?: string;
 }
 
 export interface QuestionOption {

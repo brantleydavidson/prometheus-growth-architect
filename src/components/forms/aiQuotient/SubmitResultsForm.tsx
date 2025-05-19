@@ -1,6 +1,10 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import * as z from "zod";
 import { UserInfo, AssessmentResult } from "@/types/aiQuotient";
 import { Check, Loader2 } from "lucide-react";
 
@@ -8,22 +12,46 @@ interface SubmitResultsFormProps {
   userInfo: UserInfo;
   result: AssessmentResult;
   onSubmit: () => Promise<boolean>;
+  onUpdateUserInfo: (data: Partial<UserInfo>) => void;
 }
 
 const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
   userInfo,
   result,
-  onSubmit
+  onSubmit,
+  onUpdateUserInfo,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async () => {
+  const detailsSchema = z.object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    email: z.string().email("Invalid email"),
+    jobTitle: z.string().min(1, "Job title is required"),
+  });
+
+  type DetailsForm = z.infer<typeof detailsSchema>;
+
+  const form = useForm<DetailsForm>({
+    resolver: zodResolver(detailsSchema),
+    defaultValues: {
+      firstName: userInfo.firstName ?? "",
+      lastName: userInfo.lastName ?? "",
+      email: userInfo.email ?? "",
+      jobTitle: userInfo.jobTitle ?? "",
+    },
+  });
+
+  const handleSubmit = async (details?: DetailsForm) => {
     setIsSubmitting(true);
     setError(null);
     
     try {
+      if (details) {
+        onUpdateUserInfo(details);
+      }
       const success = await onSubmit();
       if (success) {
         setIsSubmitted(true);
@@ -85,6 +113,10 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
                 <span className="font-medium">{userInfo.firstName} {userInfo.lastName}</span>
               </div>
               <div className="flex justify-between">
+                <span className="text-gray-600">Title:</span>
+                <span className="font-medium">{userInfo.jobTitle}</span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-gray-600">Company:</span>
                 <span className="font-medium">{userInfo.company}</span>
               </div>
@@ -97,20 +129,59 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
             </div>
           )}
           
-          <Button
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="w-full"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              "Submit & Get Report"
-            )}
-          </Button>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit((d)=>handleSubmit(d))} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField control={form.control} name="firstName" render={({field})=> (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="John" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}/>
+                <FormField control={form.control} name="lastName" render={({field})=> (
+                  <FormItem>
+                    <FormLabel>Last Name</FormLabel>
+                    <FormControl>
+                      <Input {...field} placeholder="Doe" />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}/>
+              </div>
+              <FormField control={form.control} name="email" render={({field})=> (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="john@company.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              <FormField control={form.control} name="jobTitle" render={({field})=> (
+                <FormItem>
+                  <FormLabel>Job Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="CMO" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+
+              <Button type="submit" disabled={isSubmitting} className="w-full">
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit & Get Report"
+                )}
+              </Button>
+            </form>
+          </Form>
         </>
       )}
     </div>

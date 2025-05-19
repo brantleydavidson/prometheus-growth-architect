@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -51,6 +50,12 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
     }
   }, [existingAnswer, currentQuestion]);
 
+  // Reset index and selection when questions change (e.g., new pillar)
+  React.useEffect(() => {
+    setCurrentQuestionIndex(0);
+    setSelectedOption(null);
+  }, [questions]);
+
   // Handle answer submission
   const handleNext = () => {
     if (!currentQuestion || !selectedOption) return;
@@ -65,13 +70,18 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
       pillar: currentQuestion.pillar
     };
     
+    // Submit the answer first
     onSubmitAnswer(answer);
     
-    // Move to next question if available
-    if (currentQuestionIndex < questions.length - 1) {
+    // Check if we're on the last question of the pillar
+    const isLastQuestionInPillar = currentQuestionIndex === questions.length - 1;
+    
+    // If not the last question, move to next question
+    if (!isLastQuestionInPillar) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
     }
+    // Note: If it is the last question, the submitAnswer callback will handle pillar transition
   };
 
   // Handle going back to previous question

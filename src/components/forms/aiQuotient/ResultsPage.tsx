@@ -1,10 +1,9 @@
-
 import React from "react";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { AssessmentResult } from "@/types/aiQuotient";
 import { getReadinessLevelColor, getReadinessLevelTextColor } from "@/utils/scoreCalculation";
-import { Award, ChevronRight, Download } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 interface ResultsPageProps {
   result: AssessmentResult;
@@ -106,19 +105,16 @@ const ResultsPage: React.FC<ResultsPageProps> = ({
       <div className="flex flex-col md:flex-row gap-4 justify-between">
         <Button 
           onClick={onRequestReport}
-          className="flex-1"
-          variant="outline"
+          className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
         >
-          <Download className="mr-2 h-4 w-4" />
-          Download Detailed Report
+          Get Your Full Report
         </Button>
         
-        <Button 
-          onClick={onContinue}
-          className="flex-1"
-        >
-          Book AI Strategy Session
-          <ChevronRight className="ml-2 h-4 w-4" />
+        <Button asChild className="flex-1" variant="outline">
+          <a href="/growth-audit" className="flex items-center justify-center">
+            Book AI Strategy Session
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </a>
         </Button>
       </div>
     </div>

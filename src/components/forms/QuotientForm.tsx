@@ -1,10 +1,10 @@
-
 import React from "react";
 import { useAIQuotientAssessment } from "@/hooks/useAIQuotientAssessment";
 import UserInfoForm from "./aiQuotient/UserInfoForm";
 import QuestionsForm from "./aiQuotient/QuestionsForm";
 import ResultsPage from "./aiQuotient/ResultsPage";
 import SubmitResultsForm from "./aiQuotient/SubmitResultsForm";
+import ThankYouPage from "./aiQuotient/ThankYouPage";
 import { UserInfo, PillarType } from "@/types/aiQuotient";
 import { AssessmentFormProps } from "@/types/aiQuotient";
 
@@ -58,6 +58,14 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
     moveToNextStep();
   };
 
+  const handleSubmitToHubSpot = async () => {
+    const success = await submitToHubSpot();
+    if (success) {
+      moveToNextStep();
+    }
+    return success;
+  };
+
   // Render the current step
   const renderStep = () => {
     switch (currentStep) {
@@ -101,7 +109,18 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
           <SubmitResultsForm
             userInfo={userInfo}
             result={result}
-            onSubmit={submitToHubSpot}
+            onSubmit={handleSubmitToHubSpot}
+            onUpdateUserInfo={updateUserInfo}
+          />
+        ) : (
+          <div>No results available.</div>
+        );
+      
+      case "thank-you":
+        return result ? (
+          <ThankYouPage
+            userInfo={userInfo}
+            result={result}
           />
         ) : (
           <div>No results available.</div>
