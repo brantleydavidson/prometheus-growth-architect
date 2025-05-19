@@ -13,14 +13,14 @@ export const prepareHubspotData = (
     email: userInfo.email?.trim() || '',
     company: userInfo.company?.trim() || '',
     company_size: userInfo.companySize?.trim() || '',
-    job_title: userInfo.jobTitle?.trim() || '',
+    jobtitle: userInfo.jobTitle?.trim() || '',
     
     // AI Quotient properties
     score__ai_quotient_: Math.round(result.percentage),
     aireadinesscategory: result.readinessLevel?.trim() || '',
     
     // Pillar scores - ensure they are rounded numbers
-    pillar_ai_ready_content_operations_percentage: Math.round(result.pillarScores.find(p => p.pillar === "AI-Ready Content Operations")?.percentage || 0),
+    pillaraireadycontentoperationspercentage: Math.round(result.pillarScores.find(p => p.pillar === "AI-Ready Content Operations")?.percentage || 0),
     pillarautomationmaturitypercentage: Math.round(result.pillarScores.find(p => p.pillar === "Automation Maturity")?.percentage || 0),
     pillardataspinehealthpercentage: Math.round(result.pillarScores.find(p => p.pillar === "Data Spine Health")?.percentage || 0),
     pillarfunnelintelligenceattributionpercentage: Math.round(result.pillarScores.find(p => p.pillar === "Funnel Intelligence & Attribution")?.percentage || 0),
