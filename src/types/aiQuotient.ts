@@ -4,6 +4,7 @@ export interface UserInfo {
   email?: string;
   company: string;
   companySize?: string;
+  jobTitle?: string;
 }
 
 export interface QuestionOption {

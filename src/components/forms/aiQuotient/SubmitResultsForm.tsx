@@ -29,6 +29,7 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
     firstName: z.string().min(1, "First name is required"),
     lastName: z.string().min(1, "Last name is required"),
     email: z.string().email("Invalid email"),
+    jobTitle: z.string().min(1, "Job title is required"),
   });
 
   type DetailsForm = z.infer<typeof detailsSchema>;
@@ -39,6 +40,7 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
       firstName: userInfo.firstName ?? "",
       lastName: userInfo.lastName ?? "",
       email: userInfo.email ?? "",
+      jobTitle: userInfo.jobTitle ?? "",
     },
   });
 
@@ -111,6 +113,10 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
                 <span className="font-medium">{userInfo.firstName} {userInfo.lastName}</span>
               </div>
               <div className="flex justify-between">
+                <span className="text-gray-600">Title:</span>
+                <span className="font-medium">{userInfo.jobTitle}</span>
+              </div>
+              <div className="flex justify-between">
                 <span className="text-gray-600">Company:</span>
                 <span className="font-medium">{userInfo.company}</span>
               </div>
@@ -150,6 +156,15 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input type="email" placeholder="john@company.com" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}/>
+              <FormField control={form.control} name="jobTitle" render={({field})=> (
+                <FormItem>
+                  <FormLabel>Job Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="CMO" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

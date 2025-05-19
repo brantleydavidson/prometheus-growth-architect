@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Check, Download, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -80,15 +79,15 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ userInfo, result }) => {
           <Button 
             variant="outline"
             className="flex-1"
-            onClick={() => window.location.href = "/"}
+            onClick={() => window.location.href = "/api/download-report"}
           >
-            Return to Homepage
+            Download Detailed Report
           </Button>
           <Button 
             className="flex-1"
             onClick={() => window.location.href = "/book-audit"}
           >
-            Book a Strategy Session
+            Book AI Strategy Session
           </Button>
         </div>
       </div>
