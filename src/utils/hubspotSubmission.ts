@@ -18,12 +18,17 @@ export const prepareHubspotData = (
     // AI Quotient properties
     score__ai_quotient_: Math.round(result.percentage),
     aireadinesscategory: result.readinessLevel?.trim() || '',
+    aitestscore: result.totalScore,
+    aitestscorepercentage: Math.round(result.percentage),
+    requesteddetailedreport: true,
+    additional_comments: ''
   };
 
   // Add pillar scores from the result object
   result.pillarScores.forEach(pillar => {
-    const fieldName = `pillar${pillar.pillar.toLowerCase().replace(/[^a-z0-9]/g, '')}percentage`;
-    hubspotData[fieldName] = Math.round(pillar.percentage);
+    const baseName = `pillar${pillar.pillar.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+    hubspotData[`${baseName}`] = pillar.score;
+    hubspotData[`${baseName}percentage`] = Math.round(pillar.percentage);
   });
 
   // Log the prepared data for debugging
