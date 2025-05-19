@@ -22,7 +22,7 @@ const formSchema = z.object({
 interface SubmitResultsFormProps {
   userInfo: UserInfo;
   result: AssessmentResult;
-  onSubmit: () => Promise<boolean>;
+  onSubmit: (result: AssessmentResult) => Promise<boolean>;
   onUpdateUserInfo: (data: Partial<UserInfo>) => void;
 }
 
@@ -62,6 +62,12 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
         companySize: userInfo.companySize,
       };
       
+      console.log("Form submission data:", {
+        formData: userDetails,
+        updatedUserInfo,
+        existingUserInfo: userInfo
+      });
+      
       onUpdateUserInfo(updatedUserInfo);
       
       const updatedResult = {
@@ -69,7 +75,7 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
         userInfo: updatedUserInfo
       };
       
-      const success = await onSubmit();
+      const success = await onSubmit(updatedResult);
       if (success) {
         setIsSubmitted(true);
       } else {

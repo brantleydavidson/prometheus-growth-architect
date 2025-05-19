@@ -64,8 +64,20 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
       return false;
     }
     
-    // Log the current user info for debugging
-    console.log("Current user info:", userInfo);
+    // Log the current user info and result for debugging
+    console.log("Submitting to HubSpot with user info:", {
+      firstName: userInfo.firstName,
+      lastName: userInfo.lastName,
+      email: userInfo.email,
+      jobTitle: userInfo.jobTitle,
+      company: userInfo.company,
+      companySize: userInfo.companySize
+    });
+    console.log("Assessment result:", {
+      percentage: result.percentage,
+      readinessLevel: result.readinessLevel,
+      pillarScores: result.pillarScores
+    });
     
     const success = await submitToHubSpot(userInfo, result);
     if (success) {
