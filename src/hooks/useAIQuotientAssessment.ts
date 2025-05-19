@@ -202,8 +202,8 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   // use the first pillar from allPillars or a default PillarType
   const safeCurrentPillar = currentPillar || (allPillars.length > 0 ? allPillars[0] : "Data Spine Health");
 
-  const handleUserInfoSubmit = (data: UserInfo) => {
-    setUserInfo(data);
+  const handleUserInfoSubmit = (data: Partial<UserInfo>) => {
+    setUserInfo(prev => ({ ...prev, ...data }));
     setCurrentStep("questions");
   };
 
