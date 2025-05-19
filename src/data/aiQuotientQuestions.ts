@@ -163,3 +163,6 @@ export const getMaxPillarScore = (pillarName: string): number => {
     return total + Math.max(...question.options.map(opt => opt.score));
   }, 0);
 };
+
+// Export all questions from all pillars
+export const questions: Question[] = pillars.flatMap(pillar => pillar.questions);
