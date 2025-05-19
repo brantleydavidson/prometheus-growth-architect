@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
-import Navbar from '@/components/layout/Navbar';
+import Navbar from '@/components/navigation/Navbar';
 import Footer from '@/components/layout/Footer';
 import QuotientForm from '@/components/forms/QuotientForm';
 import EnhancedCTABanner from '@/components/shared/EnhancedCTABanner';
