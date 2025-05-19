@@ -27,6 +27,8 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
       const success = await onSubmit();
       if (success) {
         setIsSubmitted(true);
+        // Note: We don't need to move to the next step here anymore
+        // as this is now handled by the parent component
       } else {
         setError("There was an error submitting your assessment. Please try again.");
       }

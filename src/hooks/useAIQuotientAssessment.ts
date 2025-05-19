@@ -15,7 +15,8 @@ export type AssessmentStep =
   | "user-info" 
   | "questions" 
   | "results" 
-  | "submit";
+  | "submit"
+  | "thank-you";
 
 export interface UseAIQuotientAssessment {
   currentStep: AssessmentStep;
@@ -126,6 +127,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
         case "user-info": return "questions";
         case "questions": return "results";
         case "results": return "submit";
+        case "submit": return "thank-you";
         default: return prev;
       }
     });
@@ -137,6 +139,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
         case "questions": return "user-info";
         case "results": return "questions";
         case "submit": return "results";
+        case "thank-you": return "submit";
         default: return prev;
       }
     });
