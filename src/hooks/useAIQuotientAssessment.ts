@@ -156,11 +156,30 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       const hubspotData = prepareHubspotData(userInfo, result, answers);
       console.log("Submitting to HubSpot:", hubspotData);
       
-      // Replace with your actual HubSpot submission logic
-      // This is a placeholder for the HubSpot API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      return true;
+      // Submit to HubSpot forms API
+      const response = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/40043781/8309ec82-bc28-4185-bade-8e73f33d2b08`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fields: Object.entries(hubspotData).map(([name, value]) => ({
+            name,
+            value: value?.toString() || ''
+          })),
+          context: {
+            pageUri: window.location.href,
+            pageName: document.title
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit to HubSpot');
+      }
+
+      const submitResult = await response.json();
+      return submitResult.inlineMessage !== undefined;
     } catch (error) {
       console.error("Error submitting to HubSpot:", error);
       return false;
