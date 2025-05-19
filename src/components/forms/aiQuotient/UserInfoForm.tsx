@@ -5,13 +5,7 @@ import { Input } from '@/components/ui/input';
 import { ArrowRight, User } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { Card } from '@/components/ui/card';
-
-export interface UserInfo {
-  firstname: string;
-  lastname: string;
-  email: string;
-  company: string;
-}
+import { UserInfo } from '@/types/aiQuotient';
 
 interface UserInfoFormProps {
   initialData: UserInfo;
@@ -35,7 +29,7 @@ const UserInfoForm = ({ initialData, onSubmit }: UserInfoFormProps) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={userInfoForm.control}
-              name="firstname"
+              name="firstName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
@@ -48,7 +42,7 @@ const UserInfoForm = ({ initialData, onSubmit }: UserInfoFormProps) => {
             
             <FormField
               control={userInfoForm.control}
-              name="lastname"
+              name="lastName"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>

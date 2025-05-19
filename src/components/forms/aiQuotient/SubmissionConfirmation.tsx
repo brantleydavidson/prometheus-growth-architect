@@ -1,12 +1,9 @@
 import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
+import { UserInfo } from '@/types/aiQuotient';
 
 interface SubmissionConfirmationProps {
-  userInfo: {
-    firstname: string;
-    lastname: string;
-    email: string;
-  };
+  userInfo: UserInfo;
 }
 
 const SubmissionConfirmation = ({ userInfo }: SubmissionConfirmationProps) => {
@@ -20,7 +17,7 @@ const SubmissionConfirmation = ({ userInfo }: SubmissionConfirmationProps) => {
       
       <div className="max-w-md mx-auto text-gray-600 space-y-4">
         <p>
-          Hi {userInfo.firstname},
+          Hi {userInfo.firstName},
         </p>
         
         <p>

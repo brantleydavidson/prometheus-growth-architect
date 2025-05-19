@@ -5,6 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Send } from 'lucide-react';
+import { UserInfo } from '@/types/aiQuotient';
 
 export interface AdditionalInfoFormData {
   jobTitle: string;
@@ -13,12 +14,7 @@ export interface AdditionalInfoFormData {
 }
 
 interface AdditionalInfoFormProps {
-  userInfo: {
-    firstname: string;
-    lastname: string;
-    email: string;
-    company: string;
-  };
+  userInfo: UserInfo;
   onSubmit: (data: AdditionalInfoFormData) => void;
   onCancel: () => void;
   isSubmitting?: boolean;
@@ -59,14 +55,14 @@ const AdditionalInfoForm = ({
             <div>
               <FormItem>
                 <FormLabel>First Name</FormLabel>
-                <Input value={userInfo.firstname} disabled className="bg-gray-100" />
+                <Input value={userInfo.firstName} disabled className="bg-gray-100" />
               </FormItem>
             </div>
             
             <div>
               <FormItem>
                 <FormLabel>Last Name</FormLabel>
-                <Input value={userInfo.lastname} disabled className="bg-gray-100" />
+                <Input value={userInfo.lastName} disabled className="bg-gray-100" />
               </FormItem>
             </div>
             

@@ -6,18 +6,13 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { ArrowRight, ArrowLeft, Flag, Brain } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import { questions } from '@/data/aiQuotientQuestions';
+import { questions, Question } from '@/data/aiQuotientQuestions';
 import { useToast } from '@/hooks/use-toast';
-
-interface QuestionOption {
-  id: string;
-  text: string;
-  value: number;
-}
+import { Answer } from '@/types/aiQuotient';
 
 interface QuestionFormProps {
   currentStep: number;
-  answers: { [key: number]: string };
+  answers: Answer[];
   onNext: (data: { answer: string }) => void;
   onPrevious: () => void;
 }
@@ -38,7 +33,7 @@ const QuestionsForm = ({ currentStep, answers, onNext, onPrevious }: QuestionFor
     currentStep, 
     totalSteps, 
     activeQuestionsLength: activeQuestions.length,
-    hasAnswers: Object.keys(answers).length > 0 
+    hasAnswers: answers.length > 0 
   });
   
   // Ensure currentStep is within valid bounds to prevent "no questions available" issue
@@ -52,7 +47,7 @@ const QuestionsForm = ({ currentStep, answers, onNext, onPrevious }: QuestionFor
   
   const quizForm = useForm({
     defaultValues: {
-      answer: answers[currentStep] || ''
+      answer: answers.find(a => a.questionId === currentStep)?.optionId || ''
     }
   });
   
@@ -61,8 +56,9 @@ const QuestionsForm = ({ currentStep, answers, onNext, onPrevious }: QuestionFor
     console.log('Effect running for step change to:', currentStep);
     console.log('Current answers:', answers);
     
-    if (answers[currentStep]) {
-      quizForm.setValue('answer', answers[currentStep]);
+    const currentAnswer = answers.find(a => a.questionId === currentStep);
+    if (currentAnswer) {
+      quizForm.setValue('answer', currentAnswer.optionId);
     } else {
       quizForm.setValue('answer', '');
     }
@@ -114,7 +110,7 @@ const QuestionsForm = ({ currentStep, answers, onNext, onPrevious }: QuestionFor
       <Card className="p-6 shadow-md">
         <div className="flex items-start gap-3 mb-6">
           <Brain className="h-6 w-6 text-prometheus-orange mt-1" />
-          <h2 className="text-xl font-semibold">{currentQuestion.question}</h2>
+          <h2 className="text-xl font-semibold">{currentQuestion.text}</h2>
         </div>
         
         <Form {...quizForm}>
@@ -130,10 +126,10 @@ const QuestionsForm = ({ currentStep, answers, onNext, onPrevious }: QuestionFor
                     className="space-y-3"
                   >
                     {currentQuestion.options.map((option) => (
-                      <div key={option.id} className="flex items-center space-x-2 rounded-md border border-gray-200 p-3 hover:bg-gray-50 transition-colors">
-                        <RadioGroupItem value={option.id} id={option.id} />
-                        <FormLabel htmlFor={option.id} className="flex-grow cursor-pointer font-normal">
-                          {option.text}
+                      <div key={option.value} className="flex items-center space-x-2 rounded-md border border-gray-200 p-3 hover:bg-gray-50 transition-colors">
+                        <RadioGroupItem value={option.value} id={option.value} />
+                        <FormLabel htmlFor={option.value} className="flex-grow cursor-pointer font-normal">
+                          {option.label}
                         </FormLabel>
                       </div>
                     ))}

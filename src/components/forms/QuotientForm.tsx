@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
-import { questionsByPillar } from '@/data/aiQuotientQuestions';
+import { questions } from '@/data/aiQuotientQuestions';
 import UserInfoForm from './aiQuotient/UserInfoForm';
 import QuestionsForm from './aiQuotient/QuestionsForm';
 import SubmitResultsForm from './aiQuotient/SubmitResultsForm';
-import { useAIQuotientAssessment } from '@/hooks/useAIQuotientAssessment';
+import { useAIQuotientAssessment, AssessmentStep } from '@/hooks/useAIQuotientAssessment';
 import { useHubSpot } from '@/integrations/hubspot/HubSpotProvider';
 import { useToast } from '@/hooks/use-toast';
+import { UserInfo, PillarScore } from '@/types/aiQuotient';
 
 const QuotientForm = () => {
   const { toast } = useToast();
@@ -35,14 +36,14 @@ const QuotientForm = () => {
     handleSubmitResults 
   } = actions;
   
-  const { portalId, formId, submitToHubSpot } = useHubSpot();
+  const { portalId, formId } = useHubSpot();
   
   // Log information every time the component renders
   useEffect(() => {
     console.log('QuotientForm rendering state:', { 
       currentStep, 
-      userInfoComplete: !!userInfo.firstname,
-      answersCount: Object.keys(answers).length,
+      userInfoComplete: !!userInfo.firstName,
+      answersCount: answers.length,
       showResults,
       totalSteps
     });
@@ -54,9 +55,8 @@ const QuotientForm = () => {
     console.log('QuotientForm initialized with HubSpot config:');
     console.log('Portal ID:', portalId);
     console.log('Form ID:', formId);
-    console.log('submitToHubSpot function available:', !!submitToHubSpot);
     console.log('==========================================');
-  }, [portalId, formId, submitToHubSpot]);
+  }, [portalId, formId]);
   
   // Recovery function if we encounter an issue
   const handleError = () => {
@@ -71,19 +71,29 @@ const QuotientForm = () => {
   };
   
   // Show user information collection form
-  if (currentStep === -1) {
+  if (currentStep === "user-info") {
     return <UserInfoForm initialData={userInfo} onSubmit={handleUserInfoSubmit} />;
   }
   
   // Show results and submit to HubSpot
   if (showResults) {
+    const pillarScoresMap = pillarScores.reduce((acc, score) => {
+      acc[score.pillar] = score.score;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const maxPillarScoresMap = maxPillarScores.reduce((acc, score) => {
+      acc[score.name] = score.maxScore;
+      return acc;
+    }, {} as Record<string, number>);
+
     return (
       <SubmitResultsForm 
         score={score} 
         totalPossible={totalSteps * 4} 
         userInfo={userInfo}
-        pillarScores={pillarScores}
-        maxPillarScores={maxPillarScores}
+        pillarScores={pillarScoresMap}
+        maxPillarScores={maxPillarScoresMap}
         onSubmit={handleSubmitResults}
         isSubmitting={isSubmitting}
         isSubmitted={isSubmitted}
@@ -95,7 +105,7 @@ const QuotientForm = () => {
   const { currentPillar, pillarQuestionCount, pillarProgress } = getPillarProgress();
   
   // Valid check before showing question form
-  const isValidStep = currentStep >= 0 && totalSteps > 0;
+  const isValidStep = currentStep === "questions" && totalSteps > 0;
   
   if (!isValidStep) {
     console.error('Invalid step detected:', currentStep, 'Total steps:', totalSteps);
@@ -124,7 +134,7 @@ const QuotientForm = () => {
         </div>
       )}
       <QuestionsForm 
-        currentStep={currentStep} 
+        currentStep={answers.length} 
         answers={answers} 
         onNext={handleNext} 
         onPrevious={handlePrevious} 

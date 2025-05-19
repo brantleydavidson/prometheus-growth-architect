@@ -3,19 +3,13 @@ import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
-
-interface PillarScore {
-  name: string;
-  score: number;
-  maxScore: number;
-  description: string;
-}
+import { PillarScore } from '@/types/aiQuotient';
 
 interface ResultsPageProps {
   score: number;
   totalPossible: number;
-  pillarScores: PillarScore[];
-  maxPillarScores: number;
+  pillarScores: Record<string, number>;
+  maxPillarScores: Record<string, number>;
   onRequestReport: () => void;
 }
 
@@ -50,17 +44,16 @@ const ResultsPage = ({
         </div>
 
         <div className="space-y-6">
-          {pillarScores.map((pillar, index) => (
+          {Object.entries(pillarScores).map(([pillar, score], index) => (
             <div key={index} className="border-b last:border-0 pb-6 last:pb-0">
               <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold">{pillar.name}</h3>
-                <div className={`font-medium ${getScoreColor(pillar.score, pillar.maxScore)}`}>
-                  {pillar.score}/{pillar.maxScore}
+                <h3 className="font-semibold">{pillar}</h3>
+                <div className={`font-medium ${getScoreColor(score, maxPillarScores[pillar])}`}>
+                  {score}/{maxPillarScores[pillar]}
                 </div>
               </div>
-              <p className="text-sm text-gray-600">{pillar.description}</p>
               <Progress 
-                value={(pillar.score / pillar.maxScore) * 100} 
+                value={(score / maxPillarScores[pillar]) * 100} 
                 className="mt-2"
               />
             </div>

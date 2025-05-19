@@ -7,6 +7,7 @@ import { Download } from 'lucide-react';
 import { useHubSpot } from '@/integrations/hubspot/HubSpotProvider';
 import AdditionalInfoForm, { AdditionalInfoFormData } from './AdditionalInfoForm';
 import SubmissionConfirmation from './SubmissionConfirmation';
+import { UserInfo } from '@/types/aiQuotient';
 
 // TESTING MODE flag
 const TESTING_MODE = false;
@@ -14,12 +15,7 @@ const TESTING_MODE = false;
 interface SubmitResultsFormProps {
   score: number;
   totalPossible: number;
-  userInfo: {
-    firstname: string;
-    lastname: string;
-    email: string;
-    company: string;
-  };
+  userInfo: UserInfo;
   pillarScores?: Record<string, number>;
   maxPillarScores?: Record<string, number>;
   onSubmit: () => void;
