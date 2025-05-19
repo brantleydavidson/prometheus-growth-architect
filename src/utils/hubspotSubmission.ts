@@ -18,14 +18,13 @@ export const prepareHubspotData = (
     // AI Quotient properties
     score__ai_quotient_: Math.round(result.percentage),
     aireadinesscategory: result.readinessLevel?.trim() || '',
-    
-    // Pillar scores - ensure they are rounded numbers
-    pillaraireadycontentoperationspercentage: Math.round(result.pillarScores.find(p => p.pillar === "AI-Ready Content Operations")?.percentage || 0),
-    pillarautomationmaturitypercentage: Math.round(result.pillarScores.find(p => p.pillar === "Automation Maturity")?.percentage || 0),
-    pillardataspinehealthpercentage: Math.round(result.pillarScores.find(p => p.pillar === "Data Spine Health")?.percentage || 0),
-    pillarfunnelintelligenceattributionpercentage: Math.round(result.pillarScores.find(p => p.pillar === "Funnel Intelligence & Attribution")?.percentage || 0),
-    pillargovernancechangemanagementpercentage: Math.round(result.pillarScores.find(p => p.pillar === "Governance & Change Management")?.percentage || 0),
   };
+
+  // Add pillar scores from the result object
+  result.pillarScores.forEach(pillar => {
+    const fieldName = `pillar${pillar.pillar.toLowerCase().replace(/[^a-z0-9]/g, '')}percentage`;
+    hubspotData[fieldName] = Math.round(pillar.percentage);
+  });
 
   // Log the prepared data for debugging
   console.log("Prepared HubSpot data:", hubspotData);
