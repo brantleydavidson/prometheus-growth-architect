@@ -50,6 +50,12 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
     }
   }, [existingAnswer, currentQuestion]);
 
+  // Reset index and selection when questions change (e.g., new pillar)
+  React.useEffect(() => {
+    setCurrentQuestionIndex(0);
+    setSelectedOption(null);
+  }, [questions]);
+
   // Handle answer submission
   const handleNext = () => {
     if (!currentQuestion || !selectedOption) return;
