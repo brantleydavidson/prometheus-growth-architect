@@ -1,4 +1,3 @@
-
 import React from "react";
 import SubcategoryTemplate from "@/components/subcategory/SubcategoryTemplate";
 
@@ -28,10 +27,10 @@ const ManufacturingPage = () => {
       seoDescription="Transform your manufacturing business with strategic sales and marketing solutions designed to convert idle line-time into booked POs. Contact Prometheus Agency today."
       imagePath="/placeholder.svg"
       testimonial={{
-        quote: "Working with Prometheus has transformed our approach to sales. We've seen a 35% increase in our order book and much more consistent production scheduling.",
-        author: "Michael Freeman",
-        position: "Director of Sales",
-        company: "Precision Manufacturing Inc."
+        quote: "The Prometheus team has been an exceptional partner. From their transparency of ability, to communication of deliverables, and the ability to be a true strategic partner have been of the highest quality. After working with multiple vendors in the past, the Prometheus team has been a breath of fresh air.",
+        author: "Cory Truett",
+        position: "Program Manager",
+        company: "Copperweld"
       }}
     />
   );
