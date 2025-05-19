@@ -5,8 +5,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { useHubSpot } from '@/integrations/hubspot/HubSpotProvider';
-import AdditionalInfoForm, { AdditionalInfoFormData } from './AdditionalInfoForm';
-import SubmissionConfirmation from './SubmissionConfirmation';
+import AdditionalInfoForm, { AdditionalInfoFormData } from '@/components/forms/aiQuotient/AdditionalInfoForm';
+import SubmissionConfirmation from '@/components/forms/aiQuotient/SubmissionConfirmation';
 import { UserInfo } from '@/types/aiQuotient';
 
 // TESTING MODE flag
@@ -111,6 +111,7 @@ const SubmitResultsForm = ({
         totalPossible={totalPossible} 
         pillarScores={pillarScores}
         maxPillarScores={maxPillarScores}
+        onRequestReport={handleRequestReport}
       />
       
       <Card className="p-6 bg-white shadow-lg border border-gray-200">
@@ -129,7 +130,7 @@ const SubmitResultsForm = ({
         )}
         
         {effectivelySubmitted && (
-          <SubmissionConfirmation email={userInfo.email} />
+          <SubmissionConfirmation userInfo={userInfo} />
         )}
         
         {!isSubmitting && !effectivelySubmitted && !showAdditionalForm && (

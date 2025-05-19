@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
-import { questions } from '@/data/aiQuotientQuestions';
 import UserInfoForm from './aiQuotient/UserInfoForm';
 import QuestionsForm from './aiQuotient/QuestionsForm';
 import SubmitResultsForm from './aiQuotient/SubmitResultsForm';
-import { useAIQuotientAssessment, AssessmentStep } from '@/hooks/useAIQuotientAssessment';
+import { useAiQuotientEngine } from '@/features/aiQuotient/useAiQuotientEngine';
 import { useHubSpot } from '@/integrations/hubspot/HubSpotProvider';
 import { useToast } from '@/hooks/use-toast';
-import { UserInfo, PillarScore } from '@/types/aiQuotient';
 
 const QuotientForm = () => {
   const { toast } = useToast();
@@ -14,7 +12,7 @@ const QuotientForm = () => {
     state, 
     actions, 
     getPillarProgress 
-  } = useAIQuotientAssessment();
+  } = useAiQuotientEngine();
   
   const { 
     currentStep, 
