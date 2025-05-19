@@ -47,6 +47,7 @@ export interface AssessmentResult {
   percentage: number;
   readinessLevel: ReadinessLevel;
   pillarScores: PillarScore[];
+  userInfo?: UserInfo;
 }
 
 export type ReadinessLevel = 
