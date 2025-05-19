@@ -165,14 +165,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     }
     
     try {
-      // Log the data being submitted
-      console.log("Submitting to HubSpot with:", {
-        userInfo,
-        result,
-        currentUserInfo: userInfo
-      });
-
-      // Ensure all required fields are present
+      // Use the provided userInfo directly - don't rely on state
       const formattedUserInfo: UserInfo = {
         firstName: userInfo.firstName?.trim() || '',
         lastName: userInfo.lastName?.trim() || '',
@@ -181,6 +174,12 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
         companySize: userInfo.companySize?.trim() || '',
         jobTitle: userInfo.jobTitle?.trim() || '',
       };
+
+      // Log the exact data being sent
+      console.log("Submitting to HubSpot with exact data:", {
+        userInfo: formattedUserInfo,
+        result
+      });
 
       const hubspotData = prepareHubspotData(formattedUserInfo, result, answers);
       console.log("Prepared HubSpot data:", hubspotData);
@@ -211,8 +210,8 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
         throw new Error(`Failed to submit to HubSpot: ${responseData.message || 'Unknown error'}`);
       }
 
-      // Consider both empty inlineMessage and undefined as success cases
-      // since the HubSpot API might return an empty string for inlineMessage
+      // Only update state after successful submission
+      setUserInfo(formattedUserInfo);
       return true;
     } catch (error) {
       console.error("Error submitting to HubSpot:", error);

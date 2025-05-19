@@ -68,15 +68,15 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
         existingUserInfo: userInfo
       });
       
-      onUpdateUserInfo(updatedUserInfo);
-      
       const updatedResult = {
         ...result,
         userInfo: updatedUserInfo
       };
       
       const success = await onSubmit(updatedResult);
+      
       if (success) {
+        onUpdateUserInfo(updatedUserInfo);
         setIsSubmitted(true);
       } else {
         setError("There was an error submitting your assessment. Please try again.");
