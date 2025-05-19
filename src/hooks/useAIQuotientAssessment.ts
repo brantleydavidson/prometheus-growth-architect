@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useMemo } from "react";
 import { 
   UserInfo, 
@@ -94,30 +93,32 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     setAnswers(prev => {
       // Replace answer if already exists for this question
       const filtered = prev.filter(a => a.questionId !== answer.questionId);
-      return [...filtered, answer];
-    });
-    
-    // Check if all questions for current pillar are answered
-    const answeredQuestionsInPillar = answers.filter(a => a.pillar === currentPillar).length + 1;
-    const totalQuestionsInPillar = isTestMode ? 1 : questions.filter(q => q.pillar === currentPillar).length;
-    
-    if (answeredQuestionsInPillar >= totalQuestionsInPillar) {
-      // Mark this pillar as completed
-      if (currentPillar && !completedPillars.includes(currentPillar)) {
-        setCompletedPillars(prev => [...prev, currentPillar]);
-      }
+      const newAnswers = [...filtered, answer];
       
-      // Move to next pillar or to results if all pillars completed
-      if (currentPillar) {
-        const currentPillarIndex = allPillars.indexOf(currentPillar);
-        if (currentPillarIndex < allPillars.length - 1) {
-          setCurrentPillar(allPillars[currentPillarIndex + 1]);
-        } else {
-          setCurrentStep("results");
+      // Check if all questions for current pillar are answered
+      const answeredQuestionsInPillar = newAnswers.filter(a => a.pillar === currentPillar).length;
+      const totalQuestionsInPillar = isTestMode ? 1 : questions.filter(q => q.pillar === currentPillar).length;
+      
+      if (answeredQuestionsInPillar >= totalQuestionsInPillar) {
+        // Mark this pillar as completed
+        if (currentPillar && !completedPillars.includes(currentPillar)) {
+          setCompletedPillars(prev => [...prev, currentPillar]);
+        }
+        
+        // Move to next pillar or to results if all pillars completed
+        if (currentPillar) {
+          const currentPillarIndex = allPillars.indexOf(currentPillar);
+          if (currentPillarIndex < allPillars.length - 1) {
+            setCurrentPillar(allPillars[currentPillarIndex + 1]);
+          } else {
+            setCurrentStep("results");
+          }
         }
       }
-    }
-  }, [answers, currentPillar, completedPillars, isTestMode, allPillars]);
+      
+      return newAnswers;
+    });
+  }, [currentPillar, completedPillars, isTestMode, allPillars]);
 
   // Navigation functions
   const moveToNextStep = useCallback(() => {
