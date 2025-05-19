@@ -17,14 +17,14 @@ export const prepareHubspotData = (
     
     // AI Quotient properties
     score__ai_quotient_: Math.round(result.percentage),
-    ai_readiness_category: result.readinessLevel?.trim() || '',
+    aireadinesscategory: result.readinessLevel?.trim() || '',
     
     // Pillar scores - ensure they are rounded numbers
     pillar_ai_ready_content_operations_percentage: Math.round(result.pillarScores.find(p => p.pillar === "AI-Ready Content Operations")?.percentage || 0),
-    pillar_automation_maturity_percentage: Math.round(result.pillarScores.find(p => p.pillar === "Automation Maturity")?.percentage || 0),
-    pillar_data_spine_health_percentage: Math.round(result.pillarScores.find(p => p.pillar === "Data Spine Health")?.percentage || 0),
-    pillar_funnel_intelligence_attribution_percentage: Math.round(result.pillarScores.find(p => p.pillar === "Funnel Intelligence & Attribution")?.percentage || 0),
-    pillar_governance_change_management_percentage: Math.round(result.pillarScores.find(p => p.pillar === "Governance & Change Management")?.percentage || 0),
+    pillarautomationmaturitypercentage: Math.round(result.pillarScores.find(p => p.pillar === "Automation Maturity")?.percentage || 0),
+    pillardataspinehealthpercentage: Math.round(result.pillarScores.find(p => p.pillar === "Data Spine Health")?.percentage || 0),
+    pillarfunnelintelligenceattributionpercentage: Math.round(result.pillarScores.find(p => p.pillar === "Funnel Intelligence & Attribution")?.percentage || 0),
+    pillargovernancechangemanagementpercentage: Math.round(result.pillarScores.find(p => p.pillar === "Governance & Change Management")?.percentage || 0),
   };
 
   // Log the prepared data for debugging
