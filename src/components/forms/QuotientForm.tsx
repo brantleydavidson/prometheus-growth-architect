@@ -64,22 +64,26 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
       return false;
     }
     
+    // Get the latest user info from the form
+    const latestUserInfo = {
+      ...userInfo,
+      firstName: userInfo.firstName || '',
+      lastName: userInfo.lastName || '',
+      email: userInfo.email || '',
+      jobTitle: userInfo.jobTitle || '',
+      company: userInfo.company || '',
+      companySize: userInfo.companySize || ''
+    };
+    
     // Log the current user info and result for debugging
-    console.log("Submitting to HubSpot with user info:", {
-      firstName: userInfo.firstName,
-      lastName: userInfo.lastName,
-      email: userInfo.email,
-      jobTitle: userInfo.jobTitle,
-      company: userInfo.company,
-      companySize: userInfo.companySize
-    });
+    console.log("Submitting to HubSpot with user info:", latestUserInfo);
     console.log("Assessment result:", {
       percentage: result.percentage,
       readinessLevel: result.readinessLevel,
       pillarScores: result.pillarScores
     });
     
-    const success = await submitToHubSpot(userInfo, result);
+    const success = await submitToHubSpot(latestUserInfo, result);
     if (success) {
       moveToNextStep();
     }
