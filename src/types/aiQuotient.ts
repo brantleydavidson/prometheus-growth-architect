@@ -1,9 +1,11 @@
-
 export interface UserInfo {
   firstName: string;
   lastName: string;
   email: string;
   company: string;
+  jobTitle?: string;
+  phoneNumber?: string;
+  comments?: string;
 }
 
 export interface QuestionOption {

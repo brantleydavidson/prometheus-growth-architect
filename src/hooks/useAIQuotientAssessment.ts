@@ -3,8 +3,9 @@ import { useState, useCallback, useMemo } from "react";
 import { 
   UserInfo, 
   Answer, 
-  AssessmentResult, 
-  PillarType 
+  AssessmentResult,
+  PillarType,
+  PillarScore
 } from "@/types/aiQuotient";
 import { questions, getAllPillars } from "@/data/aiQuotientQuestions";
 import { calculateAssessmentResults } from "@/utils/scoreCalculation";
@@ -54,13 +55,6 @@ const initialUserInfo: UserInfo = {
   email: "",
   company: "",
 };
-
-export interface PillarScore {
-  name: string;
-  score: number;
-  maxScore: number;
-  description: string;
-}
 
 export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientAssessment => {
   // State
@@ -174,7 +168,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       setIsSubmitting(true);
       const hubspotData = prepareHubspotData({
         userInfo,
-        score: result.score,
+        score: result.totalScore,
         totalPossible: getTotalPossibleScore(),
         pillarScores: result.pillarScores,
         additionalInfo: {
@@ -229,11 +223,11 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   }, [safeCurrentPillar, currentPillarQuestions, answers, allPillars]);
 
   // Prepare state and actions for the component
-  const state = {
+  const state: AssessmentState = {
     currentStep,
     userInfo,
     answers,
-    score: result?.score || 0,
+    score: result?.totalScore || 0,
     pillarScores: result?.pillarScores || [],
     showResults,
     isSubmitting,
@@ -245,7 +239,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     }))
   };
 
-  const actions = {
+  const actions: AssessmentActions = {
     handleUserInfoSubmit: updateUserInfo,
     handleNext: moveToNextStep,
     handlePrevious: moveToPreviousStep,

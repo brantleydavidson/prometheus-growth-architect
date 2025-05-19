@@ -1,5 +1,4 @@
-import { UserInfo } from '@/hooks/useAIQuotientAssessment';
-import { PillarScore } from '@/data/aiQuotientQuestions';
+import { UserInfo, PillarScore } from '@/types/aiQuotient';
 
 interface HubSpotSubmissionData {
   userInfo: UserInfo;
@@ -7,9 +6,9 @@ interface HubSpotSubmissionData {
   totalPossible: number;
   pillarScores: PillarScore[];
   additionalInfo?: {
-    jobTitle: string;
-    phoneNumber: string;
-    comments: string;
+    jobTitle?: string;
+    phoneNumber?: string;
+    comments?: string;
   };
 }
 
@@ -36,14 +35,14 @@ export const prepareHubspotData = (data: HubSpotSubmissionData) => {
 
   // Prepare pillar scores as a formatted string
   const pillarScoresString = pillarScores
-    .map(pillar => `${pillar.name}: ${pillar.score}/${pillar.maxScore}`)
+    .map(pillar => `${pillar.pillar}: ${pillar.score}/${pillar.maxScore}`)
     .join('\n');
 
   // Prepare the submission data
   const submissionData = {
     properties: {
-      firstname: userInfo.firstname,
-      lastname: userInfo.lastname,
+      firstname: userInfo.firstName,
+      lastname: userInfo.lastName,
       email: userInfo.email,
       company: userInfo.company,
       ai_quotient_score: percentageScore.toString(),
