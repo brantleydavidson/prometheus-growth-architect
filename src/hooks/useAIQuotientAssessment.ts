@@ -1,3 +1,4 @@
+import * as React from "react";
 import { useState, useCallback, useMemo } from "react";
 import { 
   UserInfo, 
@@ -17,24 +18,34 @@ export type AssessmentStep =
   | "results" 
   | "submit";
 
-export interface UseAIQuotientAssessment {
+export interface AssessmentState {
   currentStep: AssessmentStep;
   userInfo: UserInfo;
   answers: Answer[];
-  currentPillar: PillarType;
-  currentPillarQuestions: any[];
-  allPillars: PillarType[];
-  completedPillars: PillarType[];
-  result: AssessmentResult | null;
-  isTestMode: boolean;
-  progress: number;
-  updateUserInfo: (data: Partial<UserInfo>) => void;
-  submitAnswer: (answer: Answer) => void;
-  moveToNextStep: () => void;
-  moveToPreviousStep: () => void;
-  setCurrentPillar: (pillar: PillarType) => void;
-  submitToHubSpot: () => Promise<boolean>;
-  toggleTestMode: () => void;
+  score: number;
+  pillarScores: PillarScore[];
+  showResults: boolean;
+  isSubmitting: boolean;
+  isSubmitted: boolean;
+  totalSteps: number;
+  maxPillarScores: { name: string; maxScore: number; }[];
+}
+
+export interface AssessmentActions {
+  handleUserInfoSubmit: (data: Partial<UserInfo>) => void;
+  handleNext: () => void;
+  handlePrevious: () => void;
+  handleSubmitResults: () => Promise<boolean>;
+}
+
+export interface UseAIQuotientAssessment {
+  state: AssessmentState;
+  actions: AssessmentActions;
+  getPillarProgress: () => {
+    currentPillar: string;
+    pillarQuestionCount: number;
+    pillarProgress: number;
+  };
 }
 
 const initialUserInfo: UserInfo = {
@@ -51,25 +62,6 @@ export interface PillarScore {
   description: string;
 }
 
-export interface AssessmentState {
-  currentStep: number;
-  currentPillar: string;
-  answers: Record<string, string>;
-  userInfo: UserInfo | null;
-  showResults: boolean;
-  isSubmitting: boolean;
-  isSubmitted: boolean;
-}
-
-export interface AssessmentActions {
-  setUserInfo: (info: UserInfo) => void;
-  submitAnswer: (questionId: string, answer: string) => void;
-  goToNextQuestion: () => void;
-  goToPreviousQuestion: () => void;
-  submitAssessment: () => Promise<void>;
-  resetAssessment: () => void;
-}
-
 export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientAssessment => {
   // State
   const [currentStep, setCurrentStep] = useState<AssessmentStep>("user-info");
@@ -78,9 +70,15 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   const [currentPillar, setCurrentPillar] = useState<PillarType | null>(null);
   const [completedPillars, setCompletedPillars] = useState<PillarType[]>([]);
   const [isTestMode, setIsTestMode] = useState<boolean>(initialTestMode);
+  const [showResults, setShowResults] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   // Derived values
-  const allPillars = useMemo(() => getAllPillars() as PillarType[], []);
+  const allPillars = useMemo(() => {
+    const pillars = getAllPillars();
+    return pillars.map(p => p.name as PillarType);
+  }, []);
   
   // Set initial pillar if not set
   if (!currentPillar && allPillars.length > 0) {
@@ -139,7 +137,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
         if (currentPillarIndex < allPillars.length - 1) {
           setCurrentPillar(allPillars[currentPillarIndex + 1]);
         } else {
-          setCurrentStep("results");
+          setShowResults(true);
         }
       }
     }
@@ -173,19 +171,33 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     if (!result) return false;
     
     try {
-      const hubspotData = prepareHubspotData(userInfo, result, answers);
+      setIsSubmitting(true);
+      const hubspotData = prepareHubspotData({
+        userInfo,
+        score: result.score,
+        totalPossible: getTotalPossibleScore(),
+        pillarScores: result.pillarScores,
+        additionalInfo: {
+          jobTitle: userInfo.jobTitle,
+          phoneNumber: userInfo.phoneNumber,
+          comments: userInfo.comments
+        }
+      });
       console.log("Submitting to HubSpot:", hubspotData);
       
       // Replace with your actual HubSpot submission logic
       // This is a placeholder for the HubSpot API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      setIsSubmitted(true);
       return true;
     } catch (error) {
       console.error("Error submitting to HubSpot:", error);
       return false;
+    } finally {
+      setIsSubmitting(false);
     }
-  }, [userInfo, result, answers]);
+  }, [userInfo, result]);
 
   // Toggle test mode
   const toggleTestMode = useCallback(() => {
@@ -203,23 +215,46 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   // use the first pillar from allPillars or a default PillarType
   const safeCurrentPillar = currentPillar || (allPillars.length > 0 ? allPillars[0] : "Data Spine Health");
 
-  return {
+  // Calculate pillar progress
+  const getPillarProgress = useCallback(() => {
+    const pillarIndex = allPillars.indexOf(safeCurrentPillar);
+    const pillarQuestionCount = currentPillarQuestions.length;
+    const pillarProgress = answers.filter(a => a.pillar === safeCurrentPillar).length + 1;
+    
+    return {
+      currentPillar: safeCurrentPillar,
+      pillarQuestionCount,
+      pillarProgress
+    };
+  }, [safeCurrentPillar, currentPillarQuestions, answers, allPillars]);
+
+  // Prepare state and actions for the component
+  const state = {
     currentStep,
     userInfo,
     answers,
-    currentPillar: safeCurrentPillar,
-    currentPillarQuestions,
-    allPillars,
-    completedPillars,
-    result,
-    isTestMode,
-    progress,
-    updateUserInfo,
-    submitAnswer,
-    moveToNextStep,
-    moveToPreviousStep,
-    setCurrentPillar,
-    submitToHubSpot,
-    toggleTestMode
+    score: result?.score || 0,
+    pillarScores: result?.pillarScores || [],
+    showResults,
+    isSubmitting,
+    isSubmitted,
+    totalSteps: questions.length,
+    maxPillarScores: allPillars.map(pillar => ({
+      name: pillar,
+      maxScore: getMaxPillarScore(pillar)
+    }))
+  };
+
+  const actions = {
+    handleUserInfoSubmit: updateUserInfo,
+    handleNext: moveToNextStep,
+    handlePrevious: moveToPreviousStep,
+    handleSubmitResults: submitToHubSpot
+  };
+
+  return {
+    state,
+    actions,
+    getPillarProgress
   };
 };
