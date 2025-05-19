@@ -64,6 +64,11 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
       
       onUpdateUserInfo(updatedUserInfo);
       
+      const updatedResult = {
+        ...result,
+        userInfo: updatedUserInfo
+      };
+      
       const success = await onSubmit();
       if (success) {
         setIsSubmitted(true);

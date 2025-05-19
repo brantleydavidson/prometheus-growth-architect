@@ -63,6 +63,10 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
       console.error("No assessment result available");
       return false;
     }
+    
+    // Log the current user info for debugging
+    console.log("Current user info:", userInfo);
+    
     const success = await submitToHubSpot(userInfo, result);
     if (success) {
       moveToNextStep();
