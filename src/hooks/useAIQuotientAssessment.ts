@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useMemo } from "react";
 import { 
   UserInfo, 
@@ -9,6 +8,7 @@ import {
 import { questions, getAllPillars } from "@/data/aiQuotientQuestions";
 import { calculateAssessmentResults } from "@/utils/scoreCalculation";
 import { prepareHubspotData } from "@/utils/hubspotSubmission";
+import { pillars, getQuestionsByPillar, getMaxPillarScore, getTotalPossibleScore } from '@/data/aiQuotientQuestions';
 
 // Define the steps in the assessment flow
 export type AssessmentStep = 
@@ -43,6 +43,32 @@ const initialUserInfo: UserInfo = {
   email: "",
   company: "",
 };
+
+export interface PillarScore {
+  name: string;
+  score: number;
+  maxScore: number;
+  description: string;
+}
+
+export interface AssessmentState {
+  currentStep: number;
+  currentPillar: string;
+  answers: Record<string, string>;
+  userInfo: UserInfo | null;
+  showResults: boolean;
+  isSubmitting: boolean;
+  isSubmitted: boolean;
+}
+
+export interface AssessmentActions {
+  setUserInfo: (info: UserInfo) => void;
+  submitAnswer: (questionId: string, answer: string) => void;
+  goToNextQuestion: () => void;
+  goToPreviousQuestion: () => void;
+  submitAssessment: () => Promise<void>;
+  resetAssessment: () => void;
+}
 
 export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientAssessment => {
   // State

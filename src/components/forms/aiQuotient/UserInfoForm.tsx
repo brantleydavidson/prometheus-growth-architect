@@ -1,103 +1,102 @@
+import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { ArrowRight, User } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { Card } from '@/components/ui/card';
 
-import React from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import * as z from "zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { UserInfo } from "@/types/aiQuotient";
-
-const formSchema = z.object({
-  firstName: z.string().min(1, "First name is required"),
-  lastName: z.string().min(1, "Last name is required"),
-  email: z.string().email("Invalid email address"),
-  company: z.string().min(1, "Company name is required"),
-});
+export interface UserInfo {
+  firstname: string;
+  lastname: string;
+  email: string;
+  company: string;
+}
 
 interface UserInfoFormProps {
-  userInfo: UserInfo;
+  initialData: UserInfo;
   onSubmit: (data: UserInfo) => void;
 }
 
-const UserInfoForm: React.FC<UserInfoFormProps> = ({ userInfo, onSubmit }) => {
-  const form = useForm<UserInfo>({
-    resolver: zodResolver(formSchema),
-    defaultValues: userInfo,
+const UserInfoForm = ({ initialData, onSubmit }: UserInfoFormProps) => {
+  const userInfoForm = useForm<UserInfo>({
+    defaultValues: initialData
   });
 
   return (
-    <div className="w-full max-w-xl mx-auto bg-white rounded-lg shadow-md p-6">
-      <h2 className="text-2xl font-bold mb-6 text-center">Your Information</h2>
+    <Card className="p-6 shadow-md">
+      <div className="flex items-start gap-3 mb-6">
+        <User className="h-6 w-6 text-prometheus-orange mt-1" />
+        <h2 className="text-xl font-semibold">Let's start with your information</h2>
+      </div>
       
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <Form {...userInfoForm}>
+        <form onSubmit={userInfoForm.handleSubmit(onSubmit)} className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
-              control={form.control}
-              name="firstName"
+              control={userInfoForm.control}
+              name="firstname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>First Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="John" {...field} />
+                    <Input placeholder="Your first name" required {...field} />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
             
             <FormField
-              control={form.control}
-              name="lastName"
+              control={userInfoForm.control}
+              name="lastname"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Last Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Doe" {...field} />
+                    <Input placeholder="Your last name" required {...field} />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />
           </div>
           
           <FormField
-            control={form.control}
+            control={userInfoForm.control}
             name="email"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email Address</FormLabel>
                 <FormControl>
-                  <Input placeholder="john.doe@example.com" type="email" {...field} />
+                  <Input type="email" placeholder="your.email@example.com" required {...field} />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
           
           <FormField
-            control={form.control}
+            control={userInfoForm.control}
             name="company"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company</FormLabel>
+                <FormLabel>Company Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Acme Inc." {...field} />
+                  <Input placeholder="Your company name" required {...field} />
                 </FormControl>
-                <FormMessage />
               </FormItem>
             )}
           />
           
-          <div className="pt-4">
-            <Button type="submit" className="w-full">
-              Start Assessment
+          <div className="flex justify-end pt-4">
+            <Button 
+              type="submit" 
+              className="bg-prometheus-orange hover:bg-prometheus-orange/90 text-white flex gap-2"
+            >
+              Start Assessment <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </form>
       </Form>
-    </div>
+    </Card>
   );
 };
 

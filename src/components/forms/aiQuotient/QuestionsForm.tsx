@@ -1,184 +1,172 @@
+import React, { useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
+import { Card } from '@/components/ui/card';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Form, FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
+import { ArrowRight, ArrowLeft, Flag, Brain } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { questions } from '@/data/aiQuotientQuestions';
+import { useToast } from '@/hooks/use-toast';
 
-import React, { useState } from "react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Switch } from "@/components/ui/switch";
-import { Answer, Question, PillarType } from "@/types/aiQuotient";
-import { ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";
-
-interface QuestionsFormProps {
-  questions: Question[];
-  currentPillar: PillarType;
-  allPillars: PillarType[];
-  completedPillars: PillarType[];
-  answers: Answer[];
-  progress: number;
-  isTestMode: boolean;
-  onToggleTestMode: () => void;
-  onSubmitAnswer: (answer: Answer) => void;
-  onBack: () => void;
+interface QuestionOption {
+  id: string;
+  text: string;
+  value: number;
 }
 
-const QuestionsForm: React.FC<QuestionsFormProps> = ({
-  questions,
-  currentPillar,
-  allPillars,
-  completedPillars,
-  answers,
-  progress,
-  isTestMode,
-  onToggleTestMode,
-  onSubmitAnswer,
-  onBack
-}) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [selectedOption, setSelectedOption] = useState<string | null>(null);
+interface QuestionFormProps {
+  currentStep: number;
+  answers: { [key: number]: string };
+  onNext: (data: { answer: string }) => void;
+  onPrevious: () => void;
+}
 
-  // Get current question
-  const currentQuestion = questions[currentQuestionIndex];
+// TESTING MODE: Set to false to show all questions for normal operation
+const TESTING_MODE = false;
+// Define how many questions to show in testing mode
+const TESTING_QUESTION_COUNT = 1;
+
+const QuestionsForm = ({ currentStep, answers, onNext, onPrevious }: QuestionFormProps) => {
+  const { toast } = useToast();
+  // Use all questions in normal mode, but only the specified count in testing mode
+  const activeQuestions = TESTING_MODE ? questions.slice(0, TESTING_QUESTION_COUNT) : questions;
+  const totalSteps = activeQuestions.length;
   
-  // Check if this question already has an answer
-  const existingAnswer = answers.find(a => a.questionId === currentQuestion?.id);
-
-  // Set selected option from existing answer if present
-  React.useEffect(() => {
-    if (existingAnswer) {
-      setSelectedOption(existingAnswer.optionId);
+  // Log current state for debugging
+  console.log('QuestionsForm rendering with:', { 
+    currentStep, 
+    totalSteps, 
+    activeQuestionsLength: activeQuestions.length,
+    hasAnswers: Object.keys(answers).length > 0 
+  });
+  
+  // Ensure currentStep is within valid bounds to prevent "no questions available" issue
+  const safeCurrentStep = Math.min(Math.max(0, currentStep), activeQuestions.length - 1);
+  
+  // Log the computed safe step
+  console.log('Using safeCurrentStep:', safeCurrentStep);
+  
+  // Ensure we have a valid question
+  const currentQuestion = activeQuestions[safeCurrentStep];
+  
+  const quizForm = useForm({
+    defaultValues: {
+      answer: answers[currentStep] || ''
+    }
+  });
+  
+  // Update form when currentStep changes
+  useEffect(() => {
+    console.log('Effect running for step change to:', currentStep);
+    console.log('Current answers:', answers);
+    
+    if (answers[currentStep]) {
+      quizForm.setValue('answer', answers[currentStep]);
     } else {
-      setSelectedOption(null);
+      quizForm.setValue('answer', '');
     }
-  }, [existingAnswer, currentQuestion]);
+  }, [currentStep, quizForm, answers]);
 
-  // Handle answer submission
-  const handleNext = () => {
-    if (!currentQuestion || !selectedOption) return;
-    
-    const selectedOptionData = currentQuestion.options.find(opt => opt.id === selectedOption);
-    if (!selectedOptionData) return;
-    
-    const answer: Answer = {
-      questionId: currentQuestion.id,
-      optionId: selectedOption,
-      value: selectedOptionData.value,
-      pillar: currentQuestion.pillar
-    };
-    
-    onSubmitAnswer(answer);
-    
-    // Move to next question if available
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null);
-    }
-  };
-
-  // Handle going back to previous question
-  const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
-    } else {
-      onBack();
-    }
-  };
-
+  // Display an error message and recovery UI if no question is available
   if (!currentQuestion) {
-    return <div>No questions available.</div>;
+    console.error('No question available for step:', currentStep);
+    
+    // Show toast notification to alert user
+    useEffect(() => {
+      toast({
+        variant: "destructive",
+        title: "Error loading question",
+        description: "We encountered an issue with the assessment. Please try going back or refresh the page."
+      });
+    }, []);
+    
+    return (
+      <Card className="p-6 shadow-md">
+        <div className="text-center py-8">
+          <p className="text-xl text-gray-600">There was an issue loading your questions.</p>
+          <p className="text-gray-500 mt-2">Current step: {currentStep}, Total questions: {totalSteps}</p>
+          <Button 
+            type="button" 
+            onClick={onPrevious}
+            className="mt-4"
+            variant="outline"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" /> Go Back
+          </Button>
+        </div>
+      </Card>
+    );
   }
-
+  
   return (
-    <div className="w-full max-w-2xl mx-auto">
-      {/* Progress header */}
-      <div className="mb-8">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-sm text-gray-500">Progress</span>
-          <span className="text-sm font-medium">{progress}%</span>
+    <div className="space-y-8">
+      <div className="flex items-center justify-between mb-2">
+        <div className="text-sm text-gray-500">
+          Question {safeCurrentStep + 1} of {totalSteps} 
+          {TESTING_MODE && <span className="ml-2 text-prometheus-orange font-medium">(TESTING MODE)</span>}
         </div>
-        <Progress value={progress} className="h-2" />
+        <div className="text-sm font-medium">{Math.round(((safeCurrentStep + 1) / totalSteps) * 100)}% Complete</div>
       </div>
       
-      {/* Pillar navigation */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {allPillars.map((pillar) => (
-          <div 
-            key={pillar}
-            className={`
-              px-3 py-1 rounded-full text-xs font-medium
-              ${currentPillar === pillar ? 'bg-primary text-primary-foreground' : ''}
-              ${completedPillars.includes(pillar) ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'}
-            `}
-          >
-            {pillar}
-          </div>
-        ))}
-      </div>
+      <Progress value={((safeCurrentStep + 1) / totalSteps) * 100} className="h-2" />
       
-      {/* Test mode toggle */}
-      <div className="flex items-center justify-end mb-4 space-x-2">
-        <Label htmlFor="test-mode" className="text-sm">Test Mode</Label>
-        <Switch
-          id="test-mode"
-          checked={isTestMode}
-          onCheckedChange={onToggleTestMode}
-        />
-      </div>
-      
-      {/* Question card */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="mb-6">
-          <div className="flex items-center mb-2">
-            <h3 className="text-lg font-medium mr-2">{currentPillar}</h3>
-            <HelpCircle className="h-4 w-4 text-gray-400" />
-          </div>
-          <h4 className="text-xl font-bold">
-            {currentQuestion.question}
-          </h4>
+      <Card className="p-6 shadow-md">
+        <div className="flex items-start gap-3 mb-6">
+          <Brain className="h-6 w-6 text-prometheus-orange mt-1" />
+          <h2 className="text-xl font-semibold">{currentQuestion.question}</h2>
         </div>
         
-        {/* Answer options */}
-        <RadioGroup 
-          value={selectedOption || ""} 
-          onValueChange={setSelectedOption}
-          className="space-y-4"
-        >
-          {currentQuestion.options.map((option) => (
-            <div 
-              key={option.id}
-              className="flex items-start space-x-3 bg-gray-50 p-4 rounded-md hover:bg-gray-100 transition-colors"
-            >
-              <RadioGroupItem value={option.id} id={option.id} />
-              <Label 
-                htmlFor={option.id} 
-                className="text-base cursor-pointer font-normal leading-relaxed"
+        <Form {...quizForm}>
+          <form onSubmit={quizForm.handleSubmit(onNext)} className="space-y-6">
+            <FormField
+              control={quizForm.control}
+              name="answer"
+              render={({ field }) => (
+                <FormItem className="space-y-4">
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    className="space-y-3"
+                  >
+                    {currentQuestion.options.map((option) => (
+                      <div key={option.id} className="flex items-center space-x-2 rounded-md border border-gray-200 p-3 hover:bg-gray-50 transition-colors">
+                        <RadioGroupItem value={option.id} id={option.id} />
+                        <FormLabel htmlFor={option.id} className="flex-grow cursor-pointer font-normal">
+                          {option.text}
+                        </FormLabel>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </FormItem>
+              )}
+            />
+            
+            <div className="flex justify-between pt-4">
+              <Button 
+                type="button" 
+                variant="outline" 
+                onClick={onPrevious}
+                className="flex gap-2"
               >
-                {option.text}
-              </Label>
+                <ArrowLeft className="h-4 w-4" /> Previous
+              </Button>
+              
+              <Button 
+                type="submit" 
+                className="bg-prometheus-orange hover:bg-prometheus-orange/90 text-white flex gap-2"
+                disabled={!quizForm.watch('answer')}
+              >
+                {safeCurrentStep === totalSteps - 1 ? (
+                  <>Finish <Flag className="h-4 w-4" /></>
+                ) : (
+                  <>Next <ArrowRight className="h-4 w-4" /></>
+                )}
+              </Button>
             </div>
-          ))}
-        </RadioGroup>
-        
-        {/* Navigation buttons */}
-        <div className="mt-8 flex justify-between">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={handlePrevious}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Previous
-          </Button>
-          
-          <Button 
-            type="button" 
-            onClick={handleNext} 
-            disabled={!selectedOption}
-          >
-            Next
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
-      </div>
+          </form>
+        </Form>
+      </Card>
     </div>
   );
 };

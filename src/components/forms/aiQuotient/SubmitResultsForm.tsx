@@ -1,118 +1,162 @@
+import React, { useState, useEffect } from 'react';
+import { Card } from '@/components/ui/card';
+import ResultsPage from '@/components/forms/ResultsPage';
+import { useToast } from '@/hooks/use-toast';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
+import { useHubSpot } from '@/integrations/hubspot/HubSpotProvider';
+import AdditionalInfoForm, { AdditionalInfoFormData } from './AdditionalInfoForm';
+import SubmissionConfirmation from './SubmissionConfirmation';
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { UserInfo, AssessmentResult } from "@/types/aiQuotient";
-import { Check, Loader2 } from "lucide-react";
+// TESTING MODE flag
+const TESTING_MODE = false;
 
 interface SubmitResultsFormProps {
-  userInfo: UserInfo;
-  result: AssessmentResult;
-  onSubmit: () => Promise<boolean>;
+  score: number;
+  totalPossible: number;
+  userInfo: {
+    firstname: string;
+    lastname: string;
+    email: string;
+    company: string;
+  };
+  pillarScores?: Record<string, number>;
+  maxPillarScores?: Record<string, number>;
+  onSubmit: () => void;
+  isSubmitting?: boolean;
+  isSubmitted?: boolean;
 }
 
-const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
-  userInfo,
-  result,
-  onSubmit
-}) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const SubmitResultsForm = ({ 
+  score, 
+  totalPossible, 
+  userInfo, 
+  pillarScores = {},
+  maxPillarScores = {},
+  onSubmit,
+  isSubmitting = false,
+  isSubmitted = false
+}: SubmitResultsFormProps) => {
+  const { toast } = useToast();
+  const { portalId, formId } = useHubSpot();
+  const [showAdditionalForm, setShowAdditionalForm] = useState(false);
+  const [localSubmitted, setLocalSubmitted] = useState(false);
+  
+  // Log configuration when component mounts
+  useEffect(() => {
+    console.log('==========================================');
+    console.log('SubmitResultsForm initialized with:');
+    console.log('User Info:', userInfo);
+    console.log('Score:', score, 'of', totalPossible);
+    console.log('Pillar Scores:', pillarScores);
+    console.log('Max Pillar Scores:', maxPillarScores);
+    console.log('Using HubSpot Portal ID:', portalId);
+    console.log('Using HubSpot Form ID:', formId);
+    console.log('Testing Mode:', TESTING_MODE ? 'ENABLED' : 'DISABLED');
+    console.log('==========================================');
+  }, [userInfo, score, totalPossible, pillarScores, maxPillarScores, portalId, formId]);
 
-  const handleSubmit = async () => {
-    setIsSubmitting(true);
-    setError(null);
-    
-    try {
-      const success = await onSubmit();
-      if (success) {
-        setIsSubmitted(true);
-      } else {
-        setError("There was an error submitting your assessment. Please try again.");
-      }
-    } catch (err) {
-      setError("An unexpected error occurred. Please try again later.");
-      console.error(err);
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleRequestReport = () => {
+    console.log('Report requested - opening additional form');
+    setShowAdditionalForm(true);
   };
-
+  
+  const handleSubmitAdditionalInfo = (data: AdditionalInfoFormData) => {
+    // Prevent multiple submissions
+    if (localSubmitted || isSubmitted) {
+      console.log('Form already submitted, preventing duplicate submission');
+      return;
+    }
+    
+    console.log('Additional info submitted:', data);
+    console.log('Job Title:', data.jobTitle);
+    console.log('Phone Number:', data.phoneNumber);
+    console.log('Comments:', data.comments);
+    
+    // Set local submission state before submitting
+    setLocalSubmitted(true);
+    
+    // Call parent's onSubmit method to handle HubSpot submission
+    onSubmit();
+    
+    toast({
+      title: "Request Received!",
+      description: "We'll send your detailed report to your email shortly.",
+    });
+  };
+  
+  // Combine the component's local submitted state with the prop
+  const effectivelySubmitted = localSubmitted || isSubmitted;
+  
   return (
-    <div className="w-full max-w-xl mx-auto bg-white rounded-lg shadow-md p-8">
-      <h2 className="text-2xl font-bold mb-6 text-center">
-        {isSubmitted ? "Thank You!" : "Get Your Detailed Report"}
-      </h2>
-      
-      {isSubmitted ? (
-        <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 text-green-600 mb-6">
-            <Check className="h-8 w-8" />
-          </div>
-          
-          <p className="text-lg mb-6">
-            Your AI Quotient Assessment has been submitted successfully. We'll prepare a detailed report and action plan for your organization.
-          </p>
-          
-          <div className="p-4 bg-gray-50 rounded-md mb-6">
-            <h3 className="font-medium mb-2">What to expect next:</h3>
-            <ul className="list-disc list-inside space-y-1 text-gray-700">
-              <li>You'll receive an email with your detailed report</li>
-              <li>A member of our team will reach out to schedule a strategy session</li>
-              <li>We'll provide tailored recommendations for your AI implementation</li>
-            </ul>
+    <div className="space-y-8">
+      {TESTING_MODE && (
+        <div className="bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-yellow-500" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" 
+                  d="M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" 
+                  clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-700">
+                <strong>TESTING MODE ENABLED</strong> - Only 1 question is being used to simulate the full assessment.
+                <span className="block mt-1">All pillar fields will still be sent to HubSpot for proper testing.</span>
+              </p>
+            </div>
           </div>
         </div>
-      ) : (
-        <>
-          <p className="mb-6 text-center">
-            Submit your assessment to receive a detailed analysis of your organization's AI readiness and personalized recommendations.
-          </p>
-          
-          <div className="bg-gray-50 p-4 rounded-md mb-8">
-            <h3 className="font-medium mb-3">Assessment Summary:</h3>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Overall Score:</span>
-                <span className="font-medium">{result.percentage}%</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Readiness Level:</span>
-                <span className="font-medium">{result.readinessLevel}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Name:</span>
-                <span className="font-medium">{userInfo.firstName} {userInfo.lastName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Company:</span>
-                <span className="font-medium">{userInfo.company}</span>
-              </div>
-            </div>
-          </div>
-          
-          {error && (
-            <div className="p-3 mb-6 bg-red-50 text-red-700 rounded-md text-sm">
-              {error}
-            </div>
-          )}
-          
-          <Button
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="w-full"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Submitting...
-              </>
-            ) : (
-              "Submit & Get Report"
-            )}
-          </Button>
-        </>
       )}
+      
+      <ResultsPage 
+        score={score} 
+        totalPossible={totalPossible} 
+        pillarScores={pillarScores}
+        maxPillarScores={maxPillarScores}
+      />
+      
+      <Card className="p-6 bg-white shadow-lg border border-gray-200">
+        <h3 className="text-xl font-semibold mb-4">Your Assessment Is Complete</h3>
+        <p className="mb-6 text-gray-600">
+          Thank you for completing the AI Quotient assessment. Your summary results are shown above.
+          {!effectivelySubmitted && !isSubmitting && !showAdditionalForm && (
+            <span className="block mt-2">To receive your <strong>detailed personalized report</strong> with actionable recommendations, please request it below.</span>
+          )}
+        </p>
+        
+        {isSubmitting && (
+          <div className="text-center p-4">
+            <p className="text-blue-600 font-medium">Processing your report request...</p>
+          </div>
+        )}
+        
+        {effectivelySubmitted && (
+          <SubmissionConfirmation email={userInfo.email} />
+        )}
+        
+        {!isSubmitting && !effectivelySubmitted && !showAdditionalForm && (
+          <div className="text-center p-4">
+            <Button 
+              onClick={handleRequestReport} 
+              className="px-6 py-2 bg-prometheus-orange text-white rounded hover:bg-prometheus-orange/90 transition-colors flex items-center gap-2"
+            >
+              Request Detailed Report <Download className="h-4 w-4" />
+            </Button>
+          </div>
+        )}
+        
+        {!isSubmitting && !effectivelySubmitted && showAdditionalForm && (
+          <AdditionalInfoForm
+            userInfo={userInfo}
+            onSubmit={handleSubmitAdditionalInfo}
+            onCancel={() => setShowAdditionalForm(false)}
+            isSubmitting={isSubmitting}
+            isSubmitted={isSubmitted}
+          />
+        )}
+      </Card>
     </div>
   );
 };

@@ -1,5 +1,17 @@
+import { UserInfo } from '@/hooks/useAIQuotientAssessment';
+import { PillarScore } from '@/data/aiQuotientQuestions';
 
-import { UserInfo, Answer, AssessmentResult } from "@/types/aiQuotient";
+interface HubSpotSubmissionData {
+  userInfo: UserInfo;
+  score: number;
+  totalPossible: number;
+  pillarScores: PillarScore[];
+  additionalInfo?: {
+    jobTitle: string;
+    phoneNumber: string;
+    comments: string;
+  };
+}
 
 // Format pillar name for HubSpot property mapping
 export const formatPillarNameForHubSpot = (pillar: string): string => {
@@ -10,33 +22,58 @@ export const formatPillarNameForHubSpot = (pillar: string): string => {
     .replace(/^_|_$/g, '');        // Remove leading/trailing underscores
 };
 
-// Prepare data for HubSpot submission
-export const prepareHubspotData = (
-  userInfo: UserInfo,
-  result: AssessmentResult,
-  answers: Answer[]
-): Record<string, any> => {
-  // Base properties from user info
-  const hubspotData: Record<string, any> = {
-    firstname: userInfo.firstName,
-    lastname: userInfo.lastName,
-    email: userInfo.email,
-    company: userInfo.company,
-    ai_quotient_score: result.percentage,
-    ai_readiness_level: result.readinessLevel,
+export const prepareHubspotData = (data: HubSpotSubmissionData) => {
+  const {
+    userInfo,
+    score,
+    totalPossible,
+    pillarScores,
+    additionalInfo
+  } = data;
+
+  // Calculate percentage score
+  const percentageScore = Math.round((score / totalPossible) * 100);
+
+  // Prepare pillar scores as a formatted string
+  const pillarScoresString = pillarScores
+    .map(pillar => `${pillar.name}: ${pillar.score}/${pillar.maxScore}`)
+    .join('\n');
+
+  // Prepare the submission data
+  const submissionData = {
+    properties: {
+      firstname: userInfo.firstname,
+      lastname: userInfo.lastname,
+      email: userInfo.email,
+      company: userInfo.company,
+      ai_quotient_score: percentageScore.toString(),
+      ai_quotient_pillar_scores: pillarScoresString,
+      ai_quotient_submission_date: new Date().toISOString(),
+      ...(additionalInfo && {
+        jobtitle: additionalInfo.jobTitle,
+        phone: additionalInfo.phoneNumber,
+        ai_quotient_comments: additionalInfo.comments
+      })
+    }
   };
-  
-  // Add pillar scores
-  result.pillarScores.forEach(pillarScore => {
-    const formattedName = formatPillarNameForHubSpot(pillarScore.pillar);
-    hubspotData[`ai_pillar_${formattedName}_score`] = pillarScore.percentage;
-  });
-  
-  // Add individual question answers if needed
-  answers.forEach(answer => {
-    const questionId = `q${answer.questionId}`;
-    hubspotData[`ai_quotient_${questionId}`] = answer.value;
-  });
-  
-  return hubspotData;
+
+  return submissionData;
+};
+
+export const submitToHubspot = async (data: HubSpotSubmissionData) => {
+  try {
+    const submissionData = prepareHubspotData(data);
+    
+    // Here you would make the actual API call to HubSpot
+    // For now, we'll just log the data
+    console.log('Submitting to HubSpot:', submissionData);
+    
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    return { success: true };
+  } catch (error) {
+    console.error('Error submitting to HubSpot:', error);
+    throw error;
+  }
 };
