@@ -33,7 +33,7 @@ export interface UseAIQuotientAssessment {
   moveToNextStep: () => void;
   moveToPreviousStep: () => void;
   setCurrentPillar: (pillar: PillarType) => void;
-  submitToHubSpot: () => Promise<boolean>;
+  submitToHubSpot: (userInfo: UserInfo, result: AssessmentResult) => Promise<boolean>;
   toggleTestMode: () => void;
 }
 
@@ -149,7 +149,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   }, []);
 
   // HubSpot submission
-  const submitToHubSpot = useCallback(async (): Promise<boolean> => {
+  const submitToHubSpot = useCallback(async (userInfo: UserInfo, result: AssessmentResult): Promise<boolean> => {
     if (!result) return false;
     
     try {
@@ -184,7 +184,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       console.error("Error submitting to HubSpot:", error);
       return false;
     }
-  }, [userInfo, result, answers]);
+  }, []);
 
   // Toggle test mode
   const toggleTestMode = useCallback(() => {
@@ -201,6 +201,27 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   // If it's null (which shouldn't happen due to our initialization),
   // use the first pillar from allPillars or a default PillarType
   const safeCurrentPillar = currentPillar || (allPillars.length > 0 ? allPillars[0] : "Data Spine Health");
+
+  const handleUserInfoSubmit = (data: UserInfo) => {
+    setUserInfo(data);
+    setCurrentStep("questions");
+  };
+
+  const handleSubmitResults = async () => {
+    if (!userInfo || !result) return false;
+
+    try {
+      const success = await submitToHubSpot(userInfo, result);
+      if (success) {
+        setCurrentStep("complete");
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error submitting results:", error);
+      return false;
+    }
+  };
 
   return {
     currentStep,
