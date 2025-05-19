@@ -77,14 +77,13 @@ const ThankYouPage: React.FC<ThankYouPageProps> = ({ userInfo, result }) => {
         
         <div className="flex flex-col sm:flex-row gap-4">
           <Button 
-            variant="outline"
             className="flex-1"
             onClick={() => window.location.href = "/api/download-report"}
           >
-            Download Detailed Report
+            Get Your Full Report
           </Button>
           <Button 
-            className="flex-1"
+            className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
             onClick={() => window.location.href = "/book-audit"}
           >
             Book AI Strategy Session
