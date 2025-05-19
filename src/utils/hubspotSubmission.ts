@@ -7,7 +7,7 @@ export const prepareHubspotData = (
 ): Record<string, any> => {
   // Ensure all required fields are present and properly formatted
   const hubspotData: Record<string, any> = {
-    // Contact properties
+    // Contact properties - ensure we're using the latest user info
     firstname: userInfo.firstName?.trim() || '',
     lastname: userInfo.lastName?.trim() || '',
     email: userInfo.email?.trim() || '',
