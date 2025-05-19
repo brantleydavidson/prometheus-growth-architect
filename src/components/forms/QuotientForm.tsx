@@ -10,8 +10,8 @@ const QuotientForm = () => {
   const { toast } = useToast();
   const engine = useAiQuotientEngine();
   
-  // Defensive guard – should never hit but prevents runtime crash if import mis-resolves
-  if (!engine) {
+  // Defensive guard – if hook or state hasn't initialized yet render fallback
+  if (!engine || !engine.state || engine.state.currentStep === undefined) {
     return <p className="text-center py-8">Loading assessment…</p>;
   }
 
