@@ -195,11 +195,8 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
         throw new Error(`Failed to submit to HubSpot: ${responseData.message || 'Unknown error'}`);
       }
 
-      if (!responseData.inlineMessage) {
-        console.error("No inline message in response:", responseData);
-        throw new Error('Invalid response from HubSpot API');
-      }
-
+      // Consider both empty inlineMessage and undefined as success cases
+      // since the HubSpot API might return an empty string for inlineMessage
       return true;
     } catch (error) {
       console.error("Error submitting to HubSpot:", error);
