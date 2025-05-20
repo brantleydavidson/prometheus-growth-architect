@@ -7,13 +7,13 @@ export const prepareHubspotData = (
 ): Record<string, any> => {
   // Ensure all required fields are present and properly formatted
   const hubspotData: Record<string, any> = {
-    // Contact properties - ensure we're using the latest user info
+    // Contact properties
     firstname: userInfo.firstName?.trim() || '',
     lastname: userInfo.lastName?.trim() || '',
     email: userInfo.email?.trim() || '',
+    jobtitle: userInfo.jobTitle?.trim() || '',
     company: userInfo.company?.trim() || '',
     company_size: userInfo.companySize?.trim() || '',
-    jobtitle: userInfo.jobTitle?.trim() || '',
     
     // AI Quotient properties
     score__ai_quotient_: Math.round(result.percentage),
