@@ -5,6 +5,9 @@ export const prepareHubspotData = (
   result: AssessmentResult,
   answers: Answer[]
 ): Record<string, any> => {
+  // Calculate total points from all answers
+  const totalPoints = answers.reduce((sum, answer) => sum + answer.value, 0);
+  
   // Ensure all required fields are present and properly formatted
   const hubspotData: Record<string, any> = {
     // Contact properties
@@ -16,7 +19,7 @@ export const prepareHubspotData = (
     company_size: userInfo.companySize?.trim() || '',
     
     // AI Quotient properties
-    score__ai_quotient_: Math.round(result.percentage),
+    score__ai_quotient_: totalPoints,
     aireadinesscategory: result.readinessLevel?.trim() || '',
     aitestscore: result.totalScore,
     aitestscorepercentage: Math.round(result.percentage),
