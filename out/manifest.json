@@ -1,0 +1,21 @@
+{
+  "name": "Prometheus Agency",
+  "short_name": "Prometheus",
+  "description": "AI enablement and GTM strategies for B2B and DTC businesses",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#FF6B35",
+  "icons": [
+    {
+      "src": "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/prometheus_favicon(transparent).png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/prometheus_favicon(transparent).png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+} 

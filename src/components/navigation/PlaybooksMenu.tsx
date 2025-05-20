@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -16,9 +15,9 @@ const PlaybooksMenu = () => {
           className="flex items-center gap-1 font-medium text-base hover:text-prometheus-orange transition-colors"
           aria-expanded="false"
           aria-haspopup="true"
-          aria-label="Playbooks navigation"
+          aria-label="Tools & Playbooks navigation"
         >
-          Playbooks <ChevronDown size={16} aria-hidden="true" />
+          Tools & Playbooks <ChevronDown size={16} aria-hidden="true" />
         </button>
       </HoverCardTrigger>
       <HoverCardContent className="w-72 p-0 shadow-lg bg-white rounded-md border border-gray-200 animate-fade-in">

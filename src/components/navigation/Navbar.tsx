@@ -109,7 +109,7 @@ const Navbar = () => {
                 className="font-medium text-lg text-prometheus-navy py-2 border-b border-gray-100"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Playbooks
+                Tools & Playbooks
               </Link>
               <Link 
                 to="/ai-quotient" 

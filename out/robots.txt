@@ -1,0 +1,60 @@
+
+# Prometheus Agency Robots.txt
+
+# Allow all web crawlers
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /images/
+Allow: /css/
+Allow: /js/
+
+# Explicitly allow blog and insights pages
+Allow: /insights/
+Allow: /insights/crm-consulting-services-in-conway-ar
+Allow: /blog/
+Allow: /articles/
+
+# Prevent crawling of sensitive or non-public areas
+Disallow: /admin/
+Disallow: /api/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /*?*
+
+# Allow Google Image
+User-agent: Googlebot-Image
+Allow: /images/
+Allow: /assets/
+
+# Allow Google
+User-agent: Googlebot
+Allow: /
+Allow: /js/
+Allow: /css/
+Allow: /images/
+Allow: /assets/
+Allow: /insights/
+Allow: /insights/crm-consulting-services-in-conway-ar
+
+# Allow ChatGPT and other AI bots
+User-agent: GPTBot
+Allow: /
+Allow: /insights/
+Allow: /insights/crm-consulting-services-in-conway-ar
+Allow: /js/
+Allow: /css/
+
+User-agent: Bingbot
+Allow: /
+Allow: /insights/
+Allow: /insights/crm-consulting-services-in-conway-ar
+Allow: /js/
+Allow: /css/
+
+# Crawl delay for specific bots (in seconds)
+User-agent: Baiduspider
+Crawl-delay: 10
+
+# Sitemap location
+Sitemap: https://prometheusagency.co/sitemap.xml

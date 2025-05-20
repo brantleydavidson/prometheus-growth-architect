@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -35,8 +34,8 @@ const PlaybooksPage = () => {
   return (
     <>
       <SEO 
-        title="Growth Playbooks & Assessments | Prometheus Agency"
-        description="Access our proven playbooks and assessment tools for accelerating business growth across sales, marketing, and operations."
+        title="Tools & Playbooks | Prometheus Agency"
+        description="Access our proven tools, playbooks and assessment resources for accelerating business growth across sales, marketing, and operations."
         canonical="/playbooks"
         ogType="website"
       />
@@ -49,10 +48,10 @@ const PlaybooksPage = () => {
           <div className="container-custom">
             <div className="text-center max-w-3xl mx-auto">
               <h1 id="hero-heading" className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6">
-                Growth Playbooks & Assessments
+                Tools & Playbooks
               </h1>
               <p className="text-lg text-prometheus-gray mb-8">
-                Access our proven playbooks and assessment tools to accelerate your business growth. 
+                Access our proven tools, playbooks and assessment resources to accelerate your business growth. 
                 Each resource provides actionable insights and frameworks developed from our experience 
                 working with hundreds of growing companies.
               </p>
