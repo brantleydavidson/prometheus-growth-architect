@@ -116,8 +116,8 @@ const App = () => {
           <Route path="/admin/blog-template" element={<AuthProtected><BlogContentTemplate /></AuthProtected>} />
           
           {/* Executive Cheat Sheet Routes */}
-          <Route path="/executive-cheatsheet" element={<ExecutiveCheatSheetPage />} />
-          <Route path="/executive-cheatsheet/thank-you" element={<ExecutiveCheatSheetThankYou />} />
+          <Route path="/hubspot-executive-cheatsheet" element={<ExecutiveCheatSheetPage />} />
+          <Route path="/hubspot-executive-cheatsheet/thank-you" element={<ExecutiveCheatSheetThankYou />} />
           
           {/* 404 Page */}
           <Route path="*" element={<NotFound />} />

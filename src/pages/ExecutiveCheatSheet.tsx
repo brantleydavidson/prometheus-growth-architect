@@ -35,9 +35,9 @@ const ExecutiveCheatSheetPage: React.FC = () => {
   return (
     <>
       <SEO
-        title="Executive AI Transformation Cheatsheet | Prometheus Agency"
-        description="Download our concise executive guide to fast-tracking AI value across your revenue operations."
-        canonical="/executive-cheatsheet"
+        title="HubSpot Executive Cheatsheet | Prometheus Agency"
+        description="Download our concise executive cheatsheet to fast-track RevOps success with HubSpot and AI."
+        canonical="/hubspot-executive-cheatsheet"
         ogType="website"
       />
 
@@ -47,10 +47,10 @@ const ExecutiveCheatSheetPage: React.FC = () => {
       <section className="bg-gradient-to-b from-amber-50 to-white py-16 md:py-24">
         <div className="container mx-auto px-4 flex flex-col items-center text-center max-w-3xl">
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
-            Get the Executive AI Transformation Cheatsheet
+            Get the HubSpot Executive Cheatsheet
           </h1>
           <p className="text-lg text-gray-700 mb-8">
-            A concise guide that helps senior leaders understand where to start, where to invest, and how to measure success with AI in RevOps.
+            A concise guide that helps senior leaders pinpoint where to start, where to invest, and how to measure success with HubSpot-powered AI in RevOps.
           </p>
           <Button
             size="lg"
@@ -90,7 +90,7 @@ const ExecutiveCheatSheetPage: React.FC = () => {
         <div className="container mx-auto px-4 max-w-3xl">
           <HubSpotForm
             formId="executive-cheatsheet-form-id" // TODO: replace with real form ID
-            onSubmitSuccess={() => navigate("/executive-cheatsheet/thank-you")}
+            onSubmitSuccess={() => navigate("/hubspot-executive-cheatsheet/thank-you")}
             title="Get Your Cheatsheet"
             description="Fill out the form below and we'll send the PDF straight to your inbox."
           />
