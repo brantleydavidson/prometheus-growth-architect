@@ -1,4 +1,3 @@
-
 import fs from 'node:fs'
 import path from 'node:path'
 import url from 'node:url'
@@ -107,9 +106,14 @@ const supabase = createClient(supabaseUrl, supabaseKey);
       
       // Inject SEO tags if available
       if (helmet) {
+        const helmetTitle = helmet.title.toString();
+        const helmetMeta = helmet.meta.toString();
+        const helmetLink = helmet.link.toString();
+
         pageHtml = pageHtml
-          .replace('<title>Prometheus Agency - AI Enablement and GTM Strategy</title>', helmet.title.toString())
-          .replace('<meta name="description" content="We help B2B and DTC businesses transform technology chaos into strategic growth engines with AI enablement and proven GTM strategies." />', helmet.meta.toString());
+          .replace('<title>Prometheus Agency - AI Enablement and GTM Strategy</title>', helmetTitle)
+          .replace('<meta name="description" content="We help B2B and DTC businesses transform technology chaos into strategic growth engines with AI enablement and proven GTM strategies." />', helmetMeta)
+          .replace('</head>', `${helmetLink}</head>`);
       }
 
       // Determine the output file path
