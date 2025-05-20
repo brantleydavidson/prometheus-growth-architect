@@ -1,4 +1,3 @@
-
 import React from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
@@ -53,6 +52,9 @@ import BlogContentTemplate from './pages/admin/BlogContentTemplate';
 
 // Auth protection
 import AuthProtected from './components/cms/AuthProtected';
+
+import ExecutiveCheatSheetPage from './pages/ExecutiveCheatSheet';
+import ExecutiveCheatSheetThankYou from './pages/ExecutiveCheatSheetThankYou';
 
 const App = () => {
   return (
@@ -112,6 +114,10 @@ const App = () => {
           <Route path="/admin/seo-manager" element={<AuthProtected><SEOManager /></AuthProtected>} />
           <Route path="/admin/migrate-content" element={<AuthProtected><MigrateStaticContentPage /></AuthProtected>} />
           <Route path="/admin/blog-template" element={<AuthProtected><BlogContentTemplate /></AuthProtected>} />
+          
+          {/* Executive Cheat Sheet Routes */}
+          <Route path="/executive-cheatsheet" element={<ExecutiveCheatSheetPage />} />
+          <Route path="/executive-cheatsheet/thank-you" element={<ExecutiveCheatSheetThankYou />} />
           
           {/* 404 Page */}
           <Route path="*" element={<NotFound />} />
