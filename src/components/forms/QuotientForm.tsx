@@ -5,10 +5,10 @@ import QuestionsForm from "./aiQuotient/QuestionsForm";
 import ResultsPage from "./aiQuotient/ResultsPage";
 import SubmitResultsForm from "./aiQuotient/SubmitResultsForm";
 import ThankYouPage from "./aiQuotient/ThankYouPage";
-import { UserInfo, PillarType } from "@/types/aiQuotient";
+import { UserInfo, PillarType, AssessmentResult } from "@/types/aiQuotient";
 import { AssessmentFormProps } from "@/types/aiQuotient";
 
-const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
+const QuotientForm: React.FC<AssessmentFormProps> = () => {
   const {
     currentStep,
     userInfo,
@@ -18,15 +18,14 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
     allPillars,
     completedPillars,
     result,
-    isTestMode,
     progress,
     updateUserInfo,
     submitAnswer,
     moveToNextStep,
     moveToPreviousStep,
     submitToHubSpot,
-    toggleTestMode
-  } = useAIQuotientAssessment(testMode);
+    globalQuestionIndex
+  } = useAIQuotientAssessment();
 
   const handleUserInfoSubmit = (data: UserInfo) => {
     // Track form start in HubSpot
@@ -58,8 +57,13 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
     moveToNextStep();
   };
 
-  const handleSubmitToHubSpot = async () => {
-    const success = await submitToHubSpot();
+  const handleSubmitToHubSpot = async (userInfo: UserInfo, result: AssessmentResult) => {
+    if (!result) {
+      console.error("No assessment result available");
+      return false;
+    }
+    
+    const success = await submitToHubSpot(userInfo, result);
     if (success) {
       moveToNextStep();
     }
@@ -86,10 +90,9 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
             completedPillars={completedPillars}
             answers={answers}
             progress={progress}
-            isTestMode={isTestMode}
-            onToggleTestMode={toggleTestMode}
             onSubmitAnswer={submitAnswer}
             onBack={moveToPreviousStep}
+            globalQuestionIndex={globalQuestionIndex}
           />
         );
       

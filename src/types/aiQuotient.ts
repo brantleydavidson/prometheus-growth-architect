@@ -47,6 +47,7 @@ export interface AssessmentResult {
   percentage: number;
   readinessLevel: ReadinessLevel;
   pillarScores: PillarScore[];
+  userInfo?: UserInfo;
 }
 
 export type ReadinessLevel = 
@@ -56,5 +57,5 @@ export type ReadinessLevel =
   | "AI Developing";
 
 export interface AssessmentFormProps {
-  testMode?: boolean;
+  // No props needed
 }

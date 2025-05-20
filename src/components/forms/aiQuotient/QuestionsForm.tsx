@@ -3,7 +3,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Switch } from "@/components/ui/switch";
 import { Answer, Question, PillarType } from "@/types/aiQuotient";
 import { ArrowLeft, ArrowRight, HelpCircle } from "lucide-react";
 
@@ -14,10 +13,9 @@ interface QuestionsFormProps {
   completedPillars: PillarType[];
   answers: Answer[];
   progress: number;
-  isTestMode: boolean;
-  onToggleTestMode: () => void;
   onSubmitAnswer: (answer: Answer) => void;
-  onBack: () => void;
+  onBack: (pillar?: PillarType, questionIndex?: number) => void;
+  globalQuestionIndex: number;
 }
 
 const QuestionsForm: React.FC<QuestionsFormProps> = ({
@@ -27,16 +25,14 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
   completedPillars,
   answers,
   progress,
-  isTestMode,
-  onToggleTestMode,
   onSubmitAnswer,
-  onBack
+  onBack,
+  globalQuestionIndex
 }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   // Get current question
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = questions[globalQuestionIndex % questions.length];
   
   // Check if this question already has an answer
   const existingAnswer = answers.find(a => a.questionId === currentQuestion?.id);
@@ -49,12 +45,6 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
       setSelectedOption(null);
     }
   }, [existingAnswer, currentQuestion]);
-
-  // Reset index and selection when questions change (e.g., new pillar)
-  React.useEffect(() => {
-    setCurrentQuestionIndex(0);
-    setSelectedOption(null);
-  }, [questions]);
 
   // Handle answer submission
   const handleNext = () => {
@@ -72,23 +62,16 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
     
     // Submit the answer first
     onSubmitAnswer(answer);
-    
-    // Check if we're on the last question of the pillar
-    const isLastQuestionInPillar = currentQuestionIndex === questions.length - 1;
-    
-    // If not the last question, move to next question
-    if (!isLastQuestionInPillar) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null);
-    }
-    // Note: If it is the last question, the submitAnswer callback will handle pillar transition
+    setSelectedOption(null);
   };
 
   // Handle going back to previous question
   const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    if (globalQuestionIndex > 0) {
+      // Go to previous question
+      onBack();
     } else {
+      // If we're at the first question, go back to user info
       onBack();
     }
   };
@@ -124,70 +107,67 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
         ))}
       </div>
       
-      {/* Test mode toggle */}
-      <div className="flex items-center justify-end mb-4 space-x-2">
-        <Label htmlFor="test-mode" className="text-sm">Test Mode</Label>
-        <Switch
-          id="test-mode"
-          checked={isTestMode}
-          onCheckedChange={onToggleTestMode}
-        />
-      </div>
-      
       {/* Question card */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="mb-6">
-          <div className="flex items-center mb-2">
-            <h3 className="text-lg font-medium mr-2">{currentPillar}</h3>
-            <HelpCircle className="h-4 w-4 text-gray-400" />
+      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <div className="flex items-center mb-2">
+              <h3 className="text-lg font-medium text-gray-900 mr-2">{currentPillar}</h3>
+              <HelpCircle className="h-4 w-4 text-gray-400" />
+            </div>
+            <h4 className="text-xl font-bold mb-2">
+              {currentQuestion.question}
+            </h4>
+            {currentQuestion.description && (
+              <p className="text-sm text-gray-500">{currentQuestion.description}</p>
+            )}
           </div>
-          <h4 className="text-xl font-bold">
-            {currentQuestion.question}
-          </h4>
         </div>
         
-        {/* Answer options */}
-        <RadioGroup 
-          value={selectedOption || ""} 
+        <RadioGroup
+          value={selectedOption || ""}
           onValueChange={setSelectedOption}
           className="space-y-4"
         >
           {currentQuestion.options.map((option) => (
             <div 
-              key={option.id}
+              key={option.id} 
               className="flex items-start space-x-3 bg-gray-50 p-4 rounded-md hover:bg-gray-100 transition-colors"
             >
-              <RadioGroupItem value={option.id} id={option.id} />
-              <Label 
-                htmlFor={option.id} 
-                className="text-base cursor-pointer font-normal leading-relaxed"
+              <RadioGroupItem
+                value={option.id}
+                id={option.id}
+                className="mt-1"
+              />
+              <Label
+                htmlFor={option.id}
+                className="flex-1 cursor-pointer text-base font-normal leading-relaxed"
               >
                 {option.text}
               </Label>
             </div>
           ))}
         </RadioGroup>
-        
-        {/* Navigation buttons */}
-        <div className="mt-8 flex justify-between">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={handlePrevious}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Previous
-          </Button>
-          
-          <Button 
-            type="button" 
-            onClick={handleNext} 
-            disabled={!selectedOption}
-          >
-            Next
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
+      </div>
+      
+      {/* Navigation buttons */}
+      <div className="flex justify-between">
+        <Button
+          variant="outline"
+          onClick={handlePrevious}
+          className="flex items-center"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Previous
+        </Button>
+        <Button
+          onClick={handleNext}
+          disabled={!selectedOption}
+          className="flex items-center"
+        >
+          Next
+          <ArrowRight className="h-4 w-4 ml-2" />
+        </Button>
       </div>
     </div>
   );

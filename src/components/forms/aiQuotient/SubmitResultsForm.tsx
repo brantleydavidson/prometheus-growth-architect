@@ -1,17 +1,28 @@
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Checkbox } from "@/components/ui/checkbox";
 import { UserInfo, AssessmentResult } from "@/types/aiQuotient";
 import { Check, Loader2 } from "lucide-react";
+
+const formSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  email: z.string().email("Invalid email"),
+  jobTitle: z.string().min(1, "Job title is required"),
+  acceptTerms: z.boolean().refine((val) => val === true, {
+    message: "You must accept the terms and conditions",
+  }),
+});
 
 interface SubmitResultsFormProps {
   userInfo: UserInfo;
   result: AssessmentResult;
-  onSubmit: () => Promise<boolean>;
+  onSubmit: (userInfo: UserInfo, result: AssessmentResult) => Promise<boolean>;
   onUpdateUserInfo: (data: Partial<UserInfo>) => void;
 }
 
@@ -25,34 +36,41 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const detailsSchema = z.object({
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    email: z.string().email("Invalid email"),
-    jobTitle: z.string().min(1, "Job title is required"),
-  });
-
-  type DetailsForm = z.infer<typeof detailsSchema>;
-
-  const form = useForm<DetailsForm>({
-    resolver: zodResolver(detailsSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       firstName: userInfo.firstName ?? "",
       lastName: userInfo.lastName ?? "",
       email: userInfo.email ?? "",
       jobTitle: userInfo.jobTitle ?? "",
+      acceptTerms: false,
     },
   });
 
-  const handleSubmit = async (details?: DetailsForm) => {
+  const handleSubmit = async (data: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
     setError(null);
     
     try {
-      if (details) {
-        onUpdateUserInfo(details);
-      }
-      const success = await onSubmit();
+      const { acceptTerms, ...userDetails } = data;
+      const updatedUserInfo = {
+        ...userInfo,
+        firstName: userDetails.firstName,
+        lastName: userDetails.lastName,
+        email: userDetails.email,
+        jobTitle: userDetails.jobTitle,
+      };
+      
+      console.log("Form submission data:", {
+        formData: userDetails,
+        updatedUserInfo,
+        existingUserInfo: userInfo
+      });
+      
+      onUpdateUserInfo(updatedUserInfo);
+      
+      const success = await onSubmit(updatedUserInfo, result);
+      
       if (success) {
         setIsSubmitted(true);
       } else {
@@ -109,14 +127,6 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
                 <span className="font-medium">{result.readinessLevel}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Name:</span>
-                <span className="font-medium">{userInfo.firstName} {userInfo.lastName}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Title:</span>
-                <span className="font-medium">{userInfo.jobTitle}</span>
-              </div>
-              <div className="flex justify-between">
                 <span className="text-gray-600">Company:</span>
                 <span className="font-medium">{userInfo.company}</span>
               </div>
@@ -130,45 +140,85 @@ const SubmitResultsForm: React.FC<SubmitResultsFormProps> = ({
           )}
           
           <Form {...form}>
-            <form onSubmit={form.handleSubmit((d)=>handleSubmit(d))} className="space-y-6">
+            <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField control={form.control} name="firstName" render={({field})=> (
-                  <FormItem>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="John" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}/>
-                <FormField control={form.control} name="lastName" render={({field})=> (
-                  <FormItem>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} placeholder="Doe" />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}/>
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="John" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Doe" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              <FormField control={form.control} name="email" render={({field})=> (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input type="email" placeholder="john@company.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}/>
-              <FormField control={form.control} name="jobTitle" render={({field})=> (
-                <FormItem>
-                  <FormLabel>Job Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="CMO" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}/>
+
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input type="email" placeholder="john@company.com" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="jobTitle"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Job Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="CMO" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="acceptTerms"
+                render={({ field }) => (
+                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                    <FormControl>
+                      <Checkbox
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>
+                        I accept the terms and conditions
+                      </FormLabel>
+                      <FormMessage />
+                    </div>
+                  </FormItem>
+                )}
+              />
 
               <Button type="submit" disabled={isSubmitting} className="w-full">
                 {isSubmitting ? (

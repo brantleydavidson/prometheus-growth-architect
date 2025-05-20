@@ -26,15 +26,14 @@ export interface UseAIQuotientAssessment {
   allPillars: PillarType[];
   completedPillars: PillarType[];
   result: AssessmentResult | null;
-  isTestMode: boolean;
   progress: number;
   updateUserInfo: (data: Partial<UserInfo>) => void;
   submitAnswer: (answer: Answer) => void;
   moveToNextStep: () => void;
-  moveToPreviousStep: () => void;
+  moveToPreviousStep: (pillar?: PillarType, questionIndex?: number) => void;
   setCurrentPillar: (pillar: PillarType) => void;
-  submitToHubSpot: () => Promise<boolean>;
-  toggleTestMode: () => void;
+  submitToHubSpot: (userInfo: UserInfo, result: AssessmentResult) => Promise<boolean>;
+  globalQuestionIndex: number;
 }
 
 const initialUserInfo: UserInfo = {
@@ -46,17 +45,18 @@ const initialUserInfo: UserInfo = {
   jobTitle: "",
 };
 
-export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientAssessment => {
+export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
   // State
   const [currentStep, setCurrentStep] = useState<AssessmentStep>("user-info");
   const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [currentPillar, setCurrentPillar] = useState<PillarType | null>(null);
   const [completedPillars, setCompletedPillars] = useState<PillarType[]>([]);
-  const [isTestMode, setIsTestMode] = useState<boolean>(initialTestMode);
+  const [globalQuestionIndex, setGlobalQuestionIndex] = useState(0);
 
   // Derived values
   const allPillars = useMemo(() => getAllPillars() as PillarType[], []);
+  const allQuestions = useMemo(() => questions, []);
   
   // Set initial pillar if not set
   if (!currentPillar && allPillars.length > 0) {
@@ -66,14 +66,8 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   // Filter questions for current pillar
   const currentPillarQuestions = useMemo(() => {
     if (!currentPillar) return [];
-    
-    // In test mode, only show one question per pillar
-    if (isTestMode) {
-      return questions.filter(q => q.pillar === currentPillar).slice(0, 1);
-    }
-    
     return questions.filter(q => q.pillar === currentPillar);
-  }, [currentPillar, isTestMode]);
+  }, [currentPillar]);
 
   // Calculate assessment result
   const result = useMemo(() => {
@@ -82,14 +76,22 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
 
   // Calculate progress percentage
   const progress = useMemo(() => {
-    const totalQuestions = isTestMode ? allPillars.length : questions.length;
-    return Math.round((answers.length / totalQuestions) * 100);
-  }, [answers.length, allPillars.length, isTestMode]);
+    return Math.round((answers.length / questions.length) * 100);
+  }, [answers.length]);
 
   // Update user information
   const updateUserInfo = useCallback((data: Partial<UserInfo>) => {
-    setUserInfo(prev => ({ ...prev, ...data }));
-  }, []);
+    // Immediately update the state with the new data
+    const updatedUserInfo = { ...userInfo, ...data };
+    setUserInfo(updatedUserInfo);
+    
+    // Log the update for debugging
+    console.log("User info updated:", {
+      previous: userInfo,
+      new: data,
+      updated: updatedUserInfo
+    });
+  }, [userInfo]);
 
   // Submit an answer
   const submitAnswer = useCallback((answer: Answer) => {
@@ -98,30 +100,23 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       const filtered = prev.filter(a => a.questionId !== answer.questionId);
       const newAnswers = [...filtered, answer];
       
-      // Check if all questions for current pillar are answered
-      const answeredQuestionsInPillar = newAnswers.filter(a => a.pillar === currentPillar).length;
-      const totalQuestionsInPillar = isTestMode ? 1 : questions.filter(q => q.pillar === currentPillar).length;
+      // Move to next question
+      setGlobalQuestionIndex(prev => prev + 1);
       
-      if (answeredQuestionsInPillar >= totalQuestionsInPillar) {
-        // Mark this pillar as completed
-        if (currentPillar && !completedPillars.includes(currentPillar)) {
-          setCompletedPillars(prev => [...prev, currentPillar]);
-        }
-        
-        // Move to next pillar or to results if all pillars completed
-        if (currentPillar) {
-          const currentPillarIndex = allPillars.indexOf(currentPillar);
-          if (currentPillarIndex < allPillars.length - 1) {
-            setCurrentPillar(allPillars[currentPillarIndex + 1]);
-          } else {
-            setCurrentStep("results");
-          }
+      // Check if we've completed all questions
+      if (globalQuestionIndex + 1 >= questions.length) {
+        setCurrentStep("results");
+      } else {
+        // Find the next question's pillar
+        const nextQuestion = questions[globalQuestionIndex + 1];
+        if (nextQuestion && nextQuestion.pillar !== currentPillar) {
+          setCurrentPillar(nextQuestion.pillar);
         }
       }
       
       return newAnswers;
     });
-  }, [currentPillar, completedPillars, isTestMode, allPillars]);
+  }, [currentPillar, globalQuestionIndex, questions.length]);
 
   // Navigation functions
   const moveToNextStep = useCallback(() => {
@@ -136,51 +131,101 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     });
   }, []);
 
-  const moveToPreviousStep = useCallback(() => {
-    setCurrentStep(prev => {
-      switch (prev) {
-        case "questions": return "user-info";
-        case "results": return "questions";
-        case "submit": return "results";
-        case "thank-you": return "submit";
-        default: return prev;
+  const moveToPreviousStep = useCallback((pillar?: PillarType, questionIndex?: number) => {
+    if (pillar && typeof questionIndex === 'number') {
+      // If we're navigating between questions in different pillars
+      setCurrentPillar(pillar);
+      setGlobalQuestionIndex(questionIndex);
+    } else if (globalQuestionIndex > 0) {
+      // If we're navigating between questions in the same pillar
+      setGlobalQuestionIndex(prev => prev - 1);
+      // Find the previous question's pillar
+      const prevQuestion = allQuestions[globalQuestionIndex - 1];
+      if (prevQuestion && prevQuestion.pillar !== currentPillar) {
+        setCurrentPillar(prevQuestion.pillar);
       }
-    });
-  }, []);
+    } else {
+      // If we're at the first question, go back to user info
+      setCurrentStep(prev => {
+        switch (prev) {
+          case "questions": return "user-info";
+          case "results": return "questions";
+          case "submit": return "results";
+          case "thank-you": return "submit";
+          default: return prev;
+        }
+      });
+    }
+  }, [globalQuestionIndex, currentPillar, allQuestions]);
 
   // HubSpot submission
-  const submitToHubSpot = useCallback(async (): Promise<boolean> => {
-    if (!result) return false;
+  const submitToHubSpot = useCallback(async (userInfo: UserInfo, result: AssessmentResult): Promise<boolean> => {
+    if (!result) {
+      console.error("No assessment result available");
+      return false;
+    }
     
     try {
-      const hubspotData = prepareHubspotData(userInfo, result, answers);
-      console.log("Submitting to HubSpot:", hubspotData);
+      // Use the provided userInfo directly - don't rely on state
+      const formattedUserInfo: UserInfo = {
+        firstName: userInfo.firstName?.trim() || '',
+        lastName: userInfo.lastName?.trim() || '',
+        email: userInfo.email?.trim() || '',
+        company: userInfo.company?.trim() || '',
+        companySize: userInfo.companySize?.trim() || '',
+        jobTitle: userInfo.jobTitle?.trim() || '',
+      };
+
+      // Log the exact data being sent
+      console.log("Submitting to HubSpot with exact data:", {
+        userInfo: formattedUserInfo,
+        result
+      });
+
+      const hubspotData = prepareHubspotData(formattedUserInfo, result, answers);
+      console.log("Prepared HubSpot data:", hubspotData);
       
-      // Replace with your actual HubSpot submission logic
-      // This is a placeholder for the HubSpot API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
+      // Submit to HubSpot forms API
+      const formData = {
+        fields: Object.entries(hubspotData).map(([name, value]) => ({
+          name,
+          value: value?.toString() || ''
+        })),
+        context: {
+          pageUri: window.location.href,
+          pageName: document.title
+        }
+      };
+
+      console.log("Final form data being sent:", formData);
+
+      // Submit to HubSpot forms API
+      const response = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/40043781/8309ec82-bc28-4185-bade-8e73f33d2b08`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const responseData = await response.json();
+      console.log("HubSpot API response:", responseData);
+
+      if (!response.ok) {
+        console.error("HubSpot API error:", responseData);
+        throw new Error(`Failed to submit to HubSpot: ${responseData.message || 'Unknown error'}`);
+      }
+
+      // Only update state after successful submission
+      setUserInfo(formattedUserInfo);
       return true;
     } catch (error) {
       console.error("Error submitting to HubSpot:", error);
       return false;
     }
-  }, [userInfo, result, answers]);
-
-  // Toggle test mode
-  const toggleTestMode = useCallback(() => {
-    setIsTestMode(prev => !prev);
-    // Reset answers when toggling test mode
-    setAnswers([]);
-    setCompletedPillars([]);
-    if (allPillars.length > 0) {
-      setCurrentPillar(allPillars[0]);
-    }
-  }, [allPillars]);
+  }, [answers]);
 
   // For TypeScript safety, ensure currentPillar is always a PillarType
-  // If it's null (which shouldn't happen due to our initialization),
-  // use the first pillar from allPillars or a default PillarType
   const safeCurrentPillar = currentPillar || (allPillars.length > 0 ? allPillars[0] : "Data Spine Health");
 
   return {
@@ -192,7 +237,6 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     allPillars,
     completedPillars,
     result,
-    isTestMode,
     progress,
     updateUserInfo,
     submitAnswer,
@@ -200,6 +244,6 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     moveToPreviousStep,
     setCurrentPillar,
     submitToHubSpot,
-    toggleTestMode
+    globalQuestionIndex
   };
 };

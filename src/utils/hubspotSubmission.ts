@@ -1,42 +1,41 @@
+﻿import { UserInfo, Answer, AssessmentResult } from "@/types/aiQuotient";
 
-import { UserInfo, Answer, AssessmentResult } from "@/types/aiQuotient";
-
-// Format pillar name for HubSpot property mapping
-export const formatPillarNameForHubSpot = (pillar: string): string => {
-  return pillar
-    .toLowerCase()
-    .replace(/\s+&\s+/g, '_and_')  // Replace & with _and_
-    .replace(/[^a-z0-9]+/g, '_')   // Replace spaces and special chars with underscore
-    .replace(/^_|_$/g, '');        // Remove leading/trailing underscores
-};
-
-// Prepare data for HubSpot submission
 export const prepareHubspotData = (
   userInfo: UserInfo,
   result: AssessmentResult,
   answers: Answer[]
 ): Record<string, any> => {
-  // Base properties from user info
+  // Calculate total points from all answers
+  const totalPoints = answers.reduce((sum, answer) => sum + answer.value, 0);
+  
+  // Ensure all required fields are present and properly formatted
   const hubspotData: Record<string, any> = {
-    firstname: userInfo.firstName,
-    lastname: userInfo.lastName,
-    email: userInfo.email,
-    company: userInfo.company,
-    ai_quotient_score: result.percentage,
-    ai_readiness_level: result.readinessLevel,
+    // Contact properties
+    firstname: userInfo.firstName?.trim() || '',
+    lastname: userInfo.lastName?.trim() || '',
+    email: userInfo.email?.trim() || '',
+    jobtitle: userInfo.jobTitle?.trim() || '',
+    company: userInfo.company?.trim() || '',
+    company_size: userInfo.companySize?.trim() || '',
+    
+    // AI Quotient properties
+    score__ai_quotient_: totalPoints,
+    aireadinesscategory: result.readinessLevel?.trim() || '',
+    aitestscore: result.totalScore,
+    aitestscorepercentage: Math.round(result.percentage),
+    requesteddetailedreport: true,
+    additional_comments: ''
   };
-  
-  // Add pillar scores
-  result.pillarScores.forEach(pillarScore => {
-    const formattedName = formatPillarNameForHubSpot(pillarScore.pillar);
-    hubspotData[`ai_pillar_${formattedName}_score`] = pillarScore.percentage;
+
+  // Add pillar scores from the result object
+  result.pillarScores.forEach(pillar => {
+    const baseName = `pillar${pillar.pillar.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+    hubspotData[`${baseName}`] = pillar.score;
+    hubspotData[`${baseName}percentage`] = Math.round(pillar.percentage);
   });
-  
-  // Add individual question answers if needed
-  answers.forEach(answer => {
-    const questionId = `q${answer.questionId}`;
-    hubspotData[`ai_quotient_${questionId}`] = answer.value;
-  });
-  
+
+  // Log the prepared data for debugging
+  console.log("Prepared HubSpot data:", hubspotData);
+
   return hubspotData;
 };

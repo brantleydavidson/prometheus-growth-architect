@@ -15,13 +15,16 @@ const formSchema = z.object({
 
 interface UserInfoFormProps {
   userInfo: UserInfo;
-  onSubmit: (data: UserInfo) => void;
+  onSubmit: (data: Partial<UserInfo>) => void;
 }
 
 const UserInfoForm: React.FC<UserInfoFormProps> = ({ userInfo, onSubmit }) => {
-  const form = useForm<UserInfo>({
+  const form = useForm<Partial<UserInfo>>({
     resolver: zodResolver(formSchema),
-    defaultValues: userInfo,
+    defaultValues: {
+      company: userInfo.company,
+      companySize: userInfo.companySize,
+    },
   });
 
   return (
