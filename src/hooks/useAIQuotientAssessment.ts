@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useMemo, useEffect } from "react";
 import { 
   UserInfo, 
   Answer, 
@@ -58,10 +58,14 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   // Derived values
   const allPillars = useMemo(() => getAllPillars() as PillarType[], []);
   
-  // Set initial pillar if not set
-  if (!currentPillar && allPillars.length > 0) {
-    setCurrentPillar(allPillars[0]);
-  }
+  // Set initial pillar when pillars list is ready
+  useEffect(() => {
+    if (!currentPillar && allPillars.length > 0) {
+      setCurrentPillar(allPillars[0]);
+    }
+    // We intentionally omit setCurrentPillar from deps to avoid unnecessary re-renders
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPillar, allPillars]);
 
   // Filter questions for current pillar
   const currentPillarQuestions = useMemo(() => {
