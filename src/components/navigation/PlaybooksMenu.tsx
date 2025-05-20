@@ -35,18 +35,6 @@ const PlaybooksMenu = () => {
           >
             AI Quotient Assessment
           </Link>
-          <Link
-            to="/playbooks/growth-acceleration"
-            className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors"
-          >
-            Growth Acceleration
-          </Link>
-          <Link
-            to="/playbooks/sales-enablement"
-            className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors"
-          >
-            Sales Enablement
-          </Link>
         </nav>
       </HoverCardContent>
     </HoverCard>
