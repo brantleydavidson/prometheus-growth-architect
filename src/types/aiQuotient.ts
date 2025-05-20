@@ -57,5 +57,5 @@ export type ReadinessLevel =
   | "AI Developing";
 
 export interface AssessmentFormProps {
-  testMode?: boolean;
+  // No props needed
 }

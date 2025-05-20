@@ -26,7 +26,6 @@ export interface UseAIQuotientAssessment {
   allPillars: PillarType[];
   completedPillars: PillarType[];
   result: AssessmentResult | null;
-  isTestMode: boolean;
   progress: number;
   updateUserInfo: (data: Partial<UserInfo>) => void;
   submitAnswer: (answer: Answer) => void;
@@ -34,7 +33,6 @@ export interface UseAIQuotientAssessment {
   moveToPreviousStep: () => void;
   setCurrentPillar: (pillar: PillarType) => void;
   submitToHubSpot: (userInfo: UserInfo, result: AssessmentResult) => Promise<boolean>;
-  toggleTestMode: () => void;
 }
 
 const initialUserInfo: UserInfo = {
@@ -46,14 +44,13 @@ const initialUserInfo: UserInfo = {
   jobTitle: "",
 };
 
-export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientAssessment => {
+export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
   // State
   const [currentStep, setCurrentStep] = useState<AssessmentStep>("user-info");
   const [userInfo, setUserInfo] = useState<UserInfo>(initialUserInfo);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [currentPillar, setCurrentPillar] = useState<PillarType | null>(null);
   const [completedPillars, setCompletedPillars] = useState<PillarType[]>([]);
-  const [isTestMode, setIsTestMode] = useState<boolean>(initialTestMode);
 
   // Derived values
   const allPillars = useMemo(() => getAllPillars() as PillarType[], []);
@@ -66,14 +63,8 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
   // Filter questions for current pillar
   const currentPillarQuestions = useMemo(() => {
     if (!currentPillar) return [];
-    
-    // In test mode, only show one question per pillar
-    if (isTestMode) {
-      return questions.filter(q => q.pillar === currentPillar).slice(0, 1);
-    }
-    
     return questions.filter(q => q.pillar === currentPillar);
-  }, [currentPillar, isTestMode]);
+  }, [currentPillar]);
 
   // Calculate assessment result
   const result = useMemo(() => {
@@ -82,9 +73,8 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
 
   // Calculate progress percentage
   const progress = useMemo(() => {
-    const totalQuestions = isTestMode ? allPillars.length : questions.length;
-    return Math.round((answers.length / totalQuestions) * 100);
-  }, [answers.length, allPillars.length, isTestMode]);
+    return Math.round((answers.length / questions.length) * 100);
+  }, [answers.length]);
 
   // Update user information
   const updateUserInfo = useCallback((data: Partial<UserInfo>) => {
@@ -109,7 +99,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       
       // Check if all questions for current pillar are answered
       const answeredQuestionsInPillar = newAnswers.filter(a => a.pillar === currentPillar).length;
-      const totalQuestionsInPillar = isTestMode ? 1 : questions.filter(q => q.pillar === currentPillar).length;
+      const totalQuestionsInPillar = questions.filter(q => q.pillar === currentPillar).length;
       
       if (answeredQuestionsInPillar >= totalQuestionsInPillar) {
         // Mark this pillar as completed
@@ -130,7 +120,7 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       
       return newAnswers;
     });
-  }, [currentPillar, completedPillars, isTestMode, allPillars]);
+  }, [currentPillar, completedPillars, allPillars]);
 
   // Navigation functions
   const moveToNextStep = useCallback(() => {
@@ -224,42 +214,10 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     }
   }, [answers]);
 
-  // Toggle test mode
-  const toggleTestMode = useCallback(() => {
-    setIsTestMode(prev => !prev);
-    // Reset answers when toggling test mode
-    setAnswers([]);
-    setCompletedPillars([]);
-    if (allPillars.length > 0) {
-      setCurrentPillar(allPillars[0]);
-    }
-  }, [allPillars]);
-
   // For TypeScript safety, ensure currentPillar is always a PillarType
   // If it's null (which shouldn't happen due to our initialization),
   // use the first pillar from allPillars or a default PillarType
   const safeCurrentPillar = currentPillar || (allPillars.length > 0 ? allPillars[0] : "Data Spine Health");
-
-  const handleUserInfoSubmit = (data: Partial<UserInfo>) => {
-    setUserInfo(prev => ({ ...prev, ...data }));
-    setCurrentStep("questions");
-  };
-
-  const handleSubmitResults = async () => {
-    if (!userInfo || !result) return false;
-
-    try {
-      const success = await submitToHubSpot(userInfo, result);
-      if (success) {
-        setCurrentStep("complete");
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error("Error submitting results:", error);
-      return false;
-    }
-  };
 
   return {
     currentStep,
@@ -270,14 +228,12 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
     allPillars,
     completedPillars,
     result,
-    isTestMode,
     progress,
     updateUserInfo,
     submitAnswer,
     moveToNextStep,
     moveToPreviousStep,
     setCurrentPillar,
-    submitToHubSpot,
-    toggleTestMode
+    submitToHubSpot
   };
 };

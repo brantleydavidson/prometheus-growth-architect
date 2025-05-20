@@ -8,7 +8,7 @@ import ThankYouPage from "./aiQuotient/ThankYouPage";
 import { UserInfo, PillarType } from "@/types/aiQuotient";
 import { AssessmentFormProps } from "@/types/aiQuotient";
 
-const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
+const QuotientForm: React.FC<AssessmentFormProps> = () => {
   const {
     currentStep,
     userInfo,
@@ -18,15 +18,13 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
     allPillars,
     completedPillars,
     result,
-    isTestMode,
     progress,
     updateUserInfo,
     submitAnswer,
     moveToNextStep,
     moveToPreviousStep,
-    submitToHubSpot,
-    toggleTestMode
-  } = useAIQuotientAssessment(testMode);
+    submitToHubSpot
+  } = useAIQuotientAssessment();
 
   const handleUserInfoSubmit = (data: UserInfo) => {
     // Track form start in HubSpot
@@ -58,27 +56,8 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
     moveToNextStep();
   };
 
-  const handleSubmitToHubSpot = async (result: AssessmentResult) => {
-    if (!result) {
-      console.error("No assessment result available");
-      return false;
-    }
-    
-    // Use the user info from the result object, which contains the latest form data
-    if (!result.userInfo) {
-      console.error("No user info in result object");
-      return false;
-    }
-    
-    // Log the current user info and result for debugging
-    console.log("Submitting to HubSpot with user info:", result.userInfo);
-    console.log("Assessment result:", {
-      percentage: result.percentage,
-      readinessLevel: result.readinessLevel,
-      pillarScores: result.pillarScores
-    });
-    
-    const success = await submitToHubSpot(result.userInfo, result);
+  const handleSubmitToHubSpot = async () => {
+    const success = await submitToHubSpot();
     if (success) {
       moveToNextStep();
     }
@@ -105,8 +84,6 @@ const QuotientForm: React.FC<AssessmentFormProps> = ({ testMode = false }) => {
             completedPillars={completedPillars}
             answers={answers}
             progress={progress}
-            isTestMode={isTestMode}
-            onToggleTestMode={toggleTestMode}
             onSubmitAnswer={submitAnswer}
             onBack={moveToPreviousStep}
           />
