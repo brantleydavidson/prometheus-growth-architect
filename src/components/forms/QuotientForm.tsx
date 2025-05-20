@@ -23,7 +23,8 @@ const QuotientForm: React.FC<AssessmentFormProps> = () => {
     submitAnswer,
     moveToNextStep,
     moveToPreviousStep,
-    submitToHubSpot
+    submitToHubSpot,
+    globalQuestionIndex
   } = useAIQuotientAssessment();
 
   const handleUserInfoSubmit = (data: UserInfo) => {
@@ -69,6 +70,25 @@ const QuotientForm: React.FC<AssessmentFormProps> = () => {
     return success;
   };
 
+  const moveToPreviousStep = (pillar?: PillarType, questionIndex?: number) => {
+    if (pillar && typeof questionIndex === 'number') {
+      // If we're navigating between questions in different pillars
+      setCurrentPillar(pillar);
+      setCurrentQuestionIndex(questionIndex);
+    } else {
+      // If we're navigating between steps
+      setCurrentStep(prev => {
+        switch (prev) {
+          case "questions": return "user-info";
+          case "results": return "questions";
+          case "submit": return "results";
+          case "thank-you": return "submit";
+          default: return prev;
+        }
+      });
+    }
+  };
+
   // Render the current step
   const renderStep = () => {
     switch (currentStep) {
@@ -91,6 +111,7 @@ const QuotientForm: React.FC<AssessmentFormProps> = () => {
             progress={progress}
             onSubmitAnswer={submitAnswer}
             onBack={moveToPreviousStep}
+            globalQuestionIndex={globalQuestionIndex}
           />
         );
       

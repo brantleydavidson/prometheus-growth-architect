@@ -33,6 +33,7 @@ export interface UseAIQuotientAssessment {
   moveToPreviousStep: (pillar?: PillarType, questionIndex?: number) => void;
   setCurrentPillar: (pillar: PillarType) => void;
   submitToHubSpot: (userInfo: UserInfo, result: AssessmentResult) => Promise<boolean>;
+  globalQuestionIndex: number;
 }
 
 const initialUserInfo: UserInfo = {
@@ -51,9 +52,11 @@ export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [currentPillar, setCurrentPillar] = useState<PillarType | null>(null);
   const [completedPillars, setCompletedPillars] = useState<PillarType[]>([]);
+  const [globalQuestionIndex, setGlobalQuestionIndex] = useState(0);
 
   // Derived values
   const allPillars = useMemo(() => getAllPillars() as PillarType[], []);
+  const allQuestions = useMemo(() => questions, []);
   
   // Set initial pillar if not set
   if (!currentPillar && allPillars.length > 0) {
@@ -112,10 +115,14 @@ export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
           const currentPillarIndex = allPillars.indexOf(currentPillar);
           if (currentPillarIndex < allPillars.length - 1) {
             setCurrentPillar(allPillars[currentPillarIndex + 1]);
+            setGlobalQuestionIndex(prev => prev + 1);
           } else {
             setCurrentStep("results");
           }
         }
+      } else {
+        // Move to next question
+        setGlobalQuestionIndex(prev => prev + 1);
       }
       
       return newAnswers;
@@ -139,9 +146,17 @@ export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
     if (pillar && typeof questionIndex === 'number') {
       // If we're navigating between questions in different pillars
       setCurrentPillar(pillar);
-      // Note: We don't need to set question index as it's handled by the QuestionsForm component
+      setGlobalQuestionIndex(questionIndex);
+    } else if (globalQuestionIndex > 0) {
+      // If we're navigating between questions in the same pillar
+      setGlobalQuestionIndex(prev => prev - 1);
+      // Find the previous question's pillar
+      const prevQuestion = allQuestions[globalQuestionIndex - 1];
+      if (prevQuestion && prevQuestion.pillar !== currentPillar) {
+        setCurrentPillar(prevQuestion.pillar);
+      }
     } else {
-      // If we're navigating between steps
+      // If we're at the first question, go back to user info
       setCurrentStep(prev => {
         switch (prev) {
           case "questions": return "user-info";
@@ -152,7 +167,7 @@ export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
         }
       });
     }
-  }, []);
+  }, [globalQuestionIndex, currentPillar, allQuestions]);
 
   // HubSpot submission
   const submitToHubSpot = useCallback(async (userInfo: UserInfo, result: AssessmentResult): Promise<boolean> => {
@@ -222,8 +237,6 @@ export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
   }, [answers]);
 
   // For TypeScript safety, ensure currentPillar is always a PillarType
-  // If it's null (which shouldn't happen due to our initialization),
-  // use the first pillar from allPillars or a default PillarType
   const safeCurrentPillar = currentPillar || (allPillars.length > 0 ? allPillars[0] : "Data Spine Health");
 
   return {
@@ -241,6 +254,7 @@ export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
     moveToNextStep,
     moveToPreviousStep,
     setCurrentPillar,
-    submitToHubSpot
+    submitToHubSpot,
+    globalQuestionIndex
   };
 };

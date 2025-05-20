@@ -15,6 +15,7 @@ interface QuestionsFormProps {
   progress: number;
   onSubmitAnswer: (answer: Answer) => void;
   onBack: (pillar?: PillarType, questionIndex?: number) => void;
+  globalQuestionIndex: number;
 }
 
 const QuestionsForm: React.FC<QuestionsFormProps> = ({
@@ -25,13 +26,13 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
   answers,
   progress,
   onSubmitAnswer,
-  onBack
+  onBack,
+  globalQuestionIndex
 }) => {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   // Get current question
-  const currentQuestion = questions[currentQuestionIndex];
+  const currentQuestion = questions[globalQuestionIndex % questions.length];
   
   // Check if this question already has an answer
   const existingAnswer = answers.find(a => a.questionId === currentQuestion?.id);
@@ -44,12 +45,6 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
       setSelectedOption(null);
     }
   }, [existingAnswer, currentQuestion]);
-
-  // Reset index and selection when questions change (e.g., new pillar)
-  React.useEffect(() => {
-    setCurrentQuestionIndex(0);
-    setSelectedOption(null);
-  }, [questions]);
 
   // Handle answer submission
   const handleNext = () => {
@@ -67,38 +62,17 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
     
     // Submit the answer first
     onSubmitAnswer(answer);
-    
-    // Check if we're on the last question of the pillar
-    const isLastQuestionInPillar = currentQuestionIndex === questions.length - 1;
-    
-    // If not the last question, move to next question
-    if (!isLastQuestionInPillar) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null);
-    }
-    // Note: If it is the last question, the submitAnswer callback will handle pillar transition
+    setSelectedOption(null);
   };
 
   // Handle going back to previous question
   const handlePrevious = () => {
-    if (currentQuestionIndex > 0) {
-      // If not the first question in current pillar, go to previous question
-      setCurrentQuestionIndex(currentQuestionIndex - 1);
+    if (globalQuestionIndex > 0) {
+      // Go to previous question
+      onBack();
     } else {
-      // If we're on the first question of current pillar
-      const currentPillarIndex = allPillars.indexOf(currentPillar);
-      if (currentPillarIndex > 0) {
-        // If not the first pillar, go to last question of previous pillar
-        const previousPillar = allPillars[currentPillarIndex - 1];
-        const previousPillarQuestions = questions.filter(q => q.pillar === previousPillar);
-        const lastQuestionIndex = previousPillarQuestions.length - 1;
-        
-        // Update the current pillar and question index
-        onBack(previousPillar, lastQuestionIndex);
-      } else {
-        // If we're on the first pillar, go back to user info
-        onBack();
-      }
+      // If we're at the first question, go back to user info
+      onBack();
     }
   };
 
