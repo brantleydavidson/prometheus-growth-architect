@@ -21,20 +21,20 @@ const PlaybooksMenu = () => {
         </button>
       </HoverCardTrigger>
       <HoverCardContent className="w-72 p-0 shadow-lg bg-white rounded-md border border-gray-200 animate-fade-in">
-        <nav className="p-4 flex flex-col space-y-2" aria-label="Playbooks submenu">
+        <nav className="p-4 flex flex-col space-y-2" aria-label="Tools & Playbooks submenu">
+          <Link
+            to="/playbooks"
+            className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors"
+          >
+            All Tools & Playbooks
+          </Link>
+          <hr className="my-2" />
           <Link
             to="/ai-quotient"
             className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors"
           >
             AI Quotient Assessment
           </Link>
-          <Link
-            to="/playbooks"
-            className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors"
-          >
-            All Playbooks
-          </Link>
-          <hr className="my-2" />
           <Link
             to="/playbooks/growth-acceleration"
             className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors"
