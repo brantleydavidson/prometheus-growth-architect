@@ -100,34 +100,23 @@ export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
       const filtered = prev.filter(a => a.questionId !== answer.questionId);
       const newAnswers = [...filtered, answer];
       
-      // Check if all questions for current pillar are answered
-      const answeredQuestionsInPillar = newAnswers.filter(a => a.pillar === currentPillar).length;
-      const totalQuestionsInPillar = questions.filter(q => q.pillar === currentPillar).length;
+      // Move to next question
+      setGlobalQuestionIndex(prev => prev + 1);
       
-      if (answeredQuestionsInPillar >= totalQuestionsInPillar) {
-        // Mark this pillar as completed
-        if (currentPillar && !completedPillars.includes(currentPillar)) {
-          setCompletedPillars(prev => [...prev, currentPillar]);
-        }
-        
-        // Move to next pillar or to results if all pillars completed
-        if (currentPillar) {
-          const currentPillarIndex = allPillars.indexOf(currentPillar);
-          if (currentPillarIndex < allPillars.length - 1) {
-            setCurrentPillar(allPillars[currentPillarIndex + 1]);
-            setGlobalQuestionIndex(prev => prev + 1);
-          } else {
-            setCurrentStep("results");
-          }
-        }
+      // Check if we've completed all questions
+      if (globalQuestionIndex + 1 >= questions.length) {
+        setCurrentStep("results");
       } else {
-        // Move to next question
-        setGlobalQuestionIndex(prev => prev + 1);
+        // Find the next question's pillar
+        const nextQuestion = questions[globalQuestionIndex + 1];
+        if (nextQuestion && nextQuestion.pillar !== currentPillar) {
+          setCurrentPillar(nextQuestion.pillar);
+        }
       }
       
       return newAnswers;
     });
-  }, [currentPillar, completedPillars, allPillars]);
+  }, [currentPillar, globalQuestionIndex, questions.length]);
 
   // Navigation functions
   const moveToNextStep = useCallback(() => {
