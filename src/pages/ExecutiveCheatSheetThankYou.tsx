@@ -13,8 +13,8 @@ const ExecutiveCheatSheetThankYou: React.FC = () => {
     <>
       <SEO
         title="Cheatsheet Sent | Prometheus Agency"
-        description="Your Executive AI Transformation Cheatsheet is on its way!"
-        canonical="/executive-cheatsheet/thank-you"
+        description="Your HubSpot Executive Cheatsheet is on its way!"
+        canonical="/hubspot-executive-cheatsheet/thank-you"
         ogType="website"
       />
 
