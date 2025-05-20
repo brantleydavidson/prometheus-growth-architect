@@ -57,7 +57,12 @@ const QuotientForm: React.FC<AssessmentFormProps> = () => {
   };
 
   const handleSubmitToHubSpot = async () => {
-    const success = await submitToHubSpot();
+    if (!result) {
+      console.error("No assessment result available");
+      return false;
+    }
+    
+    const success = await submitToHubSpot(userInfo, result);
     if (success) {
       moveToNextStep();
     }

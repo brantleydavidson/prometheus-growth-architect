@@ -123,16 +123,17 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
       <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {currentQuestion.text}
-            </h3>
+            <div className="flex items-center mb-2">
+              <h3 className="text-lg font-medium text-gray-900 mr-2">{currentPillar}</h3>
+              <HelpCircle className="h-4 w-4 text-gray-400" />
+            </div>
+            <h4 className="text-xl font-bold mb-2">
+              {currentQuestion.question}
+            </h4>
             {currentQuestion.description && (
               <p className="text-sm text-gray-500">{currentQuestion.description}</p>
             )}
           </div>
-          <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-500">
-            <HelpCircle className="h-5 w-5" />
-          </Button>
         </div>
         
         <RadioGroup
@@ -141,7 +142,10 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
           className="space-y-4"
         >
           {currentQuestion.options.map((option) => (
-            <div key={option.id} className="flex items-start space-x-3">
+            <div 
+              key={option.id} 
+              className="flex items-start space-x-3 bg-gray-50 p-4 rounded-md hover:bg-gray-100 transition-colors"
+            >
               <RadioGroupItem
                 value={option.id}
                 id={option.id}
@@ -149,7 +153,7 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
               />
               <Label
                 htmlFor={option.id}
-                className="flex-1 cursor-pointer text-sm text-gray-700"
+                className="flex-1 cursor-pointer text-base font-normal leading-relaxed"
               >
                 {option.text}
               </Label>
