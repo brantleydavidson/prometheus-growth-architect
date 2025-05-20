@@ -21,16 +21,12 @@ const AboutHero = () => {
             </Link>
           </div>
           <div className="flex justify-center lg:justify-end">
-            <img 
-              src="/lovable-uploads/6bf1d2d6-a1a4-4a14-aa06-7ad2714adedd.png"
-              alt="Enterprise-level strategies" 
-              className="max-w-full h-auto rounded-lg shadow-lg"
-            />
             <img
-              src="/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png"
-              alt="Team collaborating at Prometheus Agency"
-              width="640" height="400" loading="lazy" decoding="async"
-              className="rounded-lg shadow-lg"
+              src="https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/titan(navy).png"
+              alt="Prometheus Titan Logo"
+              loading="lazy"
+              decoding="async"
+              className="max-w-xs md:max-w-sm lg:max-w-md h-auto rounded-lg shadow-[0_10px_20px_rgba(0,46,93,0.25)]"
             />
           </div>
         </div>
