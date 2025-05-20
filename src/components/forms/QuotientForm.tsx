@@ -5,7 +5,7 @@ import QuestionsForm from "./aiQuotient/QuestionsForm";
 import ResultsPage from "./aiQuotient/ResultsPage";
 import SubmitResultsForm from "./aiQuotient/SubmitResultsForm";
 import ThankYouPage from "./aiQuotient/ThankYouPage";
-import { UserInfo, PillarType } from "@/types/aiQuotient";
+import { UserInfo, PillarType, AssessmentResult } from "@/types/aiQuotient";
 import { AssessmentFormProps } from "@/types/aiQuotient";
 
 const QuotientForm: React.FC<AssessmentFormProps> = () => {
@@ -56,7 +56,7 @@ const QuotientForm: React.FC<AssessmentFormProps> = () => {
     moveToNextStep();
   };
 
-  const handleSubmitToHubSpot = async () => {
+  const handleSubmitToHubSpot = async (userInfo: UserInfo, result: AssessmentResult) => {
     if (!result) {
       console.error("No assessment result available");
       return false;
