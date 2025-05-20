@@ -14,7 +14,7 @@ interface QuestionsFormProps {
   answers: Answer[];
   progress: number;
   onSubmitAnswer: (answer: Answer) => void;
-  onBack: () => void;
+  onBack: (pillar?: PillarType, questionIndex?: number) => void;
 }
 
 const QuestionsForm: React.FC<QuestionsFormProps> = ({
@@ -82,9 +82,23 @@ const QuestionsForm: React.FC<QuestionsFormProps> = ({
   // Handle going back to previous question
   const handlePrevious = () => {
     if (currentQuestionIndex > 0) {
+      // If not the first question in current pillar, go to previous question
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     } else {
-      onBack();
+      // If we're on the first question of current pillar
+      const currentPillarIndex = allPillars.indexOf(currentPillar);
+      if (currentPillarIndex > 0) {
+        // If not the first pillar, go to last question of previous pillar
+        const previousPillar = allPillars[currentPillarIndex - 1];
+        const previousPillarQuestions = questions.filter(q => q.pillar === previousPillar);
+        const lastQuestionIndex = previousPillarQuestions.length - 1;
+        
+        // Update the current pillar and question index
+        onBack(previousPillar, lastQuestionIndex);
+      } else {
+        // If we're on the first pillar, go back to user info
+        onBack();
+      }
     }
   };
 

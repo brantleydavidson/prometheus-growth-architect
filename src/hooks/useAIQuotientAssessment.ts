@@ -30,7 +30,7 @@ export interface UseAIQuotientAssessment {
   updateUserInfo: (data: Partial<UserInfo>) => void;
   submitAnswer: (answer: Answer) => void;
   moveToNextStep: () => void;
-  moveToPreviousStep: () => void;
+  moveToPreviousStep: (pillar?: PillarType, questionIndex?: number) => void;
   setCurrentPillar: (pillar: PillarType) => void;
   submitToHubSpot: (userInfo: UserInfo, result: AssessmentResult) => Promise<boolean>;
 }
@@ -135,16 +135,23 @@ export const useAIQuotientAssessment = (): UseAIQuotientAssessment => {
     });
   }, []);
 
-  const moveToPreviousStep = useCallback(() => {
-    setCurrentStep(prev => {
-      switch (prev) {
-        case "questions": return "user-info";
-        case "results": return "questions";
-        case "submit": return "results";
-        case "thank-you": return "submit";
-        default: return prev;
-      }
-    });
+  const moveToPreviousStep = useCallback((pillar?: PillarType, questionIndex?: number) => {
+    if (pillar && typeof questionIndex === 'number') {
+      // If we're navigating between questions in different pillars
+      setCurrentPillar(pillar);
+      // Note: We don't need to set question index as it's handled by the QuestionsForm component
+    } else {
+      // If we're navigating between steps
+      setCurrentStep(prev => {
+        switch (prev) {
+          case "questions": return "user-info";
+          case "results": return "questions";
+          case "submit": return "results";
+          case "thank-you": return "submit";
+          default: return prev;
+        }
+      });
+    }
   }, []);
 
   // HubSpot submission
