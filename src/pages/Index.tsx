@@ -22,7 +22,7 @@ const Index = () => {
   return (
     <>
       <SEO 
-        title="Prometheus Agency - Tame the Tech. Unleash the Growth."
+        title="Prometheus Agency - Tame Your Tech. Unleash Growth."
         description="We help B2B and DTC businesses transform technology chaos into strategic growth engines with AI enablement and proven GTM strategies."
         canonical="/"
         schemaMarkup={schemaMarkup}

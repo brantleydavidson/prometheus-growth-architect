@@ -10,8 +10,8 @@ const HeroSection = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="animate-grid-snap text-left">
             <h1 id="main-heading" className="text-4xl md:text-5xl lg:text-6xl font-semibold text-prometheus-navy mb-6 leading-tight">
-              Tame the Tech. <br/>
-              <span className="text-prometheus-orange">Unleash the Growth.</span>
+              Tame Your Tech. <br/>
+              <span className="text-prometheus-orange">Unleash Growth.</span>
             </h1>
             <p className="text-lg md:text-xl text-prometheus-gray mb-8 max-w-lg">
               We help <strong>B2B</strong> and <strong>DTC businesses</strong> transform technology chaos into 
