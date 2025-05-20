@@ -196,6 +196,8 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
         }
       };
 
+      console.log("Final form data being sent:", formData);
+
       // Submit to HubSpot forms API
       const response = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/40043781/8309ec82-bc28-4185-bade-8e73f33d2b08`, {
         method: 'POST',
@@ -218,9 +220,6 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       return true;
     } catch (error) {
       console.error("Error submitting to HubSpot:", error);
-      if (error instanceof Error) {
-        console.error("Error details:", error.message);
-      }
       return false;
     }
   }, [answers]);

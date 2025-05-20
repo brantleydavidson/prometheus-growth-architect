@@ -12,8 +12,8 @@ export const prepareHubspotData = (
     lastname: userInfo.lastName?.trim() || '',
     email: userInfo.email?.trim() || '',
     jobtitle: userInfo.jobTitle?.trim() || '',
-    company: userInfo.company?.trim() || '',
-    company_size: userInfo.companySize?.trim() || '',
+    company_name: userInfo.company?.trim() || '',
+    numberofemployees: userInfo.companySize?.trim() || '',
     
     // AI Quotient properties
     score__ai_quotient_: Math.round(result.percentage),
