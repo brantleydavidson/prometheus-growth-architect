@@ -185,21 +185,24 @@ export const useAIQuotientAssessment = (initialTestMode = false): UseAIQuotientA
       console.log("Prepared HubSpot data:", hubspotData);
       
       // Submit to HubSpot forms API
+      const formData = {
+        fields: Object.entries(hubspotData).map(([name, value]) => ({
+          name,
+          value: value?.toString() || ''
+        })),
+        context: {
+          pageUri: window.location.href,
+          pageName: document.title
+        }
+      };
+
+      // Submit to HubSpot forms API
       const response = await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/40043781/8309ec82-bc28-4185-bade-8e73f33d2b08`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          fields: Object.entries(hubspotData).map(([name, value]) => ({
-            name,
-            value: value?.toString() || ''
-          })),
-          context: {
-            pageUri: window.location.href,
-            pageName: document.title
-          }
-        })
+        body: JSON.stringify(formData)
       });
 
       const responseData = await response.json();
