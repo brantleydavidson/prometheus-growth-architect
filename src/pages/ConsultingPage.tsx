@@ -55,7 +55,7 @@ const ConsultingPage = () => {
 
   const testimonials = [
     {
-      quote: "We are very pleased with the services offer by Prometheus. At the outset, they spent time to understand our industry, our organization and our objectives. From this baseline they helped us to form strategies and an approach to market that was aligned for best results.\n\nSenior Vice President, American Commerce Bank",
+      quote: "We are very pleased with the services offer by Prometheus. At the outset, they spent time to understand our industry, our organization and our objectives. From this baseline they helped us to form strategies and an approach to market that was aligned for best results.",
       author: "Scott Doll",
       position: "Senior Vice President",
       company: "American Commerce Bank",
@@ -63,7 +63,7 @@ const ConsultingPage = () => {
       categories: ["Banking", "Strategy"]
     },
     {
-      quote: "Team Prometheus has been easy to work with and provides a very attentive & strategic approach. They have been proactive with branding & marketing content and analytics and look to find ways to maximize returns.\n\nVP - Digital Banking Manager, Monesty Bank",
+      quote: "Team Prometheus has been easy to work with and provides a very attentive & strategic approach. They have been proactive with branding & marketing content and analytics and look to find ways to maximize returns.",
       author: "Richard Rotondo",
       position: "VP - Digital Banking Manager",
       company: "Monesty Bank",
