@@ -18,26 +18,36 @@ const CRMImplementationPage = () => {
         {/* Hero */}
         <section className="pt-24 pb-16 bg-gradient-to-br from-white to-gray-50">
           <div className="container-custom">
-            <div className="flex flex-col lg:flex-row gap-12 items-center">
-              <div className="flex-1">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              {/* Left: Text */}
+              <div>
                 <h1 className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6 leading-tight">
-                  CRM Implementation&nbsp;&amp;&nbsp;Optimization
+                  CRM Implementation <span className="text-prometheus-orange">&amp; Optimization</span>
                 </h1>
-                <p className="text-lg text-prometheus-gray mb-8 max-w-lg">
+                <p className="text-lg text-prometheus-gray mb-8 max-w-xl">
                   Build a revenue engine with HubSpot, Salesforce, or Microsoft Dynamics—implemented in weeks, not months.
                 </p>
-                <div className="bg-prometheus-orange/10 border border-prometheus-orange/20 rounded-lg p-6 mb-8">
+                <div className="bg-prometheus-orange/10 border border-prometheus-orange/30 rounded-lg p-6 mb-8 max-w-xl text-left">
                   <h3 className="text-xl font-medium text-prometheus-navy mb-3">What Sets Us Apart</h3>
-                  <ul className="space-y-2">
-                    <li className="flex items-start gap-2"><span className="text-prometheus-orange font-medium">✓</span><span>Revenue-model first, technology second</span></li>
-                    <li className="flex items-start gap-2"><span className="text-prometheus-orange font-medium">✓</span><span>AI-driven automations baked in from day one</span></li>
-                    <li className="flex items-start gap-2"><span className="text-prometheus-orange font-medium">✓</span><span>Live in weeks, optimized continuously</span></li>
+                  <ul className="space-y-4">
+                    <li className="flex items-start gap-2">
+                      <span className="text-prometheus-orange font-medium mt-1">✔️</span>
+                      <span>Revenue-model first, technology second</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-prometheus-orange font-medium mt-1">✔️</span>
+                      <span>AI-driven automations baked in from day one</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-prometheus-orange font-medium mt-1">✔️</span>
+                      <span>Live in weeks, optimized continuously</span>
+                    </li>
                   </ul>
                 </div>
               </div>
-              <div className="flex-1 flex justify-center">
-                <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg w-full max-w-md">
-                  {/* Placeholder image */}
+              {/* Right: Image */}
+              <div className="flex justify-center lg:justify-end">
+                <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg w-full max-w-xl">
                   <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=900&q=80" alt="CRM dashboard mockup" className="w-full h-full object-cover" />
                 </div>
               </div>
