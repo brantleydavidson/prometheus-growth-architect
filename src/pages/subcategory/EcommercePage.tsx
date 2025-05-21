@@ -1,4 +1,3 @@
-
 import React from "react";
 import SubcategoryTemplate from "@/components/subcategory/SubcategoryTemplate";
 
@@ -28,10 +27,10 @@ const EcommercePage = () => {
       seoDescription="Increase customer lifetime value and repeat purchase rates by 25% with strategic eCommerce marketing solutions from Prometheus Agency."
       imagePath="/placeholder.svg"
       testimonial={{
-        quote: "Implementing Prometheus's customer journey strategy increased our repeat purchase rate by 32% and our average order value by 18% in just six months.",
-        author: "Sarah Johnson",
-        position: "Director of eCommerce",
-        company: "Modern Home Goods"
+        quote: "Prometheus has been a great partner to help us plan, develop and execute marketing strategies that will enable MSP Diesel Solutions to reach new customers.",
+        author: "Travis Stewart",
+        position: "VP of Sales",
+        company: "MSP Diesel Solutions"
       }}
     />
   );
