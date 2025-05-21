@@ -29,30 +29,6 @@ export const servicesList = [
     color: "bg-prometheus-navy/10",
     textColor: "text-prometheus-navy",
   },
-  {
-    icon: Users,
-    title: "Customer Journey Mapping",
-    description: "Create seamless, personalized customer experiences across all touchpoints.",
-    link: "/services/customer-journey",
-    color: "bg-prometheus-navy/10",
-    textColor: "text-prometheus-navy",
-  },
-  {
-    icon: Zap,
-    title: "Paid Media",
-    description: "Develop and execute high-performance paid advertising campaigns that drive quality leads.",
-    link: "/services/paid-media",
-    color: "bg-prometheus-navy/10",
-    textColor: "text-prometheus-navy",
-  },
-  {
-    icon: BarChart3,
-    title: "Reporting & Analytics",
-    description: "Transform data into actionable insights with custom dashboards and reporting.",
-    link: "/services/reporting-analytics",
-    color: "bg-prometheus-navy/10",
-    textColor: "text-prometheus-navy",
-  },
 ];
 
 interface ServicesGridProps {

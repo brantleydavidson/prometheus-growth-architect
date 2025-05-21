@@ -112,16 +112,6 @@ const Footer = () => {
                   CRM Implementation & Optimization
                 </Link>
               </li>
-              <li>
-                <Link to="/services/customer-journey" className="text-prometheus-gray hover:text-white transition-colors">
-                  Customer Journey
-                </Link>
-              </li>
-              <li>
-                <Link to="/services/reporting-analytics" className="text-prometheus-gray hover:text-white transition-colors">
-                  Analytics & Reporting
-                </Link>
-              </li>
             </ul>
           </div>
 

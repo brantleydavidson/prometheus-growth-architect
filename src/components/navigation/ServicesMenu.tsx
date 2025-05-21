@@ -31,15 +31,6 @@ const ServicesMenu = () => {
           <Link to="/services/crm-implementation" className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors">
             CRM Implementation & Optimization
           </Link>
-          <Link to="/services/customer-journey" className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors">
-            Customer Journey Mapping
-          </Link>
-          <Link to="/services/paid-media" className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors">
-            Paid Media
-          </Link>
-          <Link to="/services/reporting-analytics" className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors">
-            Reporting & Analytics
-          </Link>
         </nav>
       </HoverCardContent>
     </HoverCard>
