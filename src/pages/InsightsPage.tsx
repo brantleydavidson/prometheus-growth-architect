@@ -8,6 +8,7 @@ import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
 import DynamicBlogList from "@/components/blog/DynamicBlogList";
 import { supabase } from "@/integrations/supabase/client";
+import SuccessStoriesSection from "@/components/common/SuccessStoriesSection";
 
 const InsightsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState("All Content");
@@ -64,6 +65,31 @@ const InsightsPage = () => {
     fetchCategories();
   }, []);
   
+  // Data for case studies (same as BookAuditPage)
+  const caseStudies = [
+    {
+      title: "SaaS Platform Increases Lead Quality by 63%",
+      description: "After implementing our strategic recommendations for their marketing tech stack and content operations.",
+      industry: "SaaS",
+      result: "+63% Lead Quality",
+      image: "https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      title: "Manufacturing Company Boosts Conversion Rate",
+      description: "By restructuring their data spine and implementing AI-powered personalization across their customer journey.",
+      industry: "Manufacturing",
+      result: "+42% Conversion Rate",
+      image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    },
+    {
+      title: "E-commerce Brand Reduces CAC by 28%",
+      description: "Through improved funnel intelligence and automation of key customer journey touchpoints.",
+      industry: "E-commerce",
+      result: "-28% Customer Acquisition Cost",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+    }
+  ];
+  
   return (
     <>
       <SEO 
@@ -95,7 +121,7 @@ const InsightsPage = () => {
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Insights & Playbooks
+              Insights
             </h1>
             <p className="text-lg text-gray-700 mb-8">
               Practical resources, guides, and expert perspectives to help you navigate 
@@ -146,6 +172,9 @@ const InsightsPage = () => {
           <DynamicBlogList selectedCategory={selectedCategory} />
         </div>
       </section>
+      
+      {/* Success Stories Section */}
+      <SuccessStoriesSection caseStudies={caseStudies} />
       
       {/* Newsletter Section */}
       <section className="py-16 bg-white">
