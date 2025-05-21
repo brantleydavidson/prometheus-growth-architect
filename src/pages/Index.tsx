@@ -116,23 +116,23 @@ const Index = () => {
               
               <div className="grid grid-cols-2 grid-rows-2 gap-4">
                 <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">94%</div>
-                  <p className="text-prometheus-gray">Client retention rate</p>
+                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">9.1/10</div>
+                  <p className="text-prometheus-gray">Client Satisfaction Rating</p>
                 </div>
                 
                 <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">12+</div>
-                  <p className="text-prometheus-gray">Industries served</p>
+                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">300+</div>
+                  <p className="text-prometheus-gray">Projects Completed</p>
                 </div>
                 
                 <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">3.8x</div>
-                  <p className="text-prometheus-gray">Average client ROI</p>
+                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">16+</div>
+                  <p className="text-prometheus-gray">CRM Strategies Delivered</p>
                 </div>
                 
                 <div className="bg-white p-6 rounded-lg shadow-md border border-gray-100">
-                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">100+</div>
-                  <p className="text-prometheus-gray">Projects completed</p>
+                  <div className="text-3xl md:text-4xl font-bold text-prometheus-orange mb-2">58%</div>
+                  <p className="text-prometheus-gray">Average Reduction in Manual Effort</p>
                 </div>
               </div>
             </div>

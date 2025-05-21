@@ -40,8 +40,8 @@ const HeroSection = () => {
                 <div className="text-center text-white">
                   <div className="bg-prometheus-navy/80 p-6 rounded-lg">
                     <h2 className="text-xl font-medium mb-3">From Chaos to Control</h2>
-                    <div className="text-4xl font-bold mb-2" aria-label="Average Revenue Growth">+42%</div>
-                    <p>Average Revenue Growth</p>
+                    <div className="text-4xl font-bold mb-2" aria-label="Average Revenue Growth">143%</div>
+                    <p>Year-over-year ROI Growth</p>
                   </div>
                 </div>
               </div>

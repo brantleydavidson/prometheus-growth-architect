@@ -1,4 +1,3 @@
-
 import React from "react";
 import SubcategoryTemplate from "@/components/subcategory/SubcategoryTemplate";
 
@@ -33,10 +32,10 @@ const SaaSPage = () => {
   const imagePath = "https://images.unsplash.com/photo-1553877522-43269d4ea984";
   
   const testimonial = {
-    quote: "Prometheus helped us reduce our CAC by 37% while increasing conversion rates from free to paid by 24%. Their systematic approach to growth transformed our business.",
-    author: "Emily Rodriguez",
-    position: "Growth Director",
-    company: "SaaSify Solutions"
+    quote: "Prometheus is an excellent strategic marketing partner. They bring well-rounded expertise across GTM functions and have helped us launch a very robust omni-channel ABM campaign in a short amount of time, including a website launch, SEO strategy, Programmatic Display, Paid Social, Automated Email Marketing & Sales Outreach, and Direct Mail.",
+    author: "Emilie Totten",
+    position: "Marketing Advisor",
+    company: "EC Pro"
   };
   
   const seoTitle = "SaaS Growth Solutions | AI-Powered Strategies | Prometheus Agency";

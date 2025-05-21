@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
@@ -36,20 +35,20 @@ const ServicesHero = () => {
           <div className="lg:col-span-5">
             <div className="grid grid-cols-2 gap-4">
               <div className="aspect-square bg-prometheus-orange/10 rounded-lg p-6 flex flex-col items-center justify-center text-center">
-                <div className="text-4xl font-bold text-prometheus-orange mb-2">12+</div>
-                <p className="text-prometheus-navy font-medium">Service Areas</p>
+                <div className="text-4xl font-bold text-prometheus-orange mb-2">42</div>
+                <p className="text-prometheus-navy font-medium">Platforms We've Used</p>
               </div>
               <div className="aspect-square bg-prometheus-gold/10 rounded-lg p-6 flex flex-col items-center justify-center text-center">
-                <div className="text-4xl font-bold text-prometheus-gold mb-2">100%</div>
-                <p className="text-prometheus-navy font-medium">Customized</p>
+                <div className="text-4xl font-bold text-prometheus-gold mb-2">56%</div>
+                <p className="text-prometheus-navy font-medium">Shorter Sales Cycles</p>
               </div>
               <div className="aspect-square bg-prometheus-navy/10 rounded-lg p-6 flex flex-col items-center justify-center text-center">
-                <div className="text-4xl font-bold text-prometheus-navy mb-2">3X</div>
-                <p className="text-prometheus-navy font-medium">ROI Average</p>
+                <div className="text-4xl font-bold text-prometheus-navy mb-2">125%</div>
+                <p className="text-prometheus-navy font-medium">Increased Conversion Rates</p>
               </div>
               <div className="aspect-square bg-prometheus-cyan/10 rounded-lg p-6 flex flex-col items-center justify-center text-center">
-                <div className="text-4xl font-bold text-prometheus-cyan mb-2">42%</div>
-                <p className="text-prometheus-navy font-medium">Growth Rate</p>
+                <div className="text-4xl font-bold text-prometheus-cyan mb-2">59%</div>
+                <p className="text-prometheus-navy font-medium">Decrease in CAC</p>
               </div>
             </div>
           </div>
