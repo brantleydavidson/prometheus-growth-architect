@@ -18,15 +18,14 @@ const CRMImplementationPage = () => {
         {/* Hero */}
         <section className="pt-24 pb-16 bg-gradient-to-br from-white to-gray-50">
           <div className="container-custom">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
+            <div className="flex flex-col lg:flex-row gap-12 items-center">
+              <div className="flex-1">
                 <h1 className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6 leading-tight">
                   CRM Implementation&nbsp;&amp;&nbsp;Optimization
                 </h1>
                 <p className="text-lg text-prometheus-gray mb-8 max-w-lg">
                   Build a revenue engine with HubSpot, Salesforce, or Microsoft Dynamics—implemented in weeks, not months.
                 </p>
-
                 <div className="bg-prometheus-orange/10 border border-prometheus-orange/20 rounded-lg p-6 mb-8">
                   <h3 className="text-xl font-medium text-prometheus-navy mb-3">What Sets Us Apart</h3>
                   <ul className="space-y-2">
@@ -36,8 +35,8 @@ const CRMImplementationPage = () => {
                   </ul>
                 </div>
               </div>
-              <div className="relative">
-                <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
+              <div className="flex-1 flex justify-center">
+                <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg w-full max-w-md">
                   {/* Placeholder image */}
                   <img src="https://images.unsplash.com/photo-1521791055366-0d553872125f?auto=format&fit=crop&w=900&q=80" alt="CRM dashboard mockup" className="w-full h-full object-cover" />
                 </div>
@@ -46,13 +45,29 @@ const CRMImplementationPage = () => {
           </div>
         </section>
 
-        {/* Philosophy */}
-        <section className="py-16 bg-white">
-          <div className="container-custom max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-6">Our Philosophy</h2>
-            <p className="text-lg text-prometheus-gray">
-              A successful CRM implementation aligns people, process, and data before a single field is created. We start with your revenue model, map critical conversions, and design the data structure to reflect how money actually moves through your business. Then we add AI-driven automations—lead scoring, lifecycle nudges, forecast insights—that turn the system from a database into an always-on growth engine.
-            </p>
+        {/* Capabilities Section */}
+        <section className="py-20">
+          <div className="container-custom">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-semibold text-prometheus-navy mb-4">Our CRM Capabilities</h2>
+              <p className="text-lg text-prometheus-gray max-w-2xl mx-auto">
+                From data architecture to adoption enablement, we cover the full spectrum required to turn your CRM into a profit center.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { icon: <Database className="text-prometheus-orange" size={32} />, title: "Data Architecture", desc: "Model objects & relationships around your buyer journey." },
+                { icon: <ActivitySquare className="text-prometheus-orange" size={32} />, title: "AI-Driven Automation", desc: "Lead scoring, lifecycle nudges, and forecast insights." },
+                { icon: <CheckCircle className="text-prometheus-orange" size={32} />, title: "User Adoption", desc: "Role-based training and on-screen guidance for 80%+ adoption." },
+                { icon: <BarChart3 className="text-prometheus-orange" size={32} />, title: "Forecast & Reporting", desc: "Dashboards that surface revenue KPIs in real-time." },
+              ].map((cap, idx) => (
+                <div key={idx} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center transition-all duration-200 hover:border-prometheus-orange">
+                  <div className="mb-4 flex justify-center">{cap.icon}</div>
+                  <h3 className="text-xl font-medium text-prometheus-navy mb-2">{cap.title}</h3>
+                  <p className="text-prometheus-gray text-sm">{cap.desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
@@ -113,6 +128,10 @@ const CRMImplementationPage = () => {
         <section className="py-16 bg-white">
           <div className="container-custom grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
+              <h2 className="text-3xl font-bold mb-6">Our Philosophy</h2>
+              <p className="text-lg text-prometheus-gray mb-8">
+                A successful CRM implementation aligns people, process, and data before a single field is created. We start with your revenue model, map critical conversions, and design the data structure to reflect how money actually moves through your business. Then we add AI-driven automations—lead scoring, lifecycle nudges, forecast insights—that turn the system from a database into an always-on growth engine.
+              </p>
               <h2 className="text-3xl font-semibold text-prometheus-navy mb-6">Case Study: 80% User Adoption in 60 Days</h2>
               <p className="text-lg text-prometheus-gray mb-6">
                 Discover how we helped a manufacturing company replace legacy systems, migrate 250k records, and achieve 80% CRM adoption in just two months—unlocking a 38% increase in forecast accuracy.
@@ -147,32 +166,6 @@ const CRMImplementationPage = () => {
                   <p className="text-sm text-prometheus-gray">VP Sales, IndustrialCo</p>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Capabilities Section */}
-        <section className="py-20">
-          <div className="container-custom">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-semibold text-prometheus-navy mb-4">Our CRM Capabilities</h2>
-              <p className="text-lg text-prometheus-gray max-w-2xl mx-auto">
-                From data architecture to adoption enablement, we cover the full spectrum required to turn your CRM into a profit center.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                { icon: <Database className="text-prometheus-orange" size={32} />, title: "Data Architecture", desc: "Model objects & relationships around your buyer journey." },
-                { icon: <ActivitySquare className="text-prometheus-orange" size={32} />, title: "AI-Driven Automation", desc: "Lead scoring, lifecycle nudges, and forecast insights." },
-                { icon: <CheckCircle className="text-prometheus-orange" size={32} />, title: "User Adoption", desc: "Role-based training and on-screen guidance for 80%+ adoption." },
-                { icon: <BarChart3 className="text-prometheus-orange" size={32} />, title: "Forecast & Reporting", desc: "Dashboards that surface revenue KPIs in real-time." },
-              ].map((cap, idx) => (
-                <div key={idx} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 text-center">
-                  <div className="mb-4 flex justify-center">{cap.icon}</div>
-                  <h3 className="text-xl font-medium text-prometheus-navy mb-2">{cap.title}</h3>
-                  <p className="text-prometheus-gray text-sm">{cap.desc}</p>
-                </div>
-              ))}
             </div>
           </div>
         </section>
