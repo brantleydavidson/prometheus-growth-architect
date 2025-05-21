@@ -1,10 +1,10 @@
-
 import React from "react";
 import { Star } from "lucide-react";
 
 interface TestimonialCardProps {
   quote: string;
   author: string;
+  position?: string;
   company: string;
   image?: string;
   rating?: number;
@@ -14,6 +14,7 @@ interface TestimonialCardProps {
 const TestimonialCard = ({
   quote,
   author,
+  position,
   company,
   image,
   rating = 5,
@@ -45,6 +46,7 @@ const TestimonialCard = ({
         )}
         <div>
           <p className="font-medium text-prometheus-navy">{author}</p>
+          {position && <p className="text-prometheus-gray text-sm">{position}</p>}
           <p className="text-prometheus-gray text-sm">{company}</p>
         </div>
       </div>

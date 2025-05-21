@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -56,25 +55,20 @@ const ConsultingPage = () => {
 
   const testimonials = [
     {
-      quote: "The Prometheus team delivered a GTM strategy that helped us launch our new product line with tremendous success. Their insights were invaluable.",
-      author: "Jennifer Martinez",
-      company: "InnoTech Solutions",
+      quote: "We are very pleased with the services offer by Prometheus. At the outset, they spent time to understand our industry, our organization and our objectives. From this baseline they helped us to form strategies and an approach to market that was aligned for best results.",
+      author: "Scott Doll",
+      position: "Senior Vice President",
+      company: "American Commerce Bank",
       rating: 5,
-      categories: ["B2B", "Product Launch"]
+      categories: ["Banking", "Strategy"]
     },
     {
-      quote: "Their consulting approach is refreshingly practical. No fluff, just actionable strategies that have directly contributed to our 45% YoY growth.",
-      author: "Michael Chen",
-      company: "GrowthForce Inc.",
+      quote: "Team Prometheus has been easy to work with and provides a very attentive & strategic approach. They have been proactive with branding & marketing content and analytics and look to find ways to maximize returns.",
+      author: "Richard Rotondo",
+      position: "VP - Digital Banking Manager",
+      company: "Monesty Bank",
       rating: 5,
-      categories: ["DTC", "Growth Strategy"]
-    },
-    {
-      quote: "Prometheus helped us completely rethink our customer journey, resulting in a 32% increase in conversion rates across the board.",
-      author: "Sarah Williams",
-      company: "NexGen Commerce",
-      rating: 5,
-      categories: ["B2B", "Customer Journey"]
+      categories: ["Banking", "Digital Strategy"]
     }
   ];
 
@@ -230,6 +224,7 @@ const ConsultingPage = () => {
                   key={index}
                   quote={testimonial.quote}
                   author={testimonial.author}
+                  position={testimonial.position}
                   company={testimonial.company}
                   rating={testimonial.rating}
                   categories={testimonial.categories}
