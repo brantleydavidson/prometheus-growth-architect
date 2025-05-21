@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import {
@@ -30,7 +29,7 @@ const ServicesMenu = () => {
             Consulting & GTM Strategy
           </Link>
           <Link to="/services/crm-implementation" className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors">
-            CRM Implementation
+            CRM Implementation & Optimization
           </Link>
           <Link to="/services/customer-journey" className="text-base font-medium text-prometheus-navy hover:text-prometheus-orange transition-colors">
             Customer Journey Mapping

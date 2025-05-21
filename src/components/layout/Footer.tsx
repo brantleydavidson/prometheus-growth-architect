@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Linkedin, Mail, ArrowRight } from "lucide-react";
@@ -110,7 +109,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/services/crm-implementation" className="text-prometheus-gray hover:text-white transition-colors">
-                  CRM Implementation
+                  CRM Implementation & Optimization
                 </Link>
               </li>
               <li>

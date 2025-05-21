@@ -56,6 +56,11 @@ import AuthProtected from './components/cms/AuthProtected';
 import ExecutiveCheatSheetPage from './pages/ExecutiveCheatSheet';
 import ExecutiveCheatSheetThankYou from './pages/ExecutiveCheatSheetThankYou';
 
+import CRMImplementationPage from './pages/CRMImplementationPage';
+import CustomerJourneyPage from './pages/CustomerJourneyPage';
+import PaidMediaPage from './pages/PaidMediaPage';
+import ReportingAnalyticsPage from './pages/ReportingAnalyticsPage';
+
 const App = () => {
   return (
     <ErrorBoundary>
@@ -78,6 +83,10 @@ const App = () => {
           <Route path="/services" element={<ServicesPage />} />
           <Route path="/services/ai-enablement" element={<AIEnablementPage />} />
           <Route path="/services/consulting-gtm" element={<ConsultingPage />} />
+          <Route path="/services/crm-implementation" element={<CRMImplementationPage />} />
+          <Route path="/services/customer-journey" element={<CustomerJourneyPage />} />
+          <Route path="/services/paid-media" element={<PaidMediaPage />} />
+          <Route path="/services/reporting-analytics" element={<ReportingAnalyticsPage />} />
           
           {/* Content Pages */}
           <Route path="/book-audit" element={<BookAuditPage />} />

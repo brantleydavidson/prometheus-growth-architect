@@ -1,4 +1,3 @@
-
 import React from "react";
 import ServiceCard, { ServiceCardProps } from "./ServiceCard";
 import { Bot, LineChart, Users, Database, BarChart3, Zap } from "lucide-react";
@@ -24,7 +23,7 @@ export const servicesList = [
   },
   {
     icon: Database,
-    title: "CRM Implementation",
+    title: "CRM Implementation & Optimization",
     description: "Deploy and optimize customer relationship management systems that drive results.",
     link: "/services/crm-implementation",
     color: "bg-prometheus-navy/10",
