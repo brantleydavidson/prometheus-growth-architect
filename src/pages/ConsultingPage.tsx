@@ -55,16 +55,18 @@ const ConsultingPage = () => {
 
   const testimonials = [
     {
-      quote: "We are very pleased with the services offer by Prometheus. At the outset, they spent time to understand our industry, our organization and our objectives. From this baseline they helped us to form strategies and an approach to market that was aligned for best results.",
+      quote: "We are very pleased with the services offer by Prometheus. At the outset, they spent time to understand our industry, our organization and our objectives. From this baseline they helped us to form strategies and an approach to market that was aligned for best results.\n\nSenior Vice President, American Commerce Bank",
       author: "Scott Doll",
+      position: "Senior Vice President",
       company: "American Commerce Bank",
       rating: 5,
       categories: ["Banking", "Strategy"]
     },
     {
-      quote: "Team Prometheus has been easy to work with and provides a very attentive & strategic approach. They have been proactive with branding & marketing content and analytics and look to find ways to maximize returns.",
+      quote: "Team Prometheus has been easy to work with and provides a very attentive & strategic approach. They have been proactive with branding & marketing content and analytics and look to find ways to maximize returns.\n\nVP - Digital Banking Manager, Monesty Bank",
       author: "Richard Rotondo",
-      company: "Digital Bank Manager",
+      position: "VP - Digital Banking Manager",
+      company: "Monesty Bank",
       rating: 5,
       categories: ["Banking", "Digital Strategy"]
     }
@@ -222,6 +224,7 @@ const ConsultingPage = () => {
                   key={index}
                   quote={testimonial.quote}
                   author={testimonial.author}
+                  position={testimonial.position}
                   company={testimonial.company}
                   rating={testimonial.rating}
                   categories={testimonial.categories}
