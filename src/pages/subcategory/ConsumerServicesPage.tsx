@@ -1,4 +1,3 @@
-
 import React from "react";
 import SubcategoryTemplate from "@/components/subcategory/SubcategoryTemplate";
 
@@ -33,10 +32,10 @@ const ConsumerServicesPage = () => {
   const imagePath = "https://images.unsplash.com/photo-1556740738-b6a63e27c4df";
   
   const testimonial = {
-    quote: "Prometheus transformed our marketing approach and helped us stand out in a crowded market. Our lead quality improved dramatically and we've grown 45% year over year.",
-    author: "Thomas Reynolds",
-    position: "Owner",
-    company: "Elite Home Services"
+    quote: "Their team quickly developed a deep understanding of our unique operational needs, delivering customized HubSpot architectures and innovative automation solutions.Their responsiveness, clear communication, and strategic insights consistently exceeded our expectations. I wholeheartedly recommend Prometheus for any business seeking a dedicated HubSpot partner proficient in operational automation, CRM integration, and sales enablement.",
+    author: "Tim Fleischer",
+    position: "Sr. Director, Performance Media",
+    company: "CERTUS Pest"
   };
   
   const seoTitle = "Consumer Services Marketing & Growth | Prometheus Agency";
