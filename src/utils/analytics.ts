@@ -2,14 +2,24 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 // GTM Configuration
-const GTM_ID = 'GTM-KR2LQG9K';
+// Option 1: Use same container for both environments (recommended)
+const GTM_ID = 'GTM-MSP3RD38'; // Your production container
+
+// Option 2: Use different containers per environment
+// Uncomment below and comment above to use this approach
+/*
+const GTM_CONTAINERS = {
+  staging: 'GTM-KR2LQG9K',    // Staging container
+  production: 'GTM-MSP3RD38'  // Production container
+};
+*/
 
 // GTM Environment Configuration
-// Replace these with your actual GTM environment tokens
+// Replace these with your actual GTM environment tokens if using GTM environments
 const GTM_ENVIRONMENTS = {
   staging: {
-    auth: '', // Add your staging auth token here
-    preview: '', // Add your staging preview ID here
+    auth: '', // Add your staging auth token here if using GTM environments
+    preview: '', // Add your staging preview ID here if using GTM environments
   },
   production: {
     auth: null, // Production doesn't need auth
@@ -32,8 +42,13 @@ export const initGTM = () => {
     const env = getCurrentEnvironment();
     const envConfig = GTM_ENVIRONMENTS[env];
     
+    // Get the appropriate GTM ID
+    // If using different containers per environment, uncomment the next line
+    // const gtmId = GTM_CONTAINERS[env];
+    const gtmId = GTM_ID; // Using same container for all environments
+    
     // Build GTM URL with environment parameters
-    let gtmUrl = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
+    let gtmUrl = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
     if (envConfig.auth && envConfig.preview) {
       gtmUrl += `&gtm_auth=${envConfig.auth}&gtm_preview=${envConfig.preview}&gtm_cookies_win=x`;
     }
@@ -48,7 +63,8 @@ export const initGTM = () => {
     window.dataLayer.push({
       event: 'gtm.init',
       'gtm.start': new Date().getTime(),
-      environment: env
+      environment: env,
+      gtm_container: gtmId
     });
   }
 };

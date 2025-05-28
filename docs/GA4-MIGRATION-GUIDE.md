@@ -6,7 +6,7 @@ This guide outlines the GA4 setup for deploying the new Prometheus Agency site t
 ## Current Setup
 - **Production Domain**: prometheusagency.co (existing site → new site)
 - **Staging Domain**: prometheusagency.io (development/testing only)
-- **GTM Container ID**: GTM-KR2LQG9K
+- **GTM Container ID**: GTM-MSP3RD38 (production container)
 - **Strategy**: Use existing GA4 property to maintain historical data
 
 ## Pre-Deployment Checklist
@@ -169,7 +169,7 @@ Disallow: /
 
 ## Quick Reference
 
-### GTM Container: GTM-KR2LQG9K
+### GTM Container: GTM-MSP3RD38
 ### Staging: prometheusagency.io (noindex)
 ### Production: prometheusagency.co
 ### Environment Parameter: site_environment
