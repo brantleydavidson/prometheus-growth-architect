@@ -46,7 +46,7 @@ export const usePageTracking = () => {
         page_title: document.title,
         page_referrer: document.referrer,
         // Custom parameters for better tracking
-        site_version: 'io', // Track which version of site
+        site_environment: window.location.hostname.includes('.io') ? 'staging' : 'production',
         timestamp: new Date().toISOString()
       });
       

@@ -1,190 +1,181 @@
-# GA4 Migration Guide: prometheusagency.co → prometheusagency.io
+# GA4 Implementation Guide: Prometheus Agency Site Update
 
 ## Overview
-This guide outlines the process for migrating Google Analytics 4 (GA4) tracking from prometheusagency.co to prometheusagency.io while maintaining data continuity and tracking accuracy.
+This guide outlines the GA4 setup for deploying the new Prometheus Agency site to prometheusagency.co, replacing the existing site content while maintaining analytics continuity.
 
 ## Current Setup
+- **Production Domain**: prometheusagency.co (existing site → new site)
+- **Staging Domain**: prometheusagency.io (development/testing only)
 - **GTM Container ID**: GTM-KR2LQG9K
-- **Current Domain**: prometheusagency.co
-- **New Domain**: prometheusagency.io
-- **Recommendation**: Use existing GA4 property (maintain historical data)
+- **Strategy**: Use existing GA4 property to maintain historical data
 
-## Pre-Migration Checklist
+## Pre-Deployment Checklist
 
-### 1. GA4 Property Configuration
-- [ ] Log into Google Analytics
-- [ ] Navigate to Admin → Property Settings
-- [ ] Add prometheusagency.io to approved domains
-- [ ] Keep both domains active during transition
+### 1. Staging Environment (.io)
+- [ ] Add robots.txt to block crawlers on .io domain
+- [ ] Test all tracking on staging environment
+- [ ] Verify site_environment parameter shows "staging"
+- [ ] Ensure no production data contamination
 
-### 2. Data Stream Updates
-- [ ] Go to Admin → Data Streams
-- [ ] Click on your web data stream
-- [ ] Configure tag settings → More tagging settings
-- [ ] List domains: add both prometheusagency.co and prometheusagency.io
-- [ ] Enable "Remove referrals" for both domains
+### 2. GA4 Configuration (No Changes Needed)
+Since we're keeping the same domain, no GA4 property changes are required:
+- Same measurement ID
+- Same data stream
+- Historical data preserved
+- No cross-domain tracking needed
 
-### 3. GTM Container Updates
+### 3. GTM Container Setup
 
-#### Update GA4 Configuration Tag:
+The codebase includes enhanced tracking for:
+- Page views with environment tracking (staging vs production)
+- Form submissions (PII-safe)
+- Button clicks
+- Scroll depth
+- File downloads
+
+#### Environment Variable in GTM:
+Create a variable to track which environment users are on:
 ```javascript
-// In GTM, update your GA4 Configuration tag with these fields:
-{
-  "cookie_domain": "auto",
-  "cookie_flags": "SameSite=None;Secure",
-  "linker": {
-    "domains": ["prometheusagency.co", "prometheusagency.io"],
-    "accept_incoming": true
-  }
+// Variable Name: Site Environment
+// Type: Custom JavaScript
+function() {
+  return window.location.hostname.includes('.io') ? 'staging' : 'production';
 }
 ```
 
-#### Create Migration Variables:
-1. **Variable Name**: Site Version
-   - Type: Custom JavaScript
-   - Code: `return window.location.hostname.includes('.io') ? 'io' : 'co';`
+## Deployment Process
 
-2. **Variable Name**: Migration Phase
-   - Type: Lookup Table
-   - Input: {{Page Hostname}}
-   - Outputs:
-     - prometheusagency.co → "legacy"
-     - prometheusagency.io → "new"
+### Phase 1: Pre-Launch Testing (Current)
+- [x] Enhanced analytics code implemented
+- [ ] Test all events on staging (.io)
+- [ ] Verify no tracking issues
+- [ ] Document any custom events needed
 
-### 4. Enhanced Tracking Implementation
+### Phase 2: Launch Day
+1. **Backup Current Site**
+   - Export current GA4 data
+   - Screenshot key metrics for comparison
+   - Note current conversion rates
 
-The codebase has been updated with:
-- Automatic GTM initialization
-- Enhanced page view tracking
-- Form submission tracking (PII-safe)
-- Button click tracking
-- Site version tracking
+2. **Deploy New Site**
+   - Deploy new codebase to .co
+   - GTM container remains the same
+   - Analytics continue uninterrupted
 
-## Migration Phases
+3. **Post-Launch Verification**
+   - Check real-time reports
+   - Verify all events firing
+   - Monitor for any errors
 
-### Phase 1: Dual Tracking (Current)
-- Both sites use same GTM container
-- Cross-domain tracking enabled
-- Test tracking on staging
-
-### Phase 2: DNS Switch
-- Update DNS to point to new site
-- Monitor real-time reports
-- Verify tracking is working
-
-### Phase 3: Post-Migration
-- Update default domain in GA4
-- Update all UTM campaigns
-- Archive .co tracking after 30 days
+### Phase 3: Post-Launch
+- Keep .io as staging environment
+- Add noindex, nofollow to .io
+- Monitor analytics for anomalies
 
 ## Testing Checklist
 
-### Before DNS Switch:
+### On Staging (.io):
 - [ ] Install GA Debugger Chrome extension
-- [ ] Test on prometheusagency.io staging
-- [ ] Verify events firing in real-time reports
-- [ ] Check cross-domain tracking with test navigation
-- [ ] Validate form submissions tracking
-- [ ] Test goal/conversion tracking
+- [ ] Open GTM Preview mode
+- [ ] Test critical user journeys:
+  - [ ] Homepage → Service page → Book audit
+  - [ ] Blog post navigation
+  - [ ] Form submissions
+  - [ ] Button clicks
+- [ ] Verify environment parameter = "staging"
 
-### After DNS Switch:
-- [ ] Monitor real-time reports for traffic
-- [ ] Verify no duplicate sessions
-- [ ] Check referral exclusions working
-- [ ] Validate ecommerce/conversion data
-- [ ] Review user flow reports
+### On Production (.co) After Launch:
+- [ ] Real-time reports showing traffic
+- [ ] Events firing correctly
+- [ ] No duplicate pageviews
+- [ ] Conversions tracking properly
+- [ ] Environment parameter = "production"
 
-## GTM Tags to Review/Update
+## Key Events to Track
 
-1. **GA4 Configuration Tag**
-   - Add cross-domain tracking
-   - Update cookie settings
+### Already Implemented:
+1. **Page Views** - Enhanced with environment tracking
+2. **Form Submissions** - All forms with PII protection
+3. **Button Clicks** - CTA and navigation buttons
+4. **Scroll Depth** - 25%, 50%, 75%, 90%
+5. **Outbound Links** - External link clicks
 
-2. **GA4 Event Tags**
-   - Add site_version parameter
-   - Update any hardcoded URLs
+### Consider Adding:
+- Video engagement (if applicable)
+- PDF downloads
+- Chat widget interactions
+- Time on page thresholds
 
-3. **Conversion Tags**
-   - Google Ads
-   - Facebook Pixel
-   - LinkedIn Insight
-   - Any other platforms
+## Robots.txt for Staging
+
+Add to `.io` domain after launch:
+```txt
+User-agent: *
+Disallow: /
+```
 
 ## Important Considerations
 
-### SEO Impact
-- Set up 301 redirects from .co to .io
-- Update Google Search Console
-- Submit new sitemap
-- Update canonical URLs
+### Data Continuity
+- Annotations in GA4 for launch date
+- Compare week-over-week after launch
+- Monitor user behavior changes
+- Track any metric anomalies
+
+### SEO During Transition
+- Update sitemap.xml
+- Submit to Google Search Console
+- Monitor crawl errors
+- Check page load speeds
 
 ### Campaign Updates
-- Update all active Google Ads
-- Update social media UTM links
-- Update email campaign links
-- Update any hardcoded links
-
-### Data Continuity
-- Sessions may briefly split during transition
-- Use annotations in GA4 to mark migration date
-- Create custom reports comparing both domains
-- Monitor for 30 days post-migration
+- Review all active UTM parameters
+- Update any hardcoded analytics events
+- Test conversion tracking
+- Verify Google Ads integration
 
 ## Troubleshooting
 
 ### Common Issues:
 
-1. **Split Sessions**
-   - Check cross-domain setup
-   - Verify referral exclusions
-   - Check cookie settings
-
-2. **Missing Data**
-   - Verify GTM is firing
-   - Check real-time reports
-   - Review browser console for errors
-
-3. **Duplicate Pageviews**
-   - Check for multiple GTM installations
+1. **Missing Events**
+   - Check browser console for errors
+   - Verify GTM is loading
    - Review trigger conditions
-   - Verify SPA tracking setup
 
-## Post-Migration Tasks
+2. **Incorrect Environment**
+   - Clear cache and cookies
+   - Check hostname detection
+   - Verify DNS propagation
 
-### Week 1:
-- [ ] Daily monitoring of key metrics
-- [ ] Compare YoY data for anomalies
-- [ ] Check all conversion tracking
-- [ ] Review user feedback
+3. **Performance Issues**
+   - Monitor Core Web Vitals
+   - Check GTM container size
+   - Review tag firing rules
 
-### Week 2-4:
-- [ ] Weekly performance reviews
-- [ ] Update any missed campaign links
-- [ ] Fine-tune tracking based on data
-- [ ] Document any custom solutions
+## Maintenance
 
-### Month 2:
-- [ ] Full audit of tracking
-- [ ] Archive .co configuration
-- [ ] Update documentation
-- [ ] Team training on new setup
+### Weekly Tasks:
+- Review staging vs production traffic
+- Check for any .io indexing
+- Monitor event accuracy
+- Update tracking documentation
 
-## Support Resources
+### Monthly Tasks:
+- Audit custom events
+- Review conversion paths
+- Clean up unused GTM tags
+- Performance optimization
 
-- [GA4 Cross-Domain Tracking](https://support.google.com/analytics/answer/10071811)
-- [GTM Debug Mode](https://support.google.com/tagmanager/answer/6107056)
-- [GA4 DebugView](https://support.google.com/analytics/answer/7201382)
+## Quick Reference
 
-## Emergency Rollback Plan
-
-If critical issues arise:
-1. Revert DNS to .co
-2. Disable .io tracking in GTM
-3. Document issues encountered
-4. Plan fixes before retry
+### GTM Container: GTM-KR2LQG9K
+### Staging: prometheusagency.io (noindex)
+### Production: prometheusagency.co
+### Environment Parameter: site_environment
 
 ---
 
 Last Updated: [Current Date]
-Migration Owner: [Your Name]
+Project Owner: [Your Name]
 Emergency Contact: [Contact Info] 

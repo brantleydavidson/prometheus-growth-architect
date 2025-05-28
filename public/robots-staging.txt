@@ -1,0 +1,25 @@
+# Robots.txt for Staging Environment
+# prometheusagency.io - Development/Staging Site
+# Block all search engine crawlers
+
+User-agent: *
+Disallow: /
+
+# Block specific bots
+User-agent: Googlebot
+Disallow: /
+
+User-agent: Bingbot
+Disallow: /
+
+User-agent: Slurp
+Disallow: /
+
+User-agent: DuckDuckBot
+Disallow: /
+
+User-agent: Baiduspider
+Disallow: /
+
+# No sitemap for staging
+# Sitemap: none 

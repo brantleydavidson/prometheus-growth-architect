@@ -1,17 +1,18 @@
-# Prometheus Agency Robots.txt
-# https://www.prometheusagency.io
+# Robots.txt for Prometheus Agency
+# This file dynamically serves different content based on domain
 
+# For staging environment (prometheusagency.io)
+# Block all crawlers - this will be served via server configuration
+# User-agent: *
+# Disallow: /
+
+# For production environment (prometheusagency.co)
 # Allow all crawlers
 User-agent: *
 Allow: /
 
-# Disallow admin and API routes
-Disallow: /admin/
-Disallow: /api/
-Disallow: /.netlify/
-
-# Sitemap location
-Sitemap: https://prometheusagency.io/sitemap.xml
+# Sitemap location (production only)
+Sitemap: https://prometheusagency.co/sitemap.xml
 
 # Crawl delay (in seconds) - be nice to search engines
 Crawl-delay: 1
