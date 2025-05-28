@@ -1,42 +1,35 @@
-import React from "react";
-import { Database, Settings, ActivitySquare, CheckCircle, BarChart3 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
 
-interface TechLogoProps {
-  src: string;
-  alt: string;
-  className?: string;
-}
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || "https://xkarbwfzxfxgtnefcout.supabase.co";
+const supabaseAnonKey = process.env.REACT_APP_SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-const TechLogo = ({ src, alt, className = "" }: TechLogoProps) => {
-  return (
-    <div className={`p-4 flex items-center justify-center ${className}`} aria-label={`Technology: ${alt}`}>
-      <div className="w-full max-w-[120px]">
-        <img 
-          src={src} 
-          alt={`${alt} logo - Technology used by Prometheus Agency`}
-          className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100" 
-          onError={(e) => { e.currentTarget.src = '/fallback-tech-logo.png'; }}
-        />
-      </div>
-    </div>
-  );
-};
+const BUCKET = "cms_media";
+const FOLDER = "Technology Logos";
 
 const AboutTech = () => {
-  const technologies = [
-    { name: "HubSpot", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/hubspot.png" },
-    { name: "Looker Studio", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/looker.png" },
-    { name: "Microsoft Dynamics", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/microsoft-dynamics.png" },
-    { name: "Salesforce", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/salesforce.png" },
-    { name: "Google Analytics", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/google-analytics.png" },
-    { name: "Webflow", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/webflow.png" },
-    { name: "Google Ads", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/google-ads.png" },
-    { name: "Big Commerce", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/bigcommerce.png" },
-    { name: "Klaviyo", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/klaviyo.png" },
-    { name: "Meta", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/meta.png" },
-    { name: "Google Tag Manager", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/google-tag-manager.png" },
-    { name: "Shopify", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/shopify.png" },
-  ];
+  const [logos, setLogos] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchLogos = async () => {
+      setLoading(true);
+      const { data, error } = await supabase.storage.from(BUCKET).list(FOLDER, { limit: 100 });
+      if (error) {
+        setLogos([]);
+        setLoading(false);
+        return;
+      }
+      const pngs = (data || []).filter((file: any) => file.name.endsWith('.png'));
+      const urls = pngs.map((file: any) =>
+        `${supabaseUrl}/storage/v1/object/public/${BUCKET}/${encodeURIComponent(FOLDER)}/${encodeURIComponent(file.name)}`
+      );
+      setLogos(urls);
+      setLoading(false);
+    };
+    fetchLogos();
+  }, []);
 
   return (
     <section className="py-12 bg-white" aria-labelledby="technologies-heading">
@@ -47,17 +40,24 @@ const AboutTech = () => {
             We partner with industry-leading platforms to deliver comprehensive solutions for your business.
           </p>
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-          {technologies.map((tech, index) => (
-            <TechLogo 
-              key={index}
-              src={tech.src}
-              alt={tech.name}
-              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
-            />
-          ))}
-        </div>
+        {loading ? (
+          <div className="text-center py-12 text-prometheus-gray">Loading logos...</div>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+            {logos.map((src, index) => (
+              <div key={index} className="p-4 flex items-center justify-center bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
+                <div className="w-full max-w-[120px]">
+                  <img
+                    src={src}
+                    alt={`Technology logo ${index + 1}`}
+                    className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
+                    onError={e => { e.currentTarget.src = "/fallback-tech-logo.svg"; }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
