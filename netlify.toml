@@ -9,7 +9,19 @@
     X-Frame-Options = "SAMEORIGIN"
 
 [[redirects]]
-  from = "http://*prometheusagency.io/*"
+  from = "https://www.prometheusagency.io/*"
+  to = "https://prometheusagency.io/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://www.prometheusagency.io/*"
+  to = "https://prometheusagency.io/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://prometheusagency.io/*"
   to = "https://prometheusagency.io/:splat"
   status = 301
   force = true
