@@ -5,6 +5,7 @@ import WhoWeHelpMenu from "./WhoWeHelpMenu";
 import ServicesMenu from "./ServicesMenu";
 import PlaybooksMenu from "./PlaybooksMenu";
 import { Button } from "@/components/ui/button";
+import OptimizedImage from "@/components/common/OptimizedImage";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,12 +44,14 @@ const Navbar = () => {
       >
         <div className="container-custom flex justify-between items-center">
           <Link to="/" className="flex items-center" aria-label="Prometheus Agency - Home">
-            <img 
+            <OptimizedImage
               src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png" 
               alt="Prometheus Agency Logo" 
-              width="120" height="40"
+              width={120}
+              height={40}
               className="h-10 w-auto" 
-              fetchPriority="high"
+              priority={true}
+              sizes="120px"
             />
           </Link>
 

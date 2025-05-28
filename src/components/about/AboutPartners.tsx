@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
+import { getOptimizedImageProps } from "@/utils/imageOptimization";
 
 interface PartnerLogoProps {
   src: string;
@@ -13,6 +14,13 @@ interface PartnerLogoProps {
 const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) => {
   const [imgError, setImgError] = useState(false);
   
+  // Get optimized image props for logos (max width 200px for logos)
+  const imageProps = getOptimizedImageProps(src, `${alt} logo - Prometheus Agency partner`, {
+    width: 200,
+    sizes: '(max-width: 640px) 150px, 200px',
+    loading: 'lazy'
+  });
+  
   return (
     <div 
       className={`p-4 flex items-center justify-center ${className} transition-opacity duration-700 ${visible ? 'opacity-100' : 'opacity-0'}`} 
@@ -22,12 +30,10 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
         <AspectRatio ratio={3/1} className="bg-white rounded-md">
           <div className="h-full w-full flex items-center justify-center p-3">
             <img 
-              src={imgError ? "/logo-placeholder.svg" : src}
-              alt={`${alt} logo - Prometheus Agency partner`}
-              width="160" height="60"
-              loading="lazy" decoding="async"
+              {...imageProps}
               className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
               onError={() => setImgError(true)}
+              {...(imgError && { src: "/logo-placeholder.svg" })}
             />
           </div>
         </AspectRatio>

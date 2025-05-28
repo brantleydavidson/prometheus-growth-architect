@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { getOptimizedImageProps } from "@/utils/imageOptimization";
 
 const BUCKET = "cms_media";
 const FOLDER = "Technology Logos";
@@ -64,8 +65,11 @@ const AboutTech = () => {
             {logos.map((src, index) => (
               <div key={index} className="flex items-center justify-center bg-white">
                 <img
-                  src={src}
-                  alt={`Technology logo ${index + 1}`}
+                  {...getOptimizedImageProps(src, `Technology logo ${index + 1}`, {
+                    width: 150,
+                    sizes: '(max-width: 640px) 100px, 150px',
+                    loading: 'lazy'
+                  })}
                   className="max-h-12 md:max-h-16 w-auto grayscale opacity-80 object-contain"
                   onError={e => { e.currentTarget.src = "/fallback-tech-logo.svg"; }}
                 />
