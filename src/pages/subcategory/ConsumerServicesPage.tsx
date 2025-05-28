@@ -29,7 +29,7 @@ const ConsumerServicesPage = () => {
   const ctaText = "Book Your Service Business Audit";
   const ctaLink = "/book-audit";
   
-  const imagePath = "https://images.unsplash.com/photo-1556740738-b6a63e27c4df";
+  const imagePath = "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Page%20Images/consumer-services-hero.png";
   
   const testimonial = {
     quote: "Their team quickly developed a deep understanding of our unique operational needs, delivering customized HubSpot architectures and innovative automation solutions.Their responsiveness, clear communication, and strategic insights consistently exceeded our expectations. I wholeheartedly recommend Prometheus for any business seeking a dedicated HubSpot partner proficient in operational automation, CRM integration, and sales enablement.",
