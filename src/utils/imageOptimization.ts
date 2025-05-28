@@ -50,11 +50,42 @@ export function optimizeSupabaseImage(
  */
 export function getResponsiveImageSrcSet(
   url: string,
-  sizes: number[] = [400, 800, 1200, 1600]
+  sizes: number[] = [400, 800, 1200, 1600, 2400],
+  format: 'webp' | 'avif' = 'webp'
 ): string {
   return sizes
-    .map(size => `${optimizeSupabaseImage(url, { width: size })} ${size}w`)
+    .map(size => `${optimizeSupabaseImage(url, { width: size, format })} ${size}w`)
     .join(', ');
+}
+
+/**
+ * Generate a low-quality image placeholder URL
+ */
+export function generateBlurPlaceholder(
+  url: string,
+  width: number = 20,
+  quality: number = 20
+): string {
+  return optimizeSupabaseImage(url, {
+    width,
+    quality,
+    format: 'webp'
+  });
+}
+
+/**
+ * Get optimal sizes attribute based on layout
+ */
+export function getOptimalSizes(layout: 'full' | 'half' | 'third' | 'quarter' | 'thumbnail' = 'full'): string {
+  const sizesMap = {
+    full: '100vw',
+    half: '(min-width: 768px) 50vw, 100vw',
+    third: '(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw',
+    quarter: '(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw',
+    thumbnail: '(min-width: 1024px) 200px, (min-width: 768px) 150px, 100px'
+  };
+  
+  return sizesMap[layout];
 }
 
 /**
@@ -69,11 +100,13 @@ export function getOptimizedImageProps(
     sizes?: string;
     loading?: 'lazy' | 'eager';
     priority?: boolean;
+    quality?: number;
   } = {}
 ) {
   const optimizedSrc = optimizeSupabaseImage(src, {
     width: options.width,
     height: options.height,
+    quality: options.quality,
   });
 
   return {
@@ -86,4 +119,35 @@ export function getOptimizedImageProps(
     ...(options.width && { width: options.width }),
     ...(options.height && { height: options.height }),
   };
+}
+
+/**
+ * Check if browser supports AVIF format
+ */
+export function supportsAvif(): boolean {
+  if (typeof window === 'undefined') return false;
+  
+  const avifTest = new Image();
+  avifTest.src = 'data:image/avif;base64,AAAAFGZ0eXBhdmlmAAAAAG1pZjEAAACgbWV0YQAAAAAAAAAOcGl0bQAAAAAAAQAAAB5pbG9jAAAAAEQAAAEAAQAAAAEAAAC8AAAAGwAAACZpaW5mAAAAAAABAAAAFWluZmUCAAAAAAEAAGF2MDEAAAAARWlwcnAAAAAoaXBjbwAAABRpc3BlAAAAAAAAAAQAAAAEAAAADGF2MUOBAAAAAAAAFWlwbWEAAAAAAAAAAQABAgECAAAAI21kYXQSAAoIP8R8hAQ0BUAyDWeeUy0JG+QAACANEkA=';
+  
+  return avifTest.complete && avifTest.naturalHeight !== 0;
+}
+
+/**
+ * Preload critical images
+ */
+export function preloadImage(src: string, options?: ImageOptimizationOptions): void {
+  if (typeof window === 'undefined') return;
+  
+  const link = document.createElement('link');
+  link.rel = 'preload';
+  link.as = 'image';
+  link.href = optimizeSupabaseImage(src, options);
+  
+  // Add image format type if specified
+  if (options?.format) {
+    link.type = `image/${options.format}`;
+  }
+  
+  document.head.appendChild(link);
 } 

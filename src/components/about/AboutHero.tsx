@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import OptimizedImage from "@/components/common/OptimizedImage";
 
 const AboutHero = () => {
   return (
@@ -21,11 +22,13 @@ const AboutHero = () => {
             </Link>
           </div>
           <div className="flex justify-center lg:justify-end">
-            <img
+            <OptimizedImage
               src="https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/titan(navy).png"
               alt="Prometheus Titan Logo"
-              loading="lazy"
-              decoding="async"
+              priority={true}
+              width={512}
+              height={512}
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 512px"
               className="max-w-xs md:max-w-sm lg:max-w-md h-auto rounded-lg shadow-[0_10px_20px_rgba(0,46,93,0.25)]"
             />
           </div>

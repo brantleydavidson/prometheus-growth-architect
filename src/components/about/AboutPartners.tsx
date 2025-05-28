@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getOptimizedImageProps } from "@/utils/imageOptimization";
+import OptimizedImage from '@/components/common/OptimizedImage';
 
 interface PartnerLogoProps {
   src: string;
@@ -14,13 +15,6 @@ interface PartnerLogoProps {
 const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) => {
   const [imgError, setImgError] = useState(false);
   
-  // Get optimized image props for logos (max width 200px for logos)
-  const imageProps = getOptimizedImageProps(src, `${alt} logo - Prometheus Agency partner`, {
-    width: 200,
-    sizes: '(max-width: 640px) 150px, 200px',
-    loading: 'lazy'
-  });
-  
   return (
     <div 
       className={`p-4 flex items-center justify-center ${className} transition-opacity duration-700 ${visible ? 'opacity-100' : 'opacity-0'}`} 
@@ -29,11 +23,16 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
       <div className="w-full max-w-[160px]">
         <AspectRatio ratio={3/1} className="bg-white rounded-md">
           <div className="h-full w-full flex items-center justify-center p-3">
-            <img 
-              {...imageProps}
+            <OptimizedImage
+              src={imgError ? "/logo-placeholder.svg" : src}
+              alt={`${alt} logo - Prometheus Agency partner`}
+              width={200}
+              height={67}
+              aspectRatio={3}
+              sizes="(max-width: 640px) 120px, 160px"
               className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
               onError={() => setImgError(true)}
-              {...(imgError && { src: "/logo-placeholder.svg" })}
+              objectFit="contain"
             />
           </div>
         </AspectRatio>

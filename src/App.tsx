@@ -3,6 +3,8 @@ import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import { usePageTracking } from './utils/analytics';
+import { initWebVitals } from './utils/webVitals';
+import { useImagePerformanceObserver } from './hooks/useOptimizedImage';
 
 // Main pages - loaded immediately for better UX
 import Index from './pages/Index';
@@ -70,8 +72,16 @@ const PageLoader = () => (
 );
 
 const App = () => {
+  // Initialize Web Vitals monitoring
+  React.useEffect(() => {
+    initWebVitals();
+  }, []);
+  
   // Track page views
   usePageTracking();
+  
+  // Monitor image performance
+  useImagePerformanceObserver();
   
   return (
     <ErrorBoundary>
