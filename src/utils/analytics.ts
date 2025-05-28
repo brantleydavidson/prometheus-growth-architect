@@ -4,27 +4,51 @@ import { useLocation } from 'react-router-dom';
 // GTM Configuration
 const GTM_ID = 'GTM-KR2LQG9K';
 
+// GTM Environment Configuration
+// Replace these with your actual GTM environment tokens
+const GTM_ENVIRONMENTS = {
+  staging: {
+    auth: '', // Add your staging auth token here
+    preview: '', // Add your staging preview ID here
+  },
+  production: {
+    auth: null, // Production doesn't need auth
+    preview: null, // Production doesn't need preview
+  }
+};
+
+// Determine current environment
+const getCurrentEnvironment = () => {
+  return window.location.hostname.includes('.io') ? 'staging' : 'production';
+};
+
 // Initialize Google Tag Manager
 export const initGTM = () => {
   if (typeof window !== 'undefined' && !window.dataLayer) {
     // Initialize dataLayer
     window.dataLayer = window.dataLayer || [];
     
+    // Get environment config
+    const env = getCurrentEnvironment();
+    const envConfig = GTM_ENVIRONMENTS[env];
+    
+    // Build GTM URL with environment parameters
+    let gtmUrl = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
+    if (envConfig.auth && envConfig.preview) {
+      gtmUrl += `&gtm_auth=${envConfig.auth}&gtm_preview=${envConfig.preview}&gtm_cookies_win=x`;
+    }
+    
     // Add GTM script
     const script = document.createElement('script');
-    script.innerHTML = `
-      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-      'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-      })(window,document,'script','dataLayer','${GTM_ID}');
-    `;
+    script.async = true;
+    script.src = gtmUrl;
     document.head.appendChild(script);
     
-    // Track initial page load
+    // Track initial page load with environment
     window.dataLayer.push({
       event: 'gtm.init',
-      'gtm.start': new Date().getTime()
+      'gtm.start': new Date().getTime(),
+      environment: env
     });
   }
 };
