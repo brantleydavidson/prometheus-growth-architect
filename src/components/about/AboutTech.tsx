@@ -1,5 +1,5 @@
-
 import React from "react";
+import { Database, Settings, ActivitySquare, CheckCircle, BarChart3 } from "lucide-react";
 
 interface TechLogoProps {
   src: string;
@@ -22,35 +22,38 @@ const TechLogo = ({ src, alt, className = "" }: TechLogoProps) => {
 };
 
 const AboutTech = () => {
-  // Placeholder for technology logos - replace with actual logos when available
   const technologies = [
-    { name: "HubSpot", src: "https://via.placeholder.com/120x60?text=HubSpot" },
-    { name: "Looker Studio", src: "https://via.placeholder.com/120x60?text=Looker" },
-    { name: "Microsoft Dynamics", src: "https://via.placeholder.com/120x60?text=MSDynamics" },
-    { name: "Salesforce", src: "https://via.placeholder.com/120x60?text=Salesforce" },
-    { name: "Google Analytics", src: "https://via.placeholder.com/120x60?text=GA" },
-    { name: "Webflow", src: "https://via.placeholder.com/120x60?text=Webflow" },
-    { name: "Google Ads", src: "https://via.placeholder.com/120x60?text=GoogleAds" },
-    { name: "Big Commerce", src: "https://via.placeholder.com/120x60?text=BigCommerce" },
-    { name: "Klaviyo", src: "https://via.placeholder.com/120x60?text=Klaviyo" },
-    { name: "Meta", src: "https://via.placeholder.com/120x60?text=Meta" },
-    { name: "Google Tag Manager", src: "https://via.placeholder.com/120x60?text=GTM" },
-    { name: "Shopify", src: "https://via.placeholder.com/120x60?text=Shopify" },
+    { name: "HubSpot", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/hubspot.png" },
+    { name: "Looker Studio", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/looker.png" },
+    { name: "Microsoft Dynamics", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/microsoft-dynamics.png" },
+    { name: "Salesforce", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/salesforce.png" },
+    { name: "Google Analytics", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/google-analytics.png" },
+    { name: "Webflow", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/webflow.png" },
+    { name: "Google Ads", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/google-ads.png" },
+    { name: "Big Commerce", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/bigcommerce.png" },
+    { name: "Klaviyo", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/klaviyo.png" },
+    { name: "Meta", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/meta.png" },
+    { name: "Google Tag Manager", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/google-tag-manager.png" },
+    { name: "Shopify", src: "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Technology%20Logos/shopify.png" },
   ];
 
   return (
     <section className="py-12 bg-white" aria-labelledby="technologies-heading">
       <div className="container-custom">
-        <div className="mb-8 text-center lg:text-left">
-          <h3 id="technologies-heading" className="text-2xl font-medium text-prometheus-navy mb-2">Empowering businesses with cutting-edge technology solutions</h3>
+        <div className="mb-8 text-center">
+          <h3 id="technologies-heading" className="text-2xl font-medium text-prometheus-navy mb-2">Technology Solutions</h3>
+          <p className="text-lg text-prometheus-gray max-w-2xl mx-auto">
+            We partner with industry-leading platforms to deliver comprehensive solutions for your business.
+          </p>
         </div>
         
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {technologies.map((tech, index) => (
             <TechLogo 
               key={index}
               src={tech.src}
               alt={tech.name}
+              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
             />
           ))}
         </div>
