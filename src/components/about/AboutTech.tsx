@@ -48,8 +48,10 @@ const AboutTech = () => {
     <section className="py-12 bg-white" aria-labelledby="technologies-heading">
       <div className="container-custom">
         <div className="mb-8 text-center">
-          <h3 id="technologies-heading" className="text-2xl font-medium text-prometheus-navy mb-2">Technology Solutions</h3>
-          <p className="text-lg text-prometheus-gray max-w-2xl mx-auto">
+          <h2 id="technologies-heading" className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6 leading-tight">
+            Technology Solutions
+          </h2>
+          <p className="text-lg text-prometheus-gray max-w-2xl mx-auto mb-0">
             We partner with industry-leading platforms to deliver comprehensive solutions for your business.
           </p>
         </div>
