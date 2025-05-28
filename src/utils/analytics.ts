@@ -5,15 +5,6 @@ import { useLocation } from 'react-router-dom';
 // Option 1: Use same container for both environments (recommended)
 const GTM_ID = 'GTM-MSP3RD38'; // Your production container
 
-// Option 2: Use different containers per environment
-// Uncomment below and comment above to use this approach
-/*
-const GTM_CONTAINERS = {
-  staging: 'GTM-KR2LQG9K',    // Staging container
-  production: 'GTM-MSP3RD38'  // Production container
-};
-*/
-
 // GTM Environment Configuration
 // Replace these with your actual GTM environment tokens if using GTM environments
 const GTM_ENVIRONMENTS = {
@@ -32,50 +23,49 @@ const getCurrentEnvironment = () => {
   return window.location.hostname.includes('.io') ? 'staging' : 'production';
 };
 
-// Initialize Google Tag Manager
+// Initialize Google Tag Manager - Optimized for performance
 export const initGTM = () => {
   if (typeof window !== 'undefined' && !window.dataLayer) {
     // Initialize dataLayer
     window.dataLayer = window.dataLayer || [];
     
-    // Get environment config
+    // Get environment settings
     const env = getCurrentEnvironment();
     const envConfig = GTM_ENVIRONMENTS[env];
     
-    // Get the appropriate GTM ID
-    // If using different containers per environment, uncomment the next line
-    // const gtmId = GTM_CONTAINERS[env];
-    const gtmId = GTM_ID; // Using same container for all environments
-    
-    // Build GTM URL with environment parameters
-    let gtmUrl = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+    // Build GTM URL with optional environment parameters
+    let gtmUrl = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
     if (envConfig.auth && envConfig.preview) {
       gtmUrl += `&gtm_auth=${envConfig.auth}&gtm_preview=${envConfig.preview}&gtm_cookies_win=x`;
     }
     
-    // Add GTM script
+    // Add GTM script asynchronously with defer
     const script = document.createElement('script');
     script.async = true;
+    script.defer = true;
     script.src = gtmUrl;
-    document.head.appendChild(script);
     
-    // Track initial page load with environment
-    window.dataLayer.push({
-      event: 'gtm.init',
-      'gtm.start': new Date().getTime(),
-      environment: env,
-      gtm_container: gtmId
-    });
+    // Add performance optimization attributes
+    script.setAttribute('fetchpriority', 'low');
+    
+    // Insert script after window load to not block rendering
+    if (document.readyState === 'complete') {
+      document.head.appendChild(script);
+    } else {
+      window.addEventListener('load', () => {
+        document.head.appendChild(script);
+      });
+    }
   }
 };
 
-// Enhanced page tracking for SPA
+// Custom hook for page tracking
 export const usePageTracking = () => {
   const location = useLocation();
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.dataLayer) {
-      // Clean page path
+    // Wait for GTM to be available
+    if (window.dataLayer) {
       const pagePath = location.pathname + location.search;
       
       // Push enhanced pageview event
@@ -89,38 +79,100 @@ export const usePageTracking = () => {
         site_environment: window.location.hostname.includes('.io') ? 'staging' : 'production',
         timestamp: new Date().toISOString()
       });
-      
-      // Also push virtual pageview for GTM
-      window.dataLayer.push({
-        event: 'virtual_pageview',
-        virtualPagePath: pagePath,
-        virtualPageTitle: document.title
-      });
     }
   }, [location]);
 };
 
-// Enhanced form submission tracking
-export const trackFormSubmission = (formName: string, formData: Record<string, any>, success: boolean = true) => {
-  if (window.dataLayer) {
-    // Clean form data to avoid sending PII
-    const cleanedData = Object.keys(formData).reduce((acc, key) => {
-      if (!['email', 'phone', 'name', 'firstName', 'lastName'].includes(key)) {
-        acc[key] = formData[key];
+// Event tracking helper - with performance optimization
+export const trackEvent = (eventName: string, parameters: Record<string, any> = {}) => {
+  // Use requestIdleCallback for non-critical tracking
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(() => {
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: eventName,
+          ...parameters,
+          site_environment: getCurrentEnvironment(),
+          timestamp: new Date().toISOString()
+        });
       }
-      return acc;
-    }, {} as Record<string, any>);
-    
-    window.dataLayer.push({
-      event: 'form_submission',
-      form_name: formName,
-      form_id: formName.toLowerCase().replace(/\s+/g, '_'),
-      form_destination: window.location.pathname,
-      form_submit_success: success,
-      form_fields: Object.keys(formData).join(','),
-      // Don't send actual form data, just metadata
-      form_metadata: cleanedData
     });
+  } else {
+    // Fallback for browsers that don't support requestIdleCallback
+    setTimeout(() => {
+      if (window.dataLayer) {
+        window.dataLayer.push({
+          event: eventName,
+          ...parameters,
+          site_environment: getCurrentEnvironment(),
+          timestamp: new Date().toISOString()
+        });
+      }
+    }, 0);
+  }
+};
+
+// Ecommerce tracking helper
+export const trackPurchase = (transactionData: {
+  transactionId: string;
+  value: number;
+  currency: string;
+  items: Array<{
+    name: string;
+    category: string;
+    price: number;
+    quantity: number;
+  }>;
+}) => {
+  trackEvent('purchase', transactionData);
+};
+
+// Initialize GTM when this module loads
+// We'll do this after critical resources
+if (typeof window !== 'undefined') {
+  if (document.readyState === 'complete') {
+    // If page already loaded, wait a bit before initializing
+    setTimeout(initGTM, 100);
+  } else {
+    // Otherwise wait for window load
+    window.addEventListener('load', () => {
+      setTimeout(initGTM, 100);
+    });
+  }
+}
+
+// Enhanced form submission tracking with performance optimization
+export const trackFormSubmission = (formName: string, formData: Record<string, any> = {}, success: boolean = true) => {
+  // Use requestIdleCallback for non-critical tracking
+  const trackingFunction = () => {
+    if (window.dataLayer) {
+      // Clean form data to avoid sending PII
+      const cleanedData = Object.keys(formData).reduce((acc, key) => {
+        if (!['email', 'phone', 'name', 'firstName', 'lastName'].includes(key)) {
+          acc[key] = formData[key];
+        }
+        return acc;
+      }, {} as Record<string, any>);
+      
+      window.dataLayer.push({
+        event: 'form_submission',
+        form_name: formName,
+        form_id: formName.toLowerCase().replace(/\s+/g, '_'),
+        form_destination: window.location.pathname,
+        form_submit_success: success,
+        form_fields: Object.keys(formData).join(','),
+        // Don't send actual form data, just metadata
+        form_metadata: cleanedData,
+        site_environment: getCurrentEnvironment(),
+        timestamp: new Date().toISOString()
+      });
+    }
+  };
+  
+  if ('requestIdleCallback' in window) {
+    window.requestIdleCallback(trackingFunction);
+  } else {
+    setTimeout(trackingFunction, 0);
   }
 };
 

@@ -2,7 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import ErrorBoundary from './components/common/ErrorBoundary';
-import { initGTM, usePageTracking } from './utils/analytics';
+import { usePageTracking } from './utils/analytics';
 
 // Main pages - loaded immediately for better UX
 import Index from './pages/Index';
@@ -70,11 +70,6 @@ const PageLoader = () => (
 );
 
 const App = () => {
-  // Initialize GTM on app load
-  React.useEffect(() => {
-    initGTM();
-  }, []);
-  
   // Track page views
   usePageTracking();
   

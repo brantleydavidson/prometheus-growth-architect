@@ -54,3 +54,13 @@
 
 # Catch all for any other paths that might have been missed
 /* /404.html 404
+
+# Redirect www to non-www at the edge for better performance
+https://www.prometheusagency.io/* https://prometheusagency.io/:splat 301!
+http://www.prometheusagency.io/* https://prometheusagency.io/:splat 301!
+
+# Force HTTPS
+http://prometheusagency.io/* https://prometheusagency.io/:splat 301!
+
+# Handle client-side routing for SPA
+/*  /index.html  200
