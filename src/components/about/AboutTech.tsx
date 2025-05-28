@@ -60,15 +60,13 @@ const AboutTech = () => {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
             {logos.map((src, index) => (
-              <div key={index} className="p-4 flex items-center justify-center bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200">
-                <div className="w-full max-w-[120px]">
-                  <img
-                    src={src}
-                    alt={`Technology logo ${index + 1}`}
-                    className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
-                    onError={e => { e.currentTarget.src = "/fallback-tech-logo.svg"; }}
-                  />
-                </div>
+              <div key={index} className="flex items-center justify-center bg-white">
+                <img
+                  src={src}
+                  alt={`Technology logo ${index + 1}`}
+                  className="max-h-12 md:max-h-16 w-auto grayscale opacity-80 object-contain"
+                  onError={e => { e.currentTarget.src = "/fallback-tech-logo.svg"; }}
+                />
               </div>
             ))}
           </div>
