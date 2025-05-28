@@ -15,6 +15,7 @@ const TechLogo = ({ src, alt, className = "" }: TechLogoProps) => {
           src={src} 
           alt={`${alt} logo - Technology used by Prometheus Agency`}
           className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100" 
+          onError={(e) => { e.currentTarget.src = '/fallback-tech-logo.png'; }}
         />
       </div>
     </div>
