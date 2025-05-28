@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
 import ErrorBoundary from './components/common/ErrorBoundary';
 
-// Main pages
+// Main pages - loaded immediately for better UX
 import Index from './pages/Index';
 import DTCPage from './pages/DTCPage';
 import DTCLandingPage from './pages/DTCLandingPage';
@@ -22,15 +22,15 @@ import PlaybooksPage from './pages/PlaybooksPage';
 // Import for dynamic blog post component
 import DynamicBlogPost from './components/blog/DynamicBlogPost';
 
-// Static insight detail pages (keeping these for backward compatibility)
-import CRMConsultingConwayARPage from './pages/InsightDetail/CRMConsultingConwayARPage';
-import CRMConsultingPage from './pages/InsightDetail/CRMConsultingPage';
-import SalesforceJacksonPage from './pages/InsightDetail/SalesforceJacksonPage';
-import CRMAuditServicesJacksonPage from './pages/InsightDetail/CRMAuditServicesJacksonPage';
-import HubSpotAgencyPartnerConwayARPage from './pages/InsightDetail/HubSpotAgencyPartnerConwayARPage';
-import CRMForRealEstateAgentsInLittleRockARPage from './pages/InsightDetail/CRMForRealEstateAgentsInLittleRockARPage';
-import HubSpotCRMIntegrationJacksonPage from './pages/InsightDetail/HubSpotCRMIntegrationJacksonPage';
-import CRMIntegrationServicesJacksonPage from './pages/InsightDetail/CRMIntegrationServicesJacksonPage';
+// Lazy load only heavy, non-critical pages (insight detail pages)
+const CRMConsultingConwayARPage = lazy(() => import('./pages/InsightDetail/CRMConsultingConwayARPage'));
+const CRMConsultingPage = lazy(() => import('./pages/InsightDetail/CRMConsultingPage'));
+const SalesforceJacksonPage = lazy(() => import('./pages/InsightDetail/SalesforceJacksonPage'));
+const CRMAuditServicesJacksonPage = lazy(() => import('./pages/InsightDetail/CRMAuditServicesJacksonPage'));
+const HubSpotAgencyPartnerConwayARPage = lazy(() => import('./pages/InsightDetail/HubSpotAgencyPartnerConwayARPage'));
+const CRMForRealEstateAgentsInLittleRockARPage = lazy(() => import('./pages/InsightDetail/CRMForRealEstateAgentsInLittleRockARPage'));
+const HubSpotCRMIntegrationJacksonPage = lazy(() => import('./pages/InsightDetail/HubSpotCRMIntegrationJacksonPage'));
+const CRMIntegrationServicesJacksonPage = lazy(() => import('./pages/InsightDetail/CRMIntegrationServicesJacksonPage'));
 
 // Subcategory pages
 import ManufacturingPage from './pages/subcategory/ManufacturingPage';
@@ -40,15 +40,15 @@ import EcommercePage from './pages/subcategory/EcommercePage';
 import SaaSPage from './pages/subcategory/SaaSPage';
 import ConsumerServicesPage from './pages/subcategory/ConsumerServicesPage';
 
-// Admin pages
-import LoginPage from './pages/admin/LoginPage';
-import Dashboard from './pages/admin/Dashboard';
-import MediaLibrary from './pages/admin/MediaLibrary';
-import PageEditor from './pages/admin/PageEditor';
-import BlogEditor from './pages/admin/BlogEditor';
-import SEOManager from './pages/admin/SEOManager';
-import MigrateStaticContentPage from './pages/MigrateStaticContentPage';
-import BlogContentTemplate from './pages/admin/BlogContentTemplate';
+// Lazy load admin pages (not critical for initial load)
+const LoginPage = lazy(() => import('./pages/admin/LoginPage'));
+const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
+const MediaLibrary = lazy(() => import('./pages/admin/MediaLibrary'));
+const PageEditor = lazy(() => import('./pages/admin/PageEditor'));
+const BlogEditor = lazy(() => import('./pages/admin/BlogEditor'));
+const SEOManager = lazy(() => import('./pages/admin/SEOManager'));
+const MigrateStaticContentPage = lazy(() => import('./pages/MigrateStaticContentPage'));
+const BlogContentTemplate = lazy(() => import('./pages/admin/BlogContentTemplate'));
 
 // Auth protection
 import AuthProtected from './components/cms/AuthProtected';
@@ -60,6 +60,13 @@ import CRMImplementationPage from './pages/CRMImplementationPage';
 import CustomerJourneyPage from './pages/CustomerJourneyPage';
 import PaidMediaPage from './pages/PaidMediaPage';
 import ReportingAnalyticsPage from './pages/ReportingAnalyticsPage';
+
+// Loading component for lazy loaded pages
+const PageLoader = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-prometheus-orange"></div>
+  </div>
+);
 
 const App = () => {
   return (
@@ -94,14 +101,14 @@ const App = () => {
           <Route path="/about" element={<AboutPage />} />
           
           {/* Legacy static blog post routes - keep for backward compatibility */}
-          <Route path="/insights/crm-consulting-services-in-conway-ar" element={<CRMConsultingConwayARPage />} />
-          <Route path="/insights/crm-consulting" element={<CRMConsultingPage />} />
-          <Route path="/insights/salesforce-crm-integration-in-jackson-ms" element={<SalesforceJacksonPage />} />
-          <Route path="/insights/crm-audit-services-in-jackson-ms" element={<CRMAuditServicesJacksonPage />} />
-          <Route path="/insights/hubspot-agency-partner-in-conway-ar" element={<HubSpotAgencyPartnerConwayARPage />} />
-          <Route path="/insights/crm-for-real-estate-agents-in-little-rock-ar" element={<CRMForRealEstateAgentsInLittleRockARPage />} />
-          <Route path="/insights/hubspot-crm-integration-in-jackson-ms" element={<HubSpotCRMIntegrationJacksonPage />} />
-          <Route path="/insights/crm-integration-services-in-jackson-ms" element={<CRMIntegrationServicesJacksonPage />} />
+          <Route path="/insights/crm-consulting-services-in-conway-ar" element={<Suspense fallback={<PageLoader />}><CRMConsultingConwayARPage /></Suspense>} />
+          <Route path="/insights/crm-consulting" element={<Suspense fallback={<PageLoader />}><CRMConsultingPage /></Suspense>} />
+          <Route path="/insights/salesforce-crm-integration-in-jackson-ms" element={<Suspense fallback={<PageLoader />}><SalesforceJacksonPage /></Suspense>} />
+          <Route path="/insights/crm-audit-services-in-jackson-ms" element={<Suspense fallback={<PageLoader />}><CRMAuditServicesJacksonPage /></Suspense>} />
+          <Route path="/insights/hubspot-agency-partner-in-conway-ar" element={<Suspense fallback={<PageLoader />}><HubSpotAgencyPartnerConwayARPage /></Suspense>} />
+          <Route path="/insights/crm-for-real-estate-agents-in-little-rock-ar" element={<Suspense fallback={<PageLoader />}><CRMForRealEstateAgentsInLittleRockARPage /></Suspense>} />
+          <Route path="/insights/hubspot-crm-integration-in-jackson-ms" element={<Suspense fallback={<PageLoader />}><HubSpotCRMIntegrationJacksonPage /></Suspense>} />
+          <Route path="/insights/crm-integration-services-in-jackson-ms" element={<Suspense fallback={<PageLoader />}><CRMIntegrationServicesJacksonPage /></Suspense>} />
           
           {/* Dynamic blog post route - this will handle all future blog posts */}
           <Route path="/insights/:slug" element={<DynamicBlogPost />} />
@@ -115,14 +122,14 @@ const App = () => {
           <Route path="/consumer-services" element={<ConsumerServicesPage />} />
           
           {/* Admin Routes */}
-          <Route path="/admin/login" element={<LoginPage />} />
-          <Route path="/admin" element={<AuthProtected><Dashboard /></AuthProtected>} />
-          <Route path="/admin/media-library" element={<AuthProtected><MediaLibrary /></AuthProtected>} />
-          <Route path="/admin/page-editor" element={<AuthProtected><PageEditor /></AuthProtected>} />
-          <Route path="/admin/blog-editor" element={<AuthProtected><BlogEditor /></AuthProtected>} />
-          <Route path="/admin/seo-manager" element={<AuthProtected><SEOManager /></AuthProtected>} />
-          <Route path="/admin/migrate-content" element={<AuthProtected><MigrateStaticContentPage /></AuthProtected>} />
-          <Route path="/admin/blog-template" element={<AuthProtected><BlogContentTemplate /></AuthProtected>} />
+          <Route path="/admin/login" element={<Suspense fallback={<PageLoader />}><LoginPage /></Suspense>} />
+          <Route path="/admin" element={<AuthProtected><Suspense fallback={<PageLoader />}><Dashboard /></Suspense></AuthProtected>} />
+          <Route path="/admin/media-library" element={<AuthProtected><Suspense fallback={<PageLoader />}><MediaLibrary /></Suspense></AuthProtected>} />
+          <Route path="/admin/page-editor" element={<AuthProtected><Suspense fallback={<PageLoader />}><PageEditor /></Suspense></AuthProtected>} />
+          <Route path="/admin/blog-editor" element={<AuthProtected><Suspense fallback={<PageLoader />}><BlogEditor /></Suspense></AuthProtected>} />
+          <Route path="/admin/seo-manager" element={<AuthProtected><Suspense fallback={<PageLoader />}><SEOManager /></Suspense></AuthProtected>} />
+          <Route path="/admin/migrate-content" element={<AuthProtected><Suspense fallback={<PageLoader />}><MigrateStaticContentPage /></Suspense></AuthProtected>} />
+          <Route path="/admin/blog-template" element={<AuthProtected><Suspense fallback={<PageLoader />}><BlogContentTemplate /></Suspense></AuthProtected>} />
           
           {/* Executive Cheat Sheet Routes */}
           <Route path="/hubspot-executive-cheatsheet" element={<ExecutiveCheatSheetPage />} />
