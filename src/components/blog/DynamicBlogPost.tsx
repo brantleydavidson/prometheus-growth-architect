@@ -292,7 +292,11 @@ const DynamicBlogPost = () => {
     processedContent = processedContent.replace(mediaRegex, (match, mediaTitle) => {
       const mediaUrl = mediaItems[mediaTitle];
       if (mediaUrl) {
-        return `<img src="${mediaUrl}" alt="${mediaTitle}" class="my-4 rounded-lg max-w-full h-auto" />`;
+        // Use optimized image URL with responsive sizing
+        const optimizedUrl = mediaUrl.includes('supabase.co/storage/v1/object/public/') 
+          ? `${mediaUrl}?width=800&quality=80&format=webp`
+          : mediaUrl;
+        return `<img src="${optimizedUrl}" alt="${mediaTitle}" class="my-4 rounded-lg max-w-full h-auto" loading="lazy" decoding="async" />`;
       }
       return match; // Keep the original if not found
     });
