@@ -54,7 +54,6 @@ const AboutPartners = () => {
   useEffect(() => {
     const fetchLogos = async () => {
       try {
-        console.log('Fetching client logos from Supabase...');
         const { data, error } = await supabase.storage
           .from('cms_media')
           .list('Active Client Logos', { 
@@ -65,18 +64,37 @@ const AboutPartners = () => {
 
         if (error) {
           console.error('Supabase error:', error);
-          throw error;
+          // Use fallback logos if there's an error
+          const fallbackLogos = Array.from({ length: 12 }, (_, i) => ({
+            name: `client-${i + 1}`,
+            url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png",
+            title: `Client ${i + 1}`
+          }));
+          setAllLogos(fallbackLogos);
+          setDisplayedLogos(fallbackLogos.slice(0, displayCount));
+          setIsLoading(false);
+          return;
         }
 
-        console.log('Found files:', data);
+        if (!data || data.length === 0) {
+          console.log('No logos found in Active Client Logos folder');
+          // Use fallback logos if folder is empty
+          const fallbackLogos = Array.from({ length: 12 }, (_, i) => ({
+            name: `client-${i + 1}`,
+            url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png",
+            title: `Client ${i + 1}`
+          }));
+          setAllLogos(fallbackLogos);
+          setDisplayedLogos(fallbackLogos.slice(0, displayCount));
+          setIsLoading(false);
+          return;
+        }
 
         const logos = await Promise.all(
-          (data || []).map(async (file) => {
+          data.map(async (file) => {
             const { data: { publicUrl } } = supabase.storage
               .from('cms_media')
               .getPublicUrl(`Active Client Logos/${file.name}`);
-            
-            console.log('Logo URL:', publicUrl);
             
             return {
               name: file.name,
@@ -92,6 +110,14 @@ const AboutPartners = () => {
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching logos:', error);
+        // Use fallback logos on any error
+        const fallbackLogos = Array.from({ length: 12 }, (_, i) => ({
+          name: `client-${i + 1}`,
+          url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png",
+          title: `Client ${i + 1}`
+        }));
+        setAllLogos(fallbackLogos);
+        setDisplayedLogos(fallbackLogos.slice(0, displayCount));
         setIsLoading(false);
       }
     };
