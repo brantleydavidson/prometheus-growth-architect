@@ -20,7 +20,7 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
       aria-label={`Partner: ${alt}`}
     >
       <div className="w-full max-w-[160px]">
-        <AspectRatio ratio={3/1} className="bg-white rounded-md">
+        <AspectRatio ratio={3/1} className="bg-gray-100 rounded-md">
           <div className="h-full w-full flex items-center justify-center p-3">
             <OptimizedImage
               src={imgError ? "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png" : src}
@@ -29,7 +29,7 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
               height={67}
               aspectRatio={3}
               sizes="(max-width: 640px) 120px, 160px"
-              className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
+              className="max-h-full max-w-full object-contain transition-all opacity-90 hover:opacity-100"
               onError={() => setImgError(true)}
               objectFit="contain"
             />
