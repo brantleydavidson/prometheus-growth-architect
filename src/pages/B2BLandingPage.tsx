@@ -7,6 +7,7 @@ import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle, ArrowRight } from "lucide-react";
+import OptimizedImage from "@/components/common/OptimizedImage";
 
 const B2BLandingPage = () => {
   // SEO data
@@ -89,10 +90,15 @@ const B2BLandingPage = () => {
               
               <div className="relative">
                 <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
-                  <img 
+                  <OptimizedImage 
                     src="/images/pages/b2b-page-main-hero.png" 
                     alt="B2B professionals analyzing growth data" 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full"
+                    objectFit="cover"
+                    priority={true}
+                    width={1920}
+                    height={1080}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 800px"
                   />
                 </div>
               </div>
@@ -115,7 +121,7 @@ const B2BLandingPage = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {industries.map((industry, index) => (
-                <Card key={index} className="border border-gray-100 hover:border-prometheus-orange transition-all duration-300">
+                <Card key={index} className="border border-gray-100 hover:border-prometheus-orange transition-all duration-300 bg-gray-50">
                   <CardContent className="p-6">
                     <div className="mb-4">
                       <img 

@@ -23,7 +23,7 @@ const AboutHero = () => {
           </div>
           <div className="flex justify-center lg:justify-end">
             <OptimizedImage
-              src="https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/titan(navy).png"
+              src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png"
               alt="Prometheus Titan Logo"
               priority={true}
               width={512}

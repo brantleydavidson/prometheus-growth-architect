@@ -89,6 +89,15 @@ export default defineConfig((env) => {
       rollupOptions,
       // Increase chunk size warning limit
       chunkSizeWarningLimit: 1000,
+      // Optimize assets
+      assetsInlineLimit: 4096, // 4kb - inline smaller assets
+      // Enable CSS code splitting
+      cssCodeSplit: true,
+    },
+    // Optimize dependencies
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'react-router-dom'],
+      exclude: ['@supabase/supabase-js'],
     },
     // Ensure certain dependencies are bundled for SSR instead of being treated as external
     ssr: {

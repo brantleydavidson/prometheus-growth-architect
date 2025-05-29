@@ -49,7 +49,7 @@ const AboutTech = () => {
     <section className="py-12 bg-white" aria-labelledby="technologies-heading">
       <div className="container-custom">
         <div className="mb-8 text-center">
-          <h2 id="technologies-heading" className="text-4xl md:text-5xl font-semibold text-prometheus-navy mb-6 leading-tight">
+          <h2 id="technologies-heading" className="text-3xl font-semibold text-prometheus-navy mb-4">
             Technology Solutions
           </h2>
           <p className="text-lg text-prometheus-gray max-w-2xl mx-auto mb-0">
@@ -63,16 +63,18 @@ const AboutTech = () => {
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
             {logos.map((src, index) => (
-              <div key={index} className="flex items-center justify-center bg-white">
-                <img
-                  {...getOptimizedImageProps(src, `Technology logo ${index + 1}`, {
-                    width: 150,
-                    sizes: '(max-width: 640px) 100px, 150px',
-                    loading: 'lazy'
-                  })}
-                  className="max-h-12 md:max-h-16 w-auto grayscale opacity-80 object-contain"
-                  onError={e => { e.currentTarget.src = "/fallback-tech-logo.svg"; }}
-                />
+              <div key={index} className="flex items-center justify-center p-4 bg-gray-50 rounded-lg">
+                <div className="w-28 h-14 flex items-center justify-center">
+                  <img
+                    {...getOptimizedImageProps(src, `Technology logo ${index + 1}`, {
+                      width: 150,
+                      sizes: '(max-width: 640px) 100px, 150px',
+                      loading: 'lazy'
+                    })}
+                    className="max-w-full max-h-full object-contain grayscale opacity-80 hover:grayscale-0 hover:opacity-100 transition-all duration-200"
+                    onError={e => { e.currentTarget.src = "/fallback-tech-logo.svg"; }}
+                  />
+                </div>
               </div>
             ))}
           </div>

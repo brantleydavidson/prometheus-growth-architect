@@ -26,12 +26,6 @@ const RestorationPage = () => {
       seoTitle="Restoration Business Growth Solutions | Prometheus Agency"
       seoDescription="Transform emergency calls into sustained revenue streams with strategic marketing and sales solutions for restoration companies. Contact Prometheus Agency today."
       imagePath="/images/pages/restoration-hero.png"
-      testimonial={{
-        quote: "Since partnering with Prometheus, our emergency call volume has increased by 43% and our cost per acquisition has dropped by over 20%.",
-        author: "Jennifer Martinez",
-        position: "Marketing Director",
-        company: "Rapid Restoration Services"
-      }}
     />
   );
 };
