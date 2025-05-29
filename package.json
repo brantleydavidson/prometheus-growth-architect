@@ -18,8 +18,7 @@
     "ssr:server:build": "vite build --outDir dist/client",
     "sync-images": "node scripts/sync-supabase-images.js",
     "update-image-refs": "node scripts/update-image-references.js",
-    "sync-and-update": "npm run sync-images && npm run update-image-refs",
-    "prebuild": "npm run sync-images"
+    "sync-and-update": "npm run sync-images && npm run update-image-refs"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
