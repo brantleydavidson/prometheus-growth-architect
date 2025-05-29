@@ -11,7 +11,16 @@
     "build:prerender": "node prerender.js",
     "build:dev": "BUILD_TYPE=client vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "patch-package",
+    "start": "vite",
+    "start:ssr": "cross-env NODE_ENV=production node dist/server/entry-server.js",
+    "ssr:build": "cross-env BUILD_TYPE=ssr vite build --ssr src/entry-server.tsx --outDir dist/server",
+    "ssr:server:build": "vite build --outDir dist/client",
+    "sync-images": "node scripts/sync-supabase-images.js",
+    "update-image-refs": "node scripts/update-image-references.js",
+    "sync-and-update": "npm run sync-images && npm run update-image-refs",
+    "prebuild": "npm run sync-images"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
