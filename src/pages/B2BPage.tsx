@@ -31,17 +31,17 @@ const B2BPage = () => {
     {
       title: "CRM Implementation & Optimization",
       description: "Custom CRM solutions designed for complex B2B sales cycles and multiple stakeholders.",
-      icon: "https://placehold.co/100x100/gray/white?text=CRM"
+      icon: "/images/icons/b2b-manufacturing-icon.png"
     },
     {
       title: "Marketing & Sales Alignment",
       description: "Strategic frameworks that align your teams around shared goals and consistent messaging.",
-      icon: "https://placehold.co/100x100/gray/white?text=MSA"
+      icon: "/images/icons/b2b-professional-services-icon.png"
     },
     {
       title: "AI-Enabled Lead Scoring",
       description: "Predictive models that identify your most promising prospects based on behavioral patterns.",
-      icon: "https://placehold.co/100x100/gray/white?text=AI"
+      icon: "/images/icons/b2b-services-saas-icon.png"
     },
     {
       title: "Account-Based Marketing",
