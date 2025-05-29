@@ -2,40 +2,7 @@ import React, { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
 import OptimizedImage from '@/components/common/OptimizedImage';
-
-// Hardcoded partner logos - using placeholder for now
-const PARTNER_LOGOS = [
-  { 
-    name: "hubspot", 
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/HubSpot_Logo.svg/320px-HubSpot_Logo.svg.png", 
-    title: "HubSpot" 
-  },
-  { 
-    name: "salesforce", 
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f9/Salesforce.com_logo.svg/320px-Salesforce.com_logo.svg.png", 
-    title: "Salesforce" 
-  },
-  { 
-    name: "microsoft", 
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/Microsoft_logo_%282012%29.svg/320px-Microsoft_logo_%282012%29.svg.png", 
-    title: "Microsoft" 
-  },
-  { 
-    name: "google", 
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/120px-Google_%22G%22_logo.svg.png", 
-    title: "Google Cloud" 
-  },
-  { 
-    name: "aws", 
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Amazon_Web_Services_Logo.svg/320px-Amazon_Web_Services_Logo.svg.png", 
-    title: "Amazon Web Services" 
-  },
-  { 
-    name: "adobe", 
-    url: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Adobe_Corporate_Logo.svg/200px-Adobe_Corporate_Logo.svg.png", 
-    title: "Adobe" 
-  },
-];
+import { supabase } from "@/integrations/supabase/client";
 
 interface PartnerLogoProps {
   src: string;
@@ -55,11 +22,16 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
       <div className="w-full max-w-[160px]">
         <AspectRatio ratio={3/1} className="bg-gray-100 rounded-md">
           <div className="h-full w-full flex items-center justify-center p-3">
-            <img
+            <OptimizedImage
               src={imgError ? "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png" : src}
               alt={`${alt} logo - Prometheus Agency partner`}
-              className="max-h-full max-w-full object-contain transition-all opacity-90 hover:opacity-100"
+              width={200}
+              height={67}
+              aspectRatio={3}
+              sizes="(max-width: 640px) 120px, 160px"
+              className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
               onError={() => setImgError(true)}
+              objectFit="contain"
             />
           </div>
         </AspectRatio>
@@ -69,8 +41,9 @@ const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) =>
 };
 
 const AboutPartners = () => {
-  const [displayedLogos, setDisplayedLogos] = useState<any[]>(PARTNER_LOGOS);
-  const [isLoading, setIsLoading] = useState(false);
+  const [allLogos, setAllLogos] = useState<any[]>([]);
+  const [displayedLogos, setDisplayedLogos] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [visibleLogos, setVisibleLogos] = useState<boolean[]>(new Array(6).fill(true));
   
   // Number of logos to display at once
@@ -79,17 +52,88 @@ const AboutPartners = () => {
   const rotationInterval = 4000;
 
   useEffect(() => {
-    // Simple rotation effect - cycle through logos
-    const interval = setInterval(() => {
-      setDisplayedLogos(prev => {
-        const first = prev[0];
-        const rest = prev.slice(1);
-        return [...rest, first];
-      });
-    }, rotationInterval);
+    const fetchLogos = async () => {
+      try {
+        const { data, error } = await supabase.storage
+          .from('cms_media')
+          .list('Active Client Logos', { 
+            limit: 100,
+            offset: 0,
+            sortBy: { column: 'name', order: 'asc' }
+          });
 
-    return () => clearInterval(interval);
+        if (error) throw error;
+
+        const logos = await Promise.all(
+          (data || []).map(async (file) => {
+            const { data: { publicUrl } } = supabase.storage
+              .from('cms_media')
+              .getPublicUrl(`Active Client Logos/${file.name}`);
+            
+            return {
+              name: file.name,
+              url: publicUrl,
+              title: file.name.replace(/\.[^/.]+$/, "").replace(/-/g, " ")
+            };
+          })
+        );
+
+        setAllLogos(logos);
+        setDisplayedLogos(logos.slice(0, displayCount));
+        setVisibleLogos(new Array(displayCount).fill(true));
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching logos:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchLogos();
   }, []);
+
+  useEffect(() => {
+    if (allLogos.length <= displayCount) return;
+
+    const rotateLogo = async () => {
+      // Randomly select which logo to replace
+      const indexToReplace = Math.floor(Math.random() * displayCount);
+      
+      // Make the logo invisible
+      setVisibleLogos(prev => {
+        const newState = [...prev];
+        newState[indexToReplace] = false;
+        return newState;
+      });
+
+      // Wait for fade out
+      await new Promise(resolve => setTimeout(resolve, 700));
+
+      // Get a new logo that's not currently displayed
+      const currentIds = displayedLogos.map(logo => logo.name);
+      const availableLogos = allLogos.filter(logo => !currentIds.includes(logo.name));
+      
+      if (availableLogos.length > 0) {
+        const newLogo = availableLogos[Math.floor(Math.random() * availableLogos.length)];
+
+        // Replace the logo
+        setDisplayedLogos(prev => {
+          const newLogos = [...prev];
+          newLogos[indexToReplace] = newLogo;
+          return newLogos;
+        });
+
+        // Make the new logo visible
+        setVisibleLogos(prev => {
+          const newState = [...prev];
+          newState[indexToReplace] = true;
+          return newState;
+        });
+      }
+    };
+
+    const interval = setInterval(rotateLogo, rotationInterval);
+    return () => clearInterval(interval);
+  }, [allLogos, displayedLogos]);
 
   return (
     <section className="py-12 bg-gray-50" aria-labelledby="partners-heading">
@@ -108,7 +152,7 @@ const AboutPartners = () => {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-            {displayedLogos.slice(0, displayCount).map((logo, index) => (
+            {displayedLogos.map((logo, index) => (
               <PartnerLogo 
                 key={`${logo.name}-${index}`}
                 src={logo.url}
