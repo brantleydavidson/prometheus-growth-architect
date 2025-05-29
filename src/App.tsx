@@ -5,6 +5,8 @@ import ErrorBoundary from './components/common/ErrorBoundary';
 import { usePageTracking } from './utils/analytics';
 import { initWebVitals } from './utils/webVitals';
 import { useImagePerformanceObserver } from './hooks/useOptimizedImage';
+import SEOHead from './components/common/SEOHead';
+import { initializeAccessibility } from './utils/accessibility';
 
 // Main pages - loaded immediately for better UX
 import Index from './pages/Index';
@@ -77,6 +79,11 @@ const App = () => {
     initWebVitals();
   }, []);
   
+  // Initialize accessibility features
+  React.useEffect(() => {
+    initializeAccessibility();
+  }, []);
+  
   // Track page views
   usePageTracking();
   
@@ -85,6 +92,7 @@ const App = () => {
   
   return (
     <ErrorBoundary>
+      <SEOHead />
       <div className="App w-full min-h-screen">
         <Routes>
           {/* Public Routes */}
