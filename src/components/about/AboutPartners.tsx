@@ -54,6 +54,7 @@ const AboutPartners = () => {
   useEffect(() => {
     const fetchLogos = async () => {
       try {
+        console.log('Fetching client logos from Supabase...');
         const { data, error } = await supabase.storage
           .from('cms_media')
           .list('Active Client Logos', { 
@@ -62,13 +63,20 @@ const AboutPartners = () => {
             sortBy: { column: 'name', order: 'asc' }
           });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Supabase error:', error);
+          throw error;
+        }
+
+        console.log('Found files:', data);
 
         const logos = await Promise.all(
           (data || []).map(async (file) => {
             const { data: { publicUrl } } = supabase.storage
               .from('cms_media')
               .getPublicUrl(`Active Client Logos/${file.name}`);
+            
+            console.log('Logo URL:', publicUrl);
             
             return {
               name: file.name,
