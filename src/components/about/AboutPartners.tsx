@@ -1,40 +1,87 @@
 import React, { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Skeleton } from "@/components/ui/skeleton";
 
-// Static partner data - no external dependencies
-const STATIC_PARTNERS = [
-  { name: "Partner 1", id: "partner1" },
-  { name: "Partner 2", id: "partner2" },
-  { name: "Partner 3", id: "partner3" },
-  { name: "Partner 4", id: "partner4" },
-  { name: "Partner 5", id: "partner5" },
-  { name: "Partner 6", id: "partner6" },
-  { name: "Partner 7", id: "partner7" },
-  { name: "Partner 8", id: "partner8" },
-  { name: "Partner 9", id: "partner9" },
-  { name: "Partner 10", id: "partner10" },
-  { name: "Partner 11", id: "partner11" },
-  { name: "Partner 12", id: "partner12" },
+// Real partner logos from reliable sources
+const PARTNER_LOGOS = [
+  { 
+    name: "Microsoft", 
+    id: "microsoft",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/microsoft/microsoft-original.svg"
+  },
+  { 
+    name: "Google", 
+    id: "google",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+  },
+  { 
+    name: "Amazon", 
+    id: "amazon",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original.svg"
+  },
+  { 
+    name: "Slack", 
+    id: "slack",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg"
+  },
+  { 
+    name: "Docker", 
+    id: "docker",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg"
+  },
+  { 
+    name: "LinkedIn", 
+    id: "linkedin",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
+  },
+  { 
+    name: "GitHub", 
+    id: "github",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+  },
+  { 
+    name: "Salesforce", 
+    id: "salesforce",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/salesforce/salesforce-original.svg"
+  },
+  { 
+    name: "Apple", 
+    id: "apple",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apple/apple-original.svg"
+  },
+  { 
+    name: "Facebook", 
+    id: "facebook",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg"
+  },
+  { 
+    name: "Twitter", 
+    id: "twitter",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/twitter/twitter-original.svg"
+  },
+  { 
+    name: "Oracle", 
+    id: "oracle",
+    url: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/oracle/oracle-original.svg"
+  }
 ];
 
 interface PartnerLogoProps {
-  name: string;
+  logo: { name: string; url: string; id: string };
   visible: boolean;
 }
 
-const PartnerLogo = ({ name, visible }: PartnerLogoProps) => {
+const PartnerLogo = ({ logo, visible }: PartnerLogoProps) => {
   return (
     <div 
       className={`p-4 flex items-center justify-center transition-opacity duration-700 ${visible ? 'opacity-100' : 'opacity-0'}`} 
-      aria-label={`Partner: ${name}`}
+      aria-label={`Partner: ${logo.name}`}
     >
       <div className="w-full max-w-[160px]">
         <AspectRatio ratio={3/1} className="bg-gray-100 rounded-md">
           <div className="h-full w-full flex items-center justify-center p-3">
             <img
-              src="/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png"
-              alt={`${name} logo`}
+              src={logo.url}
+              alt={`${logo.name} logo`}
               className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
             />
           </div>
@@ -45,7 +92,7 @@ const PartnerLogo = ({ name, visible }: PartnerLogoProps) => {
 };
 
 const AboutPartners = () => {
-  const [displayedLogos, setDisplayedLogos] = useState(STATIC_PARTNERS.slice(0, 6));
+  const [displayedLogos, setDisplayedLogos] = useState(PARTNER_LOGOS.slice(0, 6));
   const [visibleLogos, setVisibleLogos] = useState<boolean[]>(new Array(6).fill(true));
   
   // Number of logos to display at once
@@ -54,7 +101,7 @@ const AboutPartners = () => {
   const rotationInterval = 4000;
 
   useEffect(() => {
-    if (STATIC_PARTNERS.length <= displayCount) return;
+    if (PARTNER_LOGOS.length <= displayCount) return;
 
     const rotateLogo = async () => {
       // Randomly select which logo to replace
@@ -72,7 +119,7 @@ const AboutPartners = () => {
 
       // Get a new logo that's not currently displayed
       const currentIds = displayedLogos.map(logo => logo.id);
-      const availableLogos = STATIC_PARTNERS.filter(logo => !currentIds.includes(logo.id));
+      const availableLogos = PARTNER_LOGOS.filter(logo => !currentIds.includes(logo.id));
       
       if (availableLogos.length > 0) {
         const newLogo = availableLogos[Math.floor(Math.random() * availableLogos.length)];
@@ -108,7 +155,7 @@ const AboutPartners = () => {
           {displayedLogos.map((logo, index) => (
             <PartnerLogo 
               key={`${logo.id}-${index}`}
-              name={logo.name}
+              logo={logo}
               visible={visibleLogos[index]}
             />
           ))}
