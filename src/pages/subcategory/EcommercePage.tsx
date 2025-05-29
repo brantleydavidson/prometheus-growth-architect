@@ -23,9 +23,9 @@ const EcommercePage = () => {
       ]}
       solution="Our eCommerce growth strategies focus on transforming one-time buyers into loyal, repeat customers. We implement comprehensive customer journey mapping, strategic email and SMS sequences, and data-driven personalization to ensure customers receive the right offers at the right time, maximizing their lifetime value to your business."
       industry="dtc"
-      seoTitle="eCommerce Growth Strategies | Prometheus Agency"
-      seoDescription="Increase customer lifetime value and repeat purchase rates by 25% with strategic eCommerce marketing solutions from Prometheus Agency."
-      imagePath="/placeholder.svg"
+      seoTitle="Ecommerce Growth & Conversion Optimization | Prometheus Agency"
+      seoDescription="Reduce cart abandonment by 25% and increase conversion rates with strategic ecommerce optimization solutions. Contact Prometheus Agency today."
+      imagePath="/images/pages/ecommerce-hero.png"
       testimonial={{
         quote: "Prometheus has been a great partner to help us plan, develop and execute marketing strategies that will enable MSP Diesel Solutions to reach new customers.",
         author: "Travis Stewart",

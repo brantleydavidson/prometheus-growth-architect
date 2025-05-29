@@ -1,4 +1,3 @@
-
 import React from "react";
 import SubcategoryTemplate from "@/components/subcategory/SubcategoryTemplate";
 
@@ -24,9 +23,9 @@ const RestorationPage = () => {
       ]}
       solution="Our specialized restoration marketing strategies focus on maximizing visibility when emergency situations arise and streamlining your response process. We implement targeted local SEO, emergency-focused PPC campaigns, and automated lead management systems that ensure you're the first company property owners see and call when disaster strikes."
       industry="dtc"
-      seoTitle="Emergency Restoration Lead Generation | Prometheus Agency"
-      seoDescription="Generate 40% more emergency restoration leads with targeted digital marketing strategies. Minimize response times and maximize conversions with Prometheus Agency."
-      imagePath="/placeholder.svg"
+      seoTitle="Restoration Business Growth Solutions | Prometheus Agency"
+      seoDescription="Transform emergency calls into sustained revenue streams with strategic marketing and sales solutions for restoration companies. Contact Prometheus Agency today."
+      imagePath="/images/pages/restoration-hero.png"
       testimonial={{
         quote: "Since partnering with Prometheus, our emergency call volume has increased by 43% and our cost per acquisition has dropped by over 20%.",
         author: "Jennifer Martinez",

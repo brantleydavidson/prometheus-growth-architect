@@ -25,7 +25,7 @@ const ManufacturingPage = () => {
       industry="b2b"
       seoTitle="Manufacturing Growth Solutions | Prometheus Agency"
       seoDescription="Transform your manufacturing business with strategic sales and marketing solutions designed to convert idle line-time into booked POs. Contact Prometheus Agency today."
-      imagePath="/placeholder.svg"
+      imagePath="/images/pages/manufacturing-hero.png"
       testimonial={{
         quote: "The Prometheus team has been an exceptional partner. From their transparency of ability, to communication of deliverables, and the ability to be a true strategic partner have been of the highest quality. After working with multiple vendors in the past, the Prometheus team has been a breath of fresh air.",
         author: "Cory Truett",

@@ -25,7 +25,7 @@ const ProfessionalServicesPage = () => {
       industry="b2b"
       seoTitle="Professional Services Growth Strategies | Prometheus Agency"
       seoDescription="Cut proposal cycles by 30% and close more deals with strategic marketing and sales solutions for professional services firms. Contact Prometheus Agency today."
-      imagePath="/placeholder.svg"
+      imagePath="/images/pages/professional-services-hero.png"
       testimonial={{
         quote: "Partnering with Prometheus has been invaluable for Project Management Academy. Their expertise in data visibility, capture, and reporting helped us implement best practices and new reporting structures, significantly improving our ability to track key metrics. Through their strategic guidance, clear communication, and collaborative approach, we now have clearer insights that drive better decision-making and campaign performance.",
         author: "Grace-Ann Onishea",

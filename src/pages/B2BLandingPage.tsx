@@ -19,19 +19,19 @@ const B2BLandingPage = () => {
       name: "Manufacturing",
       description: "Optimize complex sales processes for manufacturing businesses with our data-driven approach.",
       link: "/manufacturing",
-      icon: "/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png"
+      icon: "/images/icons/b2b-manufacturing-icon.png"
     },
     {
       name: "Professional Services",
       description: "Elevate your professional services firm with streamlined client acquisition and retention strategies.",
       link: "/professional-services",
-      icon: "/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png"
+      icon: "/images/icons/b2b-professional-services-icon.png"
     },
     {
       name: "SaaS",
       description: "Accelerate growth for your SaaS business with optimized customer acquisition and expansion strategies.",
       link: "/saas",
-      icon: "/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png"
+      icon: "/images/icons/b2b-services-saas-icon.png"
     }
   ];
 
@@ -90,7 +90,7 @@ const B2BLandingPage = () => {
               <div className="relative">
                 <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
                   <img 
-                    src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
+                    src="/images/pages/b2b-page-main-hero.png" 
                     alt="B2B professionals analyzing growth data" 
                     className="w-full h-full object-cover"
                   />
