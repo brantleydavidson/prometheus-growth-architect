@@ -19,6 +19,8 @@ export const staticRoutes: SitemapEntry[] = [
   { url: '/services/customer-journey', changefreq: 'monthly', priority: 0.8 },
   { url: '/services/paid-media', changefreq: 'monthly', priority: 0.8 },
   { url: '/services/reporting-analytics', changefreq: 'monthly', priority: 0.8 },
+  { url: '/services/crm-strategy', changefreq: 'weekly', priority: 0.9 },
+  { url: '/services/crm-integration', changefreq: 'weekly', priority: 0.9 },
   { url: '/about', changefreq: 'monthly', priority: 0.7 },
   { url: '/insights', changefreq: 'daily', priority: 0.8 },
   { url: '/book-audit', changefreq: 'monthly', priority: 0.9 },
@@ -37,6 +39,8 @@ export const staticRoutes: SitemapEntry[] = [
   
   // Executive resources
   { url: '/hubspot-executive-cheatsheet', changefreq: 'monthly', priority: 0.6 },
+  { url: '/salesforce-vs-hubspot', changefreq: 'weekly', priority: 0.9 },
+  { url: '/crm-for-roofers', changefreq: 'weekly', priority: 0.8 },
 ];
 
 // Generate XML sitemap
@@ -280,7 +284,9 @@ function getPageTitle(url: string): string {
     '/ecommerce': 'E-commerce',
     '/saas': 'SaaS',
     '/consumer-services': 'Consumer Services',
-    '/hubspot-executive-cheatsheet': 'HubSpot Executive Cheat Sheet'
+    '/hubspot-executive-cheatsheet': 'HubSpot Executive Cheat Sheet',
+    '/salesforce-vs-hubspot': 'Salesforce vs HubSpot',
+    '/crm-for-roofers': 'CRM for Roofers'
   };
   
   return titles[url] || url.split('/').pop()?.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()) || url;

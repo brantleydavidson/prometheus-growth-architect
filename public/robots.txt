@@ -1,13 +1,26 @@
-# Production environment
-# Default - Allow all crawlers
+# Production environment - prometheusagency.co
+# CRM Implementation & Consulting Services
+
+# Default - Allow all legitimate crawlers
 User-agent: *
 Allow: /
 Crawl-delay: 1
 
+# Priority pages for crawling
+Allow: /salesforce-vs-hubspot
+Allow: /crm-for-roofers
+Allow: /services/crm-implementation
+Allow: /services/crm-strategy
+Allow: /services/crm-integration
+Allow: /manufacturing
+Allow: /professional-services
+Allow: /consumer-services
+Allow: /restoration
+
 # Sitemap location
 Sitemap: https://prometheusagency.co/sitemap.xml
 
-# Specific rules for search engines
+# Specific rules for major search engines
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
@@ -16,7 +29,15 @@ User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
 
-# AI Crawlers - Allow with restrictions
+User-agent: Slurp
+Allow: /
+Crawl-delay: 1
+
+User-agent: DuckDuckBot
+Allow: /
+Crawl-delay: 1
+
+# AI Crawlers - Allow with appropriate delays
 User-agent: GPTBot
 Allow: /
 Crawl-delay: 2
@@ -41,7 +62,7 @@ User-agent: PerplexityBot
 Allow: /
 Crawl-delay: 2
 
-# Block bad bots
+# Block aggressive SEO bots
 User-agent: AhrefsBot
 Disallow: /
 
@@ -54,6 +75,9 @@ Disallow: /
 User-agent: MJ12bot
 Disallow: /
 
+User-agent: Majestic-12
+Disallow: /
+
 # Protect sensitive areas
 User-agent: *
 Disallow: /admin/
@@ -64,8 +88,14 @@ Disallow: /*.json$
 Disallow: /*?*utm_
 Disallow: /*?*fbclid=
 Disallow: /*?*gclid=
+Disallow: /wp-admin/
+Disallow: /wp-includes/
 
 # Allow important files
 Allow: /robots.txt
 Allow: /sitemap.xml
 Allow: /manifest.json
+Allow: /*.css
+Allow: /*.js
+Allow: /images/
+Allow: /fonts/

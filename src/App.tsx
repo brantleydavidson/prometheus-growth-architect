@@ -45,6 +45,12 @@ import EcommercePage from './pages/subcategory/EcommercePage';
 import SaaSPage from './pages/subcategory/SaaSPage';
 import ConsumerServicesPage from './pages/subcategory/ConsumerServicesPage';
 
+// Lazy load CRM comparison and landing pages
+const SalesforceVsHubSpotPage = lazy(() => import('./pages/SalesforceVsHubSpotPage'));
+const CRMForRoofersPage = lazy(() => import('./pages/CRMForRoofersPage'));
+const CRMStrategyPage = lazy(() => import('./pages/CRMStrategyPage'));
+const CRMIntegrationPage = lazy(() => import('./pages/CRMIntegrationPage'));
+
 // Lazy load admin pages (not critical for initial load)
 const LoginPage = lazy(() => import('./pages/admin/LoginPage'));
 const Dashboard = lazy(() => import('./pages/admin/Dashboard'));
@@ -116,6 +122,8 @@ const App = () => {
           <Route path="/services/customer-journey" element={<CustomerJourneyPage />} />
           <Route path="/services/paid-media" element={<PaidMediaPage />} />
           <Route path="/services/reporting-analytics" element={<ReportingAnalyticsPage />} />
+          <Route path="/services/crm-strategy" element={<Suspense fallback={<PageLoader />}><CRMStrategyPage /></Suspense>} />
+          <Route path="/services/crm-integration" element={<Suspense fallback={<PageLoader />}><CRMIntegrationPage /></Suspense>} />
           
           {/* Content Pages */}
           <Route path="/book-audit" element={<BookAuditPage />} />
@@ -142,6 +150,10 @@ const App = () => {
           <Route path="/ecommerce" element={<EcommercePage />} />
           <Route path="/saas" element={<SaaSPage />} />
           <Route path="/consumer-services" element={<ConsumerServicesPage />} />
+          
+          {/* CRM Comparison and Landing Pages */}
+          <Route path="/salesforce-vs-hubspot" element={<Suspense fallback={<PageLoader />}><SalesforceVsHubSpotPage /></Suspense>} />
+          <Route path="/crm-for-roofers" element={<Suspense fallback={<PageLoader />}><CRMForRoofersPage /></Suspense>} />
           
           {/* Admin Routes */}
           <Route path="/admin/login" element={<Suspense fallback={<PageLoader />}><LoginPage /></Suspense>} />

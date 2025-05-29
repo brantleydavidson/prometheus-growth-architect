@@ -15,7 +15,10 @@ import {
   generateLocalBusinessSchema,
   injectSchemas,
   type WebPage,
-  organizationData
+  organizationData,
+  generateCRMServiceSchema,
+  generateSoftwareApplicationSchema,
+  generateServiceSchema
 } from '@/utils/structuredData';
 
 interface SEOHeadProps {
@@ -92,9 +95,109 @@ const SEOHead: React.FC<SEOHeadProps> = ({
     ];
     
     // Add specialized schemas based on page type
-    if (pathname === '/' || pathname === '/about') {
+    if (pathname === '/') {
       schemas.push(generateProfessionalServiceSchema());
+      schemas.push(generateCRMServiceSchema());
+    } else if (pathname === '/services/crm-implementation') {
+      schemas.push(generateCRMServiceSchema());
+      schemas.push(generateWebPageSchema({
+        name: 'CRM Implementation Services',
+        description: 'Expert CRM implementation for HubSpot, Salesforce, and Dynamics',
+        url: `https://prometheusagency.co${pathname}`,
+        breadcrumb: [
+          { name: 'Home', url: 'https://prometheusagency.co' },
+          { name: 'Services', url: 'https://prometheusagency.co/services' },
+          { name: 'CRM Implementation', url: `https://prometheusagency.co${pathname}` }
+        ]
+      }));
+    } else if (pathname === '/salesforce-vs-hubspot') {
+      schemas.push(generateSoftwareApplicationSchema('hubspot'));
+      schemas.push(generateSoftwareApplicationSchema('salesforce'));
+      schemas.push(generateWebPageSchema({
+        name: 'Salesforce vs HubSpot Comparison',
+        description: 'Comprehensive comparison of Salesforce and HubSpot CRM platforms',
+        url: `https://prometheusagency.co${pathname}`
+      }));
+    } else if (pathname === '/services/crm-strategy') {
+      schemas.push(generateCRMServiceSchema());
+      schemas.push(generateWebPageSchema({
+        name: 'CRM Strategy Consulting',
+        description: 'Strategic CRM planning and analytics services',
+        url: `https://prometheusagency.co${pathname}`,
+        breadcrumb: [
+          { name: 'Home', url: 'https://prometheusagency.co' },
+          { name: 'Services', url: 'https://prometheusagency.co/services' },
+          { name: 'CRM Strategy', url: `https://prometheusagency.co${pathname}` }
+        ]
+      }));
+    } else if (pathname === '/services/crm-integration') {
+      schemas.push(generateCRMServiceSchema());
+      schemas.push(generateWebPageSchema({
+        name: 'CRM Integration Services',
+        description: 'Expert CRM integration with marketing, sales, and AI tools',
+        url: `https://prometheusagency.co${pathname}`,
+        breadcrumb: [
+          { name: 'Home', url: 'https://prometheusagency.co' },
+          { name: 'Services', url: 'https://prometheusagency.co/services' },
+          { name: 'CRM Integration', url: `https://prometheusagency.co${pathname}` }
+        ]
+      }));
+    } else if (pathname === '/crm-for-roofers') {
+      schemas.push(generateServiceSchema({
+        name: 'CRM for Roofers',
+        description: 'Specialized CRM solutions for roofing contractors',
+        provider: organizationData,
+        serviceType: 'CRM Implementation',
+        areaServed: ['United States', 'Tennessee', 'Arkansas', 'Mississippi']
+      }));
+    } else if (pathname === '/manufacturing') {
+      schemas.push(generateServiceSchema({
+        name: 'CRM for Manufacturing',
+        description: 'CRM solutions tailored for manufacturing companies',
+        provider: organizationData,
+        serviceType: 'Industry-Specific CRM',
+        areaServed: ['United States']
+      }));
+    } else if (pathname === '/professional-services' || pathname === '/construction') {
+      schemas.push(generateServiceSchema({
+        name: 'CRM for Construction Companies',
+        description: 'CRM implementation for construction and contracting businesses',
+        provider: organizationData,
+        serviceType: 'Industry-Specific CRM',
+        areaServed: ['United States']
+      }));
+    } else if (pathname === '/consumer-services') {
+      schemas.push(generateServiceSchema({
+        name: 'CRM for Pest Control',
+        description: 'CRM solutions for pest control and home service companies',
+        provider: organizationData,
+        serviceType: 'Industry-Specific CRM',
+        areaServed: ['United States']
+      }));
+    } else if (pathname === '/restoration') {
+      schemas.push(generateServiceSchema({
+        name: 'Restoration CRM Software',
+        description: 'CRM for water damage and restoration companies',
+        provider: organizationData,
+        serviceType: 'Industry-Specific CRM',
+        areaServed: ['United States']
+      }));
+    } else if (pathname === '/about') {
       schemas.push(generateLocalBusinessSchema());
+    } else if (pathname.startsWith('/insights/')) {
+      // Blog post schema would be added here based on post data
+      schemas.push(generateWebPageSchema({
+        name: metaTags.title,
+        description: metaTags.description,
+        url: `https://prometheusagency.co${pathname}`
+      }));
+    } else {
+      // Default webpage schema
+      schemas.push(generateWebPageSchema({
+        name: metaTags.title,
+        description: metaTags.description,
+        url: `https://prometheusagency.co${pathname}`
+      }));
     }
     
     injectSchemas(schemas);

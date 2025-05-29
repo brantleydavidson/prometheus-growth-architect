@@ -28,19 +28,30 @@ export interface AIBotTags {
 
 // Default meta tags
 export const defaultMetaTags: MetaTags = {
-  title: 'Prometheus Agency - AI Enablement & GTM Strategies',
-  description: 'Transform your business with AI-powered solutions and expert GTM strategies. HubSpot partner specializing in CRM implementation for B2B and DTC companies.',
+  title: 'CRM Implementation & AI Consulting Services | Prometheus Agency',
+  description: 'Expert CRM consulting and implementation for HubSpot, Salesforce & Dynamics. Specialized in manufacturing, construction, restoration CRM solutions. AI-powered CRM integration services.',
   keywords: [
-    'AI enablement',
-    'GTM strategy',
-    'HubSpot partner',
+    'CRM implementation',
     'CRM consulting',
-    'B2B marketing',
-    'DTC growth',
-    'marketing automation',
-    'sales enablement',
-    'revenue operations',
-    'AI transformation'
+    'Salesforce implementation',
+    'HubSpot consulting',
+    'CRM for manufacturing',
+    'CRM for construction companies',
+    'Salesforce vs HubSpot',
+    'Salesforce vs Dynamics',
+    'CRM implementation process',
+    'CRM for roofers',
+    'CRM strategy',
+    'CRM analytics',
+    'restoration CRM software',
+    'CRM integration',
+    'AI CRM software',
+    'CRM for pest control',
+    'HubSpot CRM pricing',
+    'AI consulting services',
+    'CRM implementation Tennessee',
+    'HubSpot consulting Memphis',
+    'LLM integration consulting'
   ],
   author: 'Prometheus Agency',
   type: 'website',
@@ -53,32 +64,79 @@ export const defaultMetaTags: MetaTags = {
 // Page-specific meta tags
 export const pageMetaTags: Record<string, Partial<MetaTags>> = {
   '/': {
-    title: 'Prometheus Agency - AI Enablement & GTM Strategies for Growth',
-    description: 'Unlock exponential growth with AI-powered solutions and proven GTM strategies. Expert HubSpot partner helping B2B and DTC businesses scale efficiently.'
+    title: 'CRM Implementation & AI Consulting | Salesforce vs HubSpot Experts',
+    description: 'Leading CRM consulting firm specializing in HubSpot, Salesforce & Dynamics implementation. Expert CRM solutions for manufacturing, construction, and restoration industries. AI-powered CRM integration.',
+    keywords: ['CRM implementation', 'CRM consulting', 'Salesforce vs HubSpot', 'AI CRM software', 'CRM implementation Tennessee']
   },
   '/services': {
-    title: 'Our Services - AI, CRM & Growth Solutions | Prometheus Agency',
-    description: 'Comprehensive AI enablement, CRM implementation, and GTM consulting services. Transform your business with our proven methodologies and expert guidance.'
+    title: 'CRM Implementation Services | HubSpot & Salesforce Consulting',
+    description: 'Comprehensive CRM implementation process for businesses. Expert Salesforce implementation, HubSpot consulting, and AI CRM integration. Specialized solutions for manufacturing, construction, and pest control.',
+    keywords: ['CRM implementation process', 'Salesforce implementation', 'HubSpot consulting', 'CRM integration', 'AI consulting services']
   },
   '/services/ai-enablement': {
-    title: 'AI Enablement Services - Transform Your Business | Prometheus Agency',
-    description: 'Leverage cutting-edge AI to automate processes, enhance decision-making, and drive growth. Custom AI solutions for B2B and DTC businesses.'
+    title: 'AI Consulting Services | LLM Integration & AI CRM Software',
+    description: 'Transform your business with AI consulting services. Expert LLM integration consulting and AI-powered CRM software implementation. Custom AI solutions for CRM analytics and automation.',
+    keywords: ['AI consulting services', 'LLM integration consulting', 'AI CRM software', 'CRM analytics']
   },
   '/services/crm-implementation': {
-    title: 'CRM Implementation - HubSpot & Salesforce Experts | Prometheus Agency',
-    description: 'Expert CRM implementation and optimization services. Certified HubSpot partner helping businesses streamline operations and accelerate growth.'
+    title: 'CRM Implementation Process | Salesforce vs HubSpot vs Dynamics',
+    description: 'Expert CRM implementation services comparing Salesforce vs HubSpot vs Dynamics. Proven CRM implementation process for manufacturing, construction, roofers, and pest control industries.',
+    keywords: ['CRM implementation', 'CRM implementation process', 'Salesforce implementation', 'Salesforce vs HubSpot', 'Salesforce vs Dynamics']
+  },
+  '/manufacturing': {
+    title: 'CRM for Manufacturing | Manufacturing CRM Implementation',
+    description: 'Specialized CRM for manufacturing companies. Expert implementation of Salesforce, HubSpot, and Dynamics CRM solutions tailored for manufacturers. Improve production planning and customer management.',
+    keywords: ['CRM for manufacturing', 'manufacturing CRM software', 'CRM implementation']
+  },
+  '/professional-services': {
+    title: 'CRM for Construction Companies | Construction CRM Solutions',
+    description: 'Industry-leading CRM for construction companies and contractors. Specialized CRM implementation for project management, bid tracking, and customer relationships in construction.',
+    keywords: ['CRM for construction companies', 'construction CRM software', 'CRM implementation']
+  },
+  '/restoration': {
+    title: 'Restoration CRM Software | CRM for Restoration Companies',
+    description: 'Powerful restoration CRM software for water damage, fire restoration, and mold remediation companies. Streamline jobs, estimates, and insurance claims with specialized CRM solutions.',
+    keywords: ['restoration CRM software', 'CRM for restoration', 'CRM implementation']
   },
   '/about': {
-    title: 'About Us - Meet the Team | Prometheus Agency',
-    description: 'Learn about Prometheus Agency\'s mission to bring enterprise-level strategies to growing businesses. Meet our team of growth experts and AI specialists.'
+    title: 'CRM Consulting Experts | Tennessee & Memphis CRM Implementation',
+    description: 'Meet the CRM consulting experts at Prometheus Agency. Based in Tennessee, serving Memphis and nationwide with HubSpot consulting, Salesforce implementation, and AI CRM integration services.',
+    keywords: ['CRM consulting', 'CRM implementation Tennessee', 'HubSpot consulting Memphis']
   },
   '/insights': {
-    title: 'Insights & Resources - Marketing & AI Blog | Prometheus Agency',
-    description: 'Expert insights on AI, CRM, GTM strategies, and growth marketing. Stay ahead with our latest articles, case studies, and industry analysis.'
+    title: 'CRM Strategy & Analytics Blog | CRM Implementation Insights',
+    description: 'Expert insights on CRM strategy, analytics, and implementation best practices. Learn about Salesforce vs HubSpot comparisons, CRM for specific industries, and AI CRM innovations.',
+    keywords: ['CRM strategy', 'CRM analytics', 'Salesforce vs HubSpot', 'CRM implementation']
   },
   '/book-audit': {
-    title: 'Book Your Free Growth Audit | Prometheus Agency',
-    description: 'Get a personalized growth audit and discover untapped opportunities. Free consultation with our AI and GTM experts.'
+    title: 'Free CRM Consultation | HubSpot CRM Pricing & Implementation',
+    description: 'Book your free CRM consultation. Get expert advice on HubSpot CRM pricing, Salesforce vs HubSpot comparison, and custom CRM implementation strategies for your industry.',
+    keywords: ['CRM consulting', 'HubSpot CRM pricing', 'CRM implementation', 'free consultation']
+  },
+  '/services/consulting-gtm': {
+    title: 'CRM Strategy Consulting | Go-to-Market CRM Implementation',
+    description: 'Expert CRM strategy consulting for go-to-market success. Align your CRM implementation with business goals, optimize CRM analytics, and create data-driven growth strategies.',
+    keywords: ['CRM strategy', 'CRM consulting', 'CRM analytics', 'CRM implementation']
+  },
+  '/consumer-services': {
+    title: 'CRM for Pest Control & Home Services | Service Industry CRM',
+    description: 'Specialized CRM for pest control companies and home service businesses. Manage routes, scheduling, customer contracts, and service history with industry-specific CRM solutions.',
+    keywords: ['CRM for pest control', 'service industry CRM', 'CRM implementation']
+  },
+  '/b2b': {
+    title: 'B2B CRM Implementation | Salesforce vs HubSpot for B2B',
+    description: 'Enterprise B2B CRM implementation services. Expert comparison of Salesforce vs HubSpot vs Dynamics for B2B companies. Specialized CRM solutions for complex sales cycles.',
+    keywords: ['B2B CRM', 'Salesforce vs HubSpot', 'Salesforce vs Dynamics', 'CRM implementation']
+  },
+  '/dtc': {
+    title: 'DTC CRM Solutions | CRM for Roofers & Trade Businesses',
+    description: 'Direct-to-consumer CRM implementation for roofers, contractors, and trade businesses. Streamline lead management, quotes, and customer relationships with specialized CRM solutions.',
+    keywords: ['CRM for roofers', 'DTC CRM', 'CRM implementation', 'contractor CRM']
+  },
+  '/services/crm-integration': {
+    title: 'CRM Integration Services | AI-Powered CRM Integration',
+    description: 'Expert CRM integration services connecting your CRM with marketing automation, ERP, and AI tools. Seamless Salesforce, HubSpot, and Dynamics integrations for unified data management.',
+    keywords: ['CRM integration', 'AI CRM software', 'CRM implementation', 'system integration']
   }
 };
 

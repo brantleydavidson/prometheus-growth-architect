@@ -2,123 +2,78 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prometheus Agency</title>
     
-    <!-- Critical Resource Hints -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="dns-prefetch" href="https://xkarbwfzxfxgtnefcout.supabase.co">
-    <link rel="dns-prefetch" href="https://www.googletagmanager.com">
+    <!-- Primary Meta Tags -->
+    <title>CRM Implementation & AI Consulting Services | Prometheus Agency</title>
+    <meta name="title" content="CRM Implementation & AI Consulting Services | Prometheus Agency">
+    <meta name="description" content="Expert CRM consulting and implementation for HubSpot, Salesforce & Dynamics. Specialized in manufacturing, construction, restoration CRM solutions. AI-powered CRM integration services.">
+    <meta name="keywords" content="CRM implementation, CRM consulting, Salesforce implementation, HubSpot consulting, CRM for manufacturing, CRM for construction companies, Salesforce vs HubSpot, CRM strategy, CRM integration, AI CRM software">
+    <meta name="author" content="Prometheus Agency">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://prometheusagency.co/">
+    <meta property="og:title" content="CRM Implementation & AI Consulting Services | Prometheus Agency">
+    <meta property="og:description" content="Expert CRM consulting and implementation for HubSpot, Salesforce & Dynamics. Transform your business with AI-powered CRM solutions.">
+    <meta property="og:image" content="https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/prometheus_logo_white_orange_icon.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://prometheusagency.co/">
+    <meta property="twitter:title" content="CRM Implementation & AI Consulting Services | Prometheus Agency">
+    <meta property="twitter:description" content="Expert CRM consulting and implementation for HubSpot, Salesforce & Dynamics. Transform your business with AI-powered CRM solutions.">
+    <meta property="twitter:image" content="https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/prometheus_logo_white_orange_icon.png">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://prometheusagency.co/">
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://xkarbwfzxfxgtnefcout.supabase.co">
+    <link rel="preconnect" href="https://www.googletagmanager.com">
     
-    <!-- Preload Critical Fonts -->
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2" as="font" type="font/woff2" crossorigin="anonymous">
-    <link rel="preload" href="https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiA.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Critical CSS -->
-    <style>
-      /* Critical CSS for immediate render */
-      *, ::before, ::after { box-sizing: border-box; }
-      html { -webkit-text-size-adjust: 100%; line-height: 1.5; }
-      body { margin: 0; font-family: Inter, system-ui, -apple-system, sans-serif; }
-      .hero-section { min-height: 100vh; position: relative; }
-      h1, h2, h3 { margin: 0; font-weight: 700; }
-      p { margin: 0; }
-      .container-custom { width: 100%; margin: 0 auto; padding: 0 1rem; }
-      @media (min-width: 640px) { .container-custom { max-width: 640px; } }
-      @media (min-width: 768px) { .container-custom { max-width: 768px; } }
-      @media (min-width: 1024px) { .container-custom { max-width: 1024px; } }
-      @media (min-width: 1280px) { .container-custom { max-width: 1280px; } }
-      
-      /* Font loading optimization */
-      @font-face {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 400;
-        font-display: swap;
-        src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiA.woff2') format('woff2');
-      }
-      @font-face {
-        font-family: 'Inter';
-        font-style: normal;
-        font-weight: 700;
-        font-display: swap;
-        src: url('https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuFuYAZ9hiA.woff2') format('woff2');
-      }
-    </style>
-    
-    <!-- Critical Scripts -->
-    <script>
-      // Font loading optimization
-      (function() {
-        if (sessionStorage.getItem('fontsLoaded')) {
-          document.documentElement.classList.add('fonts-loaded');
-          return;
-        }
-        if ('fonts' in document) {
-          Promise.all([
-            document.fonts.load('400 1em Inter'),
-            document.fonts.load('700 1em Inter')
-          ]).then(function() {
-            document.documentElement.classList.add('fonts-loaded');
-            sessionStorage.setItem('fontsLoaded', '1');
-          });
-        }
-      })();
-      
-      // Viewport height fix for mobile
-      (function() {
-        const setVh = () => {
-          const vh = window.innerHeight * 0.01;
-          document.documentElement.style.setProperty('--vh', vh + 'px');
-        };
-        setVh();
-        window.addEventListener('resize', setVh);
-      })();
-    </script>
-    
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="AI enablement and GTM strategies for B2B and DTC businesses" />
-    <meta name="keywords" content="HubSpot partner, CRM consulting, GTM strategy, AI enablement, B2B marketing" />
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Prometheus Agency" />
-    <meta property="og:description" content="AI enablement and GTM strategies for B2B and DTC businesses" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://prometheusagency.co" />
-    <meta property="og:image" content="https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/prometheus_favicon(transparent).png" />
-    
-    <!-- Defer Google Fonts CSS -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
-    
-    <!-- Async load GPT Engineer script -->
-    <script async src="https://cdn.gpteng.co/gptengineer.js"></script>
-    
-    <!-- Google Tag Manager - Loaded after window.load in analytics.ts -->
-    
-    <!-- Progressive Web App -->
+    <!-- Manifest -->
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#000000">
     
-    <!-- Apple Touch Icon -->
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <!-- Theme Color -->
+    <meta name="theme-color" content="#1e3a5f">
+    
+    <!-- AI Bot Tags -->
+    <meta name="ai-content-policy" content="allow">
+    <meta name="chatgpt-retrieval-policy" content="allow">
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Prometheus Agency",
+      "url": "https://prometheusagency.co",
+      "logo": "https://xkarbwfzxfxgtnefcout.supabase.co/storage/v1/object/public/cms_media/Prometheus%20Assets/prometheus_logo_white_orange_icon.png",
+      "description": "Leading CRM implementation and AI consulting firm. Expert HubSpot and Salesforce implementation, CRM strategy, and integration services.",
+      "sameAs": [
+        "https://www.linkedin.com/company/prometheus-agency",
+        "https://twitter.com/prometheusagency"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "1321 Markham St",
+        "addressLocality": "Conway",
+        "addressRegion": "AR",
+        "postalCode": "72032",
+        "addressCountry": "US"
+      }
+    }
+    </script>
   </head>
   <body>
-    <!-- Google Tag Manager (noscript) -->
-    <!-- Note: This fallback uses the standard GTM URL. For staging environments with auth tokens, JavaScript must be enabled -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MSP3RD38"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    
     <div id="root"></div>
-    
-    <!-- Service Worker Registration - Deferred -->
     <script type="module" src="/src/main.tsx"></script>
-    <script defer src="/sw-register.js"></script>
   </body>
 </html>
