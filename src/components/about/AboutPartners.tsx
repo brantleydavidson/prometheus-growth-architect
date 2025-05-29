@@ -1,41 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
-
-// Partner logos with brand colors
-const PARTNER_LOGOS = [
-  { name: "hubspot", title: "HubSpot", color: "#FF5C35" },
-  { name: "salesforce", title: "Salesforce", color: "#00A1E0" },
-  { name: "microsoft", title: "Microsoft", color: "#0078D4" },
-  { name: "google", title: "Google Cloud", color: "#4285F4" },
-  { name: "aws", title: "AWS", color: "#FF9900" },
-  { name: "adobe", title: "Adobe", color: "#FF0000" },
-  { name: "oracle", title: "Oracle", color: "#F80000" },
-  { name: "sap", title: "SAP", color: "#0CAFFE" },
-  { name: "ibm", title: "IBM", color: "#054ADA" },
-];
+import OptimizedImage from '@/components/common/OptimizedImage';
+import { supabase } from "@/integrations/supabase/client";
 
 interface PartnerLogoProps {
-  partner: { name: string; title: string; color: string };
+  src: string;
+  alt: string;
   className?: string;
   visible: boolean;
 }
 
-const PartnerLogo = ({ partner, className = "", visible }: PartnerLogoProps) => {
+const PartnerLogo = ({ src, alt, className = "", visible }: PartnerLogoProps) => {
+  const [imgError, setImgError] = useState(false);
+  
   return (
     <div 
       className={`p-4 flex items-center justify-center ${className} transition-opacity duration-700 ${visible ? 'opacity-100' : 'opacity-0'}`} 
-      aria-label={`Partner: ${partner.title}`}
+      aria-label={`Partner: ${alt}`}
     >
       <div className="w-full max-w-[160px]">
-        <AspectRatio ratio={3/1} className="bg-white rounded-md shadow-sm">
+        <AspectRatio ratio={3/1} className="bg-white rounded-md">
           <div className="h-full w-full flex items-center justify-center p-3">
-            <div 
-              className="w-full h-full rounded flex items-center justify-center text-white font-semibold text-sm"
-              style={{ backgroundColor: partner.color }}
-            >
-              {partner.title}
-            </div>
+            <OptimizedImage
+              src={imgError ? "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png" : src}
+              alt={`${alt} logo - Prometheus Agency partner`}
+              width={200}
+              height={67}
+              aspectRatio={3}
+              sizes="(max-width: 640px) 120px, 160px"
+              className="max-h-full max-w-full object-contain grayscale hover:grayscale-0 transition-all opacity-80 hover:opacity-100"
+              onError={() => setImgError(true)}
+              objectFit="contain"
+            />
           </div>
         </AspectRatio>
       </div>
@@ -44,15 +41,66 @@ const PartnerLogo = ({ partner, className = "", visible }: PartnerLogoProps) => 
 };
 
 const AboutPartners = () => {
-  const [allLogos] = useState(PARTNER_LOGOS);
-  const [displayedLogos, setDisplayedLogos] = useState(PARTNER_LOGOS.slice(0, 6));
-  const [isLoading] = useState(false);
+  const [allLogos, setAllLogos] = useState<any[]>([]);
+  const [displayedLogos, setDisplayedLogos] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [visibleLogos, setVisibleLogos] = useState<boolean[]>(new Array(6).fill(true));
   
   // Number of logos to display at once
   const displayCount = 6;
   // How often to rotate logos (in milliseconds)
   const rotationInterval = 4000;
+
+  useEffect(() => {
+    const fetchLogos = async () => {
+      try {
+        const { data, error } = await supabase.storage
+          .from('cms_media')
+          .list('Active Client Logos', { 
+            limit: 100,
+            offset: 0,
+            sortBy: { column: 'name', order: 'asc' }
+          });
+
+        if (error) throw error;
+
+        const logos = await Promise.all(
+          (data || []).map(async (file) => {
+            const { data: { publicUrl } } = supabase.storage
+              .from('cms_media')
+              .getPublicUrl(`Active Client Logos/${file.name}`);
+            
+            return {
+              name: file.name,
+              url: publicUrl,
+              title: file.name.replace(/\.[^/.]+$/, "")
+            };
+          })
+        );
+
+        setAllLogos(logos);
+        setDisplayedLogos(logos.slice(0, displayCount));
+        setVisibleLogos(new Array(displayCount).fill(true));
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching logos:', error);
+        // Fallback logos if fetch fails
+        const fallbackLogos = [
+          { name: "partner1", url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png", title: "Partner 1" },
+          { name: "partner2", url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png", title: "Partner 2" },
+          { name: "partner3", url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png", title: "Partner 3" },
+          { name: "partner4", url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png", title: "Partner 4" },
+          { name: "partner5", url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png", title: "Partner 5" },
+          { name: "partner6", url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png", title: "Partner 6" },
+        ];
+        setAllLogos(fallbackLogos);
+        setDisplayedLogos(fallbackLogos);
+        setIsLoading(false);
+      }
+    };
+
+    fetchLogos();
+  }, []);
 
   useEffect(() => {
     if (allLogos.length <= displayCount) return;
@@ -115,7 +163,8 @@ const AboutPartners = () => {
             {displayedLogos.map((logo, index) => (
               <PartnerLogo 
                 key={`${logo.name}-${index}`}
-                partner={logo}
+                src={logo.url}
+                alt={logo.title}
                 visible={visibleLogos[index]}
               />
             ))}

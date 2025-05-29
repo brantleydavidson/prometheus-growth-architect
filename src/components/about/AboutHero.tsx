@@ -22,15 +22,22 @@ const AboutHero = () => {
             </Link>
           </div>
           <div className="flex justify-center lg:justify-end">
-            <OptimizedImage
-              src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png"
-              alt="Prometheus Titan Logo"
-              priority={true}
-              width={512}
-              height={512}
-              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 512px"
-              className="max-w-xs md:max-w-sm lg:max-w-md h-auto rounded-lg shadow-[0_10px_20px_rgba(0,46,93,0.25)]"
-            />
+            <div 
+              className="max-w-xs md:max-w-sm lg:max-w-md rounded-lg shadow-[0_10px_20px_rgba(0,46,93,0.25)]"
+              style={{
+                filter: 'hue-rotate(200deg) saturate(1.2) brightness(0.9)'
+              }}
+            >
+              <OptimizedImage
+                src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png"
+                alt="Prometheus Titan Logo"
+                priority={true}
+                width={512}
+                height={512}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 512px"
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
           </div>
         </div>
       </div>
