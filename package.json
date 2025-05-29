@@ -12,7 +12,6 @@
     "build:dev": "BUILD_TYPE=client vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "postinstall": "patch-package",
     "start": "vite",
     "start:ssr": "cross-env NODE_ENV=production node dist/server/entry-server.js",
     "ssr:build": "cross-env BUILD_TYPE=ssr vite build --ssr src/entry-server.tsx --outDir dist/server",

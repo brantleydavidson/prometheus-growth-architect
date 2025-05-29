@@ -40,6 +40,10 @@ const IMAGE_SYNC_CONFIG = {
   'team': {
     localPath: 'public/images/team',
     description: 'Team member photos'
+  },
+  'favicon': {
+    localPath: 'public',
+    description: 'Favicon files'
   }
 };
 
@@ -89,6 +93,34 @@ async function syncFolder(bucketName, folderPath, localPath) {
   try {
     // Ensure local directory exists
     await ensureDir(localPath);
+    
+    // Special handling for favicon - look for specific files
+    if (folderPath === 'favicon') {
+      // Try to download favicon.ico directly from root
+      const faviconFiles = ['favicon.ico', 'favicon.png', 'favicon.svg'];
+      
+      for (const filename of faviconFiles) {
+        try {
+          const { data: { publicUrl } } = supabase.storage
+            .from(bucketName)
+            .getPublicUrl(filename);
+          
+          const localFilePath = path.join(localPath, filename);
+          
+          try {
+            await fs.access(localFilePath);
+            console.log(`✓ ${filename} (already exists)`);
+          } catch {
+            console.log(`⬇️  Downloading ${filename}...`);
+            await downloadFile(publicUrl, localFilePath);
+            console.log(`✓ ${filename}`);
+          }
+        } catch (error) {
+          // File might not exist, continue
+        }
+      }
+      return;
+    }
     
     // List files in Supabase folder
     const { data: files, error } = await supabase.storage
