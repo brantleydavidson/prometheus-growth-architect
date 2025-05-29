@@ -111,3 +111,25 @@ public/
 - Markdown: `![Alt text](/images/blog/post-1/hero.jpg)`
 - JSX: `<img src="/images/blog/post-1/hero.jpg" alt="Description" />`
 - Supabase: `<img src="https://<your-project>.supabase.co/storage/v1/object/public/media/blog/post-3/hero.jpg" alt="Description" />`
+
+## Troubleshooting
+
+### Common Issues
+
+If you encounter issues with components not displaying correctly, check our comprehensive troubleshooting guide:
+
+- [Component Troubleshooting Guide](./COMPONENT_TROUBLESHOOTING.md) - Detailed solutions for component-specific issues
+
+### Quick Debug Tips
+
+1. **Check Browser Console**: Always check for JavaScript errors or warning messages
+2. **Verify Environment Variables**: Ensure all required environment variables are set (especially for Supabase)
+3. **Network Tab**: Check if API calls are failing or returning unexpected data
+4. **Clear Cache**: Try hard refresh (Cmd+Shift+R on Mac, Ctrl+Shift+R on Windows)
+5. **Check Deployment Logs**: For production issues, check Netlify deployment logs
+
+### Getting Help
+
+- Review the troubleshooting guides in this repository
+- Check component-specific documentation
+- Look for console error messages that indicate the specific issue
