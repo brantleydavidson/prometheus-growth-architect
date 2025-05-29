@@ -1,4 +1,3 @@
-
 import React from "react";
 import Navbar from "@/components/navigation/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -85,13 +84,14 @@ const B2BPage = () => {
               </div>
               
               <div className="relative">
-                <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden shadow-lg">
-                  <img 
-                    src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d" 
-                    alt="B2B business professional analyzing growth data on laptop" 
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+                <img
+                  src="/images/pages/b2b-page-main-hero.png"
+                  alt="B2B Solutions Hero - Prometheus Agency"
+                  width="1200"
+                  height="600"
+                  loading="eager"
+                  style={{ width: '100%', height: 'auto' }}
+                />
               </div>
             </div>
           </div>
