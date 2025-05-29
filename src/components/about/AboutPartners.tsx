@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Skeleton } from "@/components/ui/skeleton";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PartnerLogoProps {
   src: string;
@@ -33,7 +34,7 @@ const PartnerLogo = ({ src, alt, visible }: PartnerLogoProps) => {
 };
 
 const AboutPartners = () => {
-  // Start with fallback logos immediately
+  // Start with fallback logos immediately so something is visible
   const fallbackLogos = Array.from({ length: 12 }, (_, i) => ({
     name: `client-${i + 1}`,
     url: "/lovable-uploads/f90ef8a0-a3ab-4689-97d1-fad07e16b477.png",
@@ -42,7 +43,7 @@ const AboutPartners = () => {
 
   const [allLogos, setAllLogos] = useState<any[]>(fallbackLogos);
   const [displayedLogos, setDisplayedLogos] = useState<any[]>(fallbackLogos.slice(0, 6));
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [visibleLogos, setVisibleLogos] = useState<boolean[]>(new Array(6).fill(true));
   
   // Number of logos to display at once
@@ -51,9 +52,57 @@ const AboutPartners = () => {
   const rotationInterval = 4000;
 
   useEffect(() => {
-    // Try to fetch real logos from Supabase (optional enhancement)
-    // For now, we'll just use the fallback logos to ensure something shows
-    console.log('AboutPartners mounted, showing fallback logos');
+    const fetchLogos = async () => {
+      try {
+        console.log('Fetching client logos from Supabase...');
+        
+        const { data, error } = await supabase.storage
+          .from('cms_media')
+          .list('Active Client Logos', { 
+            limit: 100,
+            offset: 0,
+            sortBy: { column: 'name', order: 'asc' }
+          });
+
+        if (error) {
+          console.error('Error fetching from Supabase:', error);
+          setIsLoading(false);
+          return;
+        }
+
+        if (!data || data.length === 0) {
+          console.log('No client logos found in Active Client Logos folder');
+          setIsLoading(false);
+          return;
+        }
+
+        console.log(`Found ${data.length} client logos`);
+
+        // Get public URLs for all logos
+        const logos = data.map((file) => {
+          const { data: { publicUrl } } = supabase.storage
+            .from('cms_media')
+            .getPublicUrl(`Active Client Logos/${file.name}`);
+          
+          return {
+            name: file.name,
+            url: publicUrl,
+            title: file.name.replace(/\.[^/.]+$/, "").replace(/-/g, " ")
+          };
+        });
+
+        // Update with real logos
+        setAllLogos(logos);
+        setDisplayedLogos(logos.slice(0, displayCount));
+        setVisibleLogos(new Array(displayCount).fill(true));
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error in fetchLogos:', error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchLogos();
   }, []);
 
   useEffect(() => {
