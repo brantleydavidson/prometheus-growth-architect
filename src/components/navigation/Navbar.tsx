@@ -45,7 +45,7 @@ const Navbar = () => {
         <div className="container-custom flex justify-between items-center">
           <Link to="/" className="flex items-center" aria-label="Prometheus Agency - Home">
             <OptimizedImage
-              src="/lovable-uploads/7dbfc2c4-9dea-4bcd-a3b3-c1177facb45a.png" 
+              src="/images/logos/prometheus-logo.png" 
               alt="Prometheus Agency Logo" 
               width={120}
               height={40}

@@ -5,6 +5,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getOptimizedImageProps } from "@/utils/imageOptimization";
 import OptimizedImage from '@/components/common/OptimizedImage';
 
+// Fallback partner logos
+const FALLBACK_LOGOS = [
+  { name: "hubspot", url: "/logo-placeholder.svg", title: "HubSpot Partner" },
+  { name: "salesforce", url: "/logo-placeholder.svg", title: "Salesforce Partner" },
+  { name: "microsoft", url: "/logo-placeholder.svg", title: "Microsoft Partner" },
+  { name: "google", url: "/logo-placeholder.svg", title: "Google Cloud Partner" },
+  { name: "aws", url: "/logo-placeholder.svg", title: "AWS Partner" },
+  { name: "adobe", url: "/logo-placeholder.svg", title: "Adobe Partner" },
+  { name: "oracle", url: "/logo-placeholder.svg", title: "Oracle Partner" },
+  { name: "sap", url: "/logo-placeholder.svg", title: "SAP Partner" },
+  { name: "ibm", url: "/logo-placeholder.svg", title: "IBM Partner" },
+];
+
 interface PartnerLogoProps {
   src: string;
   alt: string;
@@ -82,13 +95,23 @@ const AboutPartners = () => {
           })
         );
 
-        setAllLogos(logosWithUrls);
-        // Initialize with first set of logos
-        setDisplayedLogos(logosWithUrls.slice(0, displayCount));
+        // Use Supabase logos if available, otherwise use fallbacks
+        if (logosWithUrls.length > 0) {
+          setAllLogos(logosWithUrls);
+          setDisplayedLogos(logosWithUrls.slice(0, displayCount));
+        } else {
+          // Use fallback logos if no logos from Supabase
+          setAllLogos(FALLBACK_LOGOS);
+          setDisplayedLogos(FALLBACK_LOGOS.slice(0, displayCount));
+        }
         setVisibleLogos(new Array(displayCount).fill(true));
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching logos:', error);
+        // Use fallback logos on error
+        setAllLogos(FALLBACK_LOGOS);
+        setDisplayedLogos(FALLBACK_LOGOS.slice(0, displayCount));
+        setVisibleLogos(new Array(displayCount).fill(true));
         setIsLoading(false);
       }
     };
